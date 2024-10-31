@@ -13,4 +13,7 @@ export class User {
 
   @Column() // Пароль пользователя
   password: string;
+
+  @Column({ unique: true })
+  username: string;
 }
