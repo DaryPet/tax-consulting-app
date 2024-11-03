@@ -7,6 +7,10 @@ export class CreateTestimonialDto {
 
   @IsString()
   @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()
