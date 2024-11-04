@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Session } from '../../auth/enteties/session.entity';
 
 @Entity() // Декоратор, обозначающий, что этот класс представляет сущность базы данных
 export class User {
@@ -16,4 +17,7 @@ export class User {
 
   @Column({ unique: true })
   username: string;
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
 }
