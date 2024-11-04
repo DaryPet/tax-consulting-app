@@ -1,67 +1,34 @@
-// import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
-// import { AuthService } from './auth.service';
-
-// @Controller('auth')
-// export class AuthController {
-//   constructor(private readonly authService: AuthService) {}
-
-//   @Post('login')
-//   async login(@Body() body: { username: string; password: string }) {
-//     const user = await this.authService.validateUser(
-//       body.username,
-//       body.password,
-//     );
-//     if (!user) {
-//       throw new UnauthorizedException('Invalid credentials');
-//     }
-//     return this.authService.login(user);
-//   }
-// }
-// File: src/auth/auth.controller.ts
-
-// import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
-// import { AuthService } from './auth.service';
-// import { CreateUserDto } from '../user/dto/create-user.dto'; // Импортируем DTO для пользователя
-
-// @Controller('auth')
-// export class AuthController {
-//   constructor(private readonly authService: AuthService) {}
-
-//   @Post('login')
-//   async login(@Body() body: { username: string; password: string }) {
-//     const user = await this.authService.validateUser(
-//       body.username,
-//       body.password,
-//     );
-//     if (!user) {
-//       throw new UnauthorizedException('Invalid credentials');
-//     }
-//     return this.authService.login(user);
-//   }
-
-//   @Post('register') // Новый эндпоинт для регистрации
-//   async register(@Body() createUserDto: CreateUserDto) {
-//     return this.authService.register(createUserDto);
-//   }
-// }
 import {
   Controller,
   Post,
   Body,
   HttpCode,
   HttpStatus,
+  Res,
   UseGuards,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  //   @Post('login')
+  //   async login(@Body() loginDto: any) {
+  //     const user = await this.authService.validateUser(
+  //       loginDto.username,
+  //       loginDto.password,
+  //     );
+  //     if (!user) {
+  //       throw new UnauthorizedException('Invalid credentials');
+  //     }
+  //     return this.authService.login(user);
+  //   }
   @Post('login')
-  async login(@Body() loginDto: any) {
+  async login(@Body() loginDto: any, @Res() res: Response) {
     const user = await this.authService.validateUser(
       loginDto.username,
       loginDto.password,
@@ -69,23 +36,63 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    return this.authService.login(user);
-  }
 
+    const { access_token, refresh_token } = await this.authService.login(user);
+
+    res
+      .cookie('access_token', access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000, // 1 час
+      })
+      .cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+      })
+      .send({ message: 'Login successful' });
+  }
+  //   @Post('refresh')
+  //   async refresh(@Body() body: any) {
+  //     const { refreshToken } = body;
+  //     return this.authService.refreshToken(refreshToken);
+  //   }
   @Post('refresh')
-  async refresh(@Body() body: any) {
+  async refresh(@Body() body: any, @Res() res: Response) {
     const { refreshToken } = body;
-    return this.authService.refreshToken(refreshToken);
+    const { access_token, refresh_token } =
+      await this.authService.refreshToken(refreshToken);
+
+    res
+      .cookie('access_token', access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000, // 1 час
+      })
+      .cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+      })
+      .send({ message: 'Token refreshed successfully' });
   }
 
+  //   @UseGuards(JwtAuthGuard)
+  //   @Post('logout')
+  //   @HttpCode(HttpStatus.NO_CONTENT)
+  //   async logout(@Body() body: any) {
+  //     const { refreshToken } = body;
+  //     if (!refreshToken) {
+  //       throw new UnauthorizedException('Refresh token is required');
+  //     }
+  //     await this.authService.logout(refreshToken);
+  //   }
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Body() body: any) {
+  async logout(@Body() body: any, @Res() res: Response) {
     const { refreshToken } = body;
-    if (!refreshToken) {
-      throw new UnauthorizedException('Refresh token is required');
-    }
     await this.authService.logout(refreshToken);
+
+    res
+      .clearCookie('access_token')
+      .clearCookie('refresh_token')
+      .send({ message: 'Logout successful' });
   }
 }
