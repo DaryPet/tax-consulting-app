@@ -1,118 +1,3 @@
-// import { Injectable, UnauthorizedException } from '@nestjs/common';
-// import { JwtService } from '@nestjs/jwt';
-// import { UserService } from '../user/user.service';
-// import { CreateUserDto } from '../user/dto/create-user.dto';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { Session } from './enteties/session.entity';
-// import { User } from '../user/entities/user.entity';
-// import * as bcrypt from 'bcryptjs';
-
-// @Injectable()
-// export class AuthService {
-//   constructor(
-//     private userService: UserService,
-//     private jwtService: JwtService,
-//     @InjectRepository(Session)
-//     private sessionRepository: Repository<Session>,
-//   ) {}
-
-//   async validateUser(username: string, pass: string): Promise<any> {
-//     // Найдите пользователя по имени
-//     const user = await this.userService.findByUsername(username);
-//     if (user) {
-//       // console.log('Пользователь найден:', user); // Логирование найденного пользователя
-
-//       // Сравнение пароля пользователя с паролем из запроса
-//       const isPasswordMatching = await bcrypt.compare(pass, user.password);
-//       // console.log('Сравнение пароля:', isPasswordMatching);
-
-//       if (isPasswordMatching) {
-//         // Исключаем пароль из ответа
-//         const { password: _password, ...result } = user;
-//         return result;
-//       }
-//     }
-//     // Если пользователь не найден или пароль не совпадает
-//     // console.log('Неудачная попытка логина для пользователя:', username);
-//     return null;
-//   }
-
-//   async login(user: User) {
-//     const payload = { username: user.username, sub: user.id };
-//     const accessToken = this.jwtService.sign(payload, { expiresIn: '30m' });
-//     // Генерация refresh токена
-//     const refreshToken = await bcrypt.hash(
-//       `${user.username}-${Date.now()}`,
-//       10,
-//     );
-
-//     // Срок действия токенов
-//     const accessTokenValidUntil = new Date();
-//     accessTokenValidUntil.setMinutes(accessTokenValidUntil.getMinutes() + 15);
-//     const refreshTokenValidUntil = new Date();
-//     refreshTokenValidUntil.setDate(refreshTokenValidUntil.getDate() + 1);
-
-//     // Создание новой сессии
-//     const session = this.sessionRepository.create({
-//       user,
-//       refreshToken,
-//       accessTokenValidUntil,
-//       refreshTokenValidUntil,
-//     });
-//     await this.sessionRepository.save(session);
-//     return {
-//       accessToken,
-//       refreshToken,
-//     };
-//   }
-//   async register(createUserDto: CreateUserDto) {
-//     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-//     const user = await this.userService.create({
-//       ...createUserDto,
-//       password: hashedPassword,
-//     });
-//     return user;
-//   }
-//   async refresh(refreshToken: string) {
-//     const session = await this.sessionRepository.findOne({
-//       where: { refreshToken },
-//     });
-
-//     if (!session) {
-//       throw new UnauthorizedException('Invalid refresh token');
-//     }
-
-//     if (session.refreshTokenValidUntil < new Date()) {
-//       throw new UnauthorizedException('Refresh token expired');
-//     }
-
-//     const payload = { username: session.user.username, sub: session.user.id };
-//     const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
-
-//     // Обновление времени действия токена доступа
-//     session.accessTokenValidUntil = new Date();
-//     session.accessTokenValidUntil.setMinutes(
-//       session.accessTokenValidUntil.getMinutes() + 15,
-//     );
-
-//     await this.sessionRepository.save(session);
-//     return {
-//       accessToken,
-//     };
-//   }
-//   async logout(refreshToken: string): Promise<void> {
-//     const session = await this.sessionRepository.findOne({
-//       where: { refreshToken },
-//     });
-
-//     if (!session) {
-//       throw new UnauthorizedException('Invalid refresh token');
-//     }
-
-//     await this.sessionRepository.remove(session);
-//   }
-// }
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
@@ -132,15 +17,40 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
+    // Шаг 1: Найти пользователя по имени пользователя
     const user = await this.userService.findByUsername(username);
-    if (user) {
-      const isPasswordMatching = await bcrypt.compare(pass, user.password);
-      if (isPasswordMatching) {
-        const { password: _password, ...result } = user;
-        return result;
-      }
+    if (!user) {
+      console.log('Пользователь не найден');
+      return null;
     }
-    return null;
+
+    // Лог найденного пользователя
+    console.log('Найден пользователь:', user);
+
+    // Сравнение введенного пароля с хэшированным паролем из базы данных
+    try {
+      // Лог введенного пароля и хэшированного пароля для проверки
+      console.log('Введенный пароль:', pass);
+      console.log('Хэшированный пароль в базе данных:', user.password);
+
+      // Проверка совпадения паролей
+      const isPasswordMatching = await bcrypt.compare(pass, user.password);
+      console.log('Результат сравнения паролей:', isPasswordMatching);
+
+      if (!isPasswordMatching) {
+        console.log('Пароль не совпадает');
+        return null;
+      }
+    } catch (error) {
+      console.error('Ошибка при сравнении паролей:', error);
+      return null;
+    }
+
+    console.log('Успешная проверка пользователя');
+
+    // Возврат пользователя без пароля
+    const { password: _password, ...result } = user;
+    return result;
   }
 
   async login(user: any) {
@@ -165,21 +75,28 @@ export class AuthService {
       refresh_token: refreshToken,
     };
   }
-
   async register(createUserDto: CreateUserDto) {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const user = await this.userService.create({
-      ...createUserDto,
-      password: hashedPassword,
-    });
-    return user;
-  }
+    try {
+      // Генерация соли и хэширование пароля
+      const salt = await bcrypt.genSalt(10);
+      console.log('Сгенерированная соль:', salt); // Лог соли для хэширования
 
-  // async logout(userId: number) {
-  //   // Удаление всех сессий для пользователя
-  //   await this.sessionRepository.delete({ userId });
-  //   return { message: 'Logout successful' };
-  // }
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+      console.log('Хэшированный пароль:', hashedPassword); // Лог хэшированного пароля
+
+      // Создание пользователя с захэшированным паролем
+      const user = await this.userService.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+
+      console.log('Созданный пользователь:', user);
+      return user;
+    } catch (error) {
+      console.error('Ошибка при регистрации пользователя:', error);
+      throw new Error('Ошибка при регистрации');
+    }
+  }
   async logout(refreshToken: string) {
     // Удаление сессии из базы данных, используя refreshToken
     const session = await this.sessionRepository.findOneBy({ refreshToken });

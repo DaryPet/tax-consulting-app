@@ -1,9 +1,3 @@
-// export class CreateUserDto {
-//   username: string;
-//   name: string;
-//   email: string;
-//   password: string;
-// }
 import { IsString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreateUserDto {

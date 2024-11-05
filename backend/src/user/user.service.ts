@@ -13,14 +13,12 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-
+    // Здесь не нужно хэшировать пароль снова, он уже захэширован в register
     const user = this.userRepository.create({
       name: createUserDto.name,
       email: createUserDto.email,
       username: createUserDto.username,
-      password: hashedPassword,
+      password: createUserDto.password, // Захэшированный пароль уже передается
     });
     return await this.userRepository.save(user);
   }
@@ -37,10 +35,6 @@ export class UserService {
     return await this.userRepository.findOne({ where: { username } });
   }
 
-  // async updateUser(id: number, updateData: Partial<User>): Promise<User> {
-  //   await this.userRepository.update(id, updateData);
-  //   return this.findById(id);
-  // }
   async updateUser(id: number, updateData: Partial<User>): Promise<User> {
     if (updateData.password) {
       const salt = await bcrypt.genSalt(10);
