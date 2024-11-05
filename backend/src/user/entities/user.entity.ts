@@ -18,6 +18,9 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @Column({ default: 'user' }) // Роль по умолчанию - обычный пользователь
+  role: string;
+
   @OneToMany(() => Session, (session) => session.user)
   sessions: Session[];
 }

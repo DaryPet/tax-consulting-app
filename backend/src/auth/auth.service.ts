@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, sub: user.id, role: user.role };
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: '7d', // Пример срока действия для refresh token
@@ -75,19 +75,45 @@ export class AuthService {
       refresh_token: refreshToken,
     };
   }
+  // async register(createUserDto: CreateUserDto) {
+  //   try {
+  //     // Генерация соли и хэширование пароля
+  //     const salt = await bcrypt.genSalt(10);
+  //     console.log('Сгенерированная соль:', salt); // Лог соли для хэширования
+
+  //     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+  //     console.log('Хэшированный пароль:', hashedPassword); // Лог хэшированного пароля
+
+  //     // Создание пользователя с захэшированным паролем
+  //     const user = await this.userService.create({
+  //       ...createUserDto,
+  //       password: hashedPassword,
+  //     });
+
+  //     console.log('Созданный пользователь:', user);
+  //     return user;
+  //   } catch (error) {
+  //     console.error('Ошибка при регистрации пользователя:', error);
+  //     throw new Error('Ошибка при регистрации');
+  //   }
+  // }
   async register(createUserDto: CreateUserDto) {
     try {
       // Генерация соли и хэширование пароля
       const salt = await bcrypt.genSalt(10);
-      console.log('Сгенерированная соль:', salt); // Лог соли для хэширования
+      console.log('Сгенерированная соль:', salt);
 
       const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-      console.log('Хэшированный пароль:', hashedPassword); // Лог хэшированного пароля
+      console.log('Хэшированный пароль:', hashedPassword);
 
-      // Создание пользователя с захэшированным паролем
+      // Установка роли по умолчанию, если она не указана
+      const role = createUserDto.role ? createUserDto.role : 'user';
+
+      // Создание пользователя с захэшированным паролем и ролью
       const user = await this.userService.create({
         ...createUserDto,
         password: hashedPassword,
+        role: role, // Устанавливаем роль ('user' по умолчанию или указанную)
       });
 
       console.log('Созданный пользователь:', user);
@@ -97,6 +123,7 @@ export class AuthService {
       throw new Error('Ошибка при регистрации');
     }
   }
+
   async logout(refreshToken: string) {
     // Удаление сессии из базы данных, используя refreshToken
     const session = await this.sessionRepository.findOneBy({ refreshToken });
@@ -126,7 +153,7 @@ export class AuthService {
       throw new Error('User not found for the given session');
     }
 
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, sub: user.id, role: user.role };
     const newAccessToken = this.jwtService.sign(payload);
     const newRefreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 

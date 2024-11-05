@@ -19,6 +19,7 @@ export class UserService {
       email: createUserDto.email,
       username: createUserDto.username,
       password: createUserDto.password, // Захэшированный пароль уже передается
+      role: createUserDto.role, // Добавляем роль для сохранения в базу данных
     });
     return await this.userRepository.save(user);
   }
