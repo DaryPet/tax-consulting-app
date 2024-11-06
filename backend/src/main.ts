@@ -7,6 +7,14 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // Настройка CORS
+  app.enableCors({
+    origin: [
+      'http://localhost:3000', // Для разработки, если ваш фронтенд работает на localhost
+      // 'https://your-frontend-url.com', // Для продакшн-версии вашего фронтенда
+    ],
+    credentials: true, // Разрешаем использование авторизационных куки
+  });
   app.use(cookieParser()); // Используем cookie-parser для обработки куки
   // app.useGlobalFilters(new AllExceptionsFilter());
   await app.listen(3001);
