@@ -17,20 +17,15 @@ export class LogoutController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   async logout(@Req() req: Request, @Res() res: Response) {
-    try {
-      const user = req.user;
-
-      if (user) {
-        await this.logoutService.logoutUser(user['userId']);
-        // Очищаем куки, связанные с токенами
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
-        res.status(HttpStatus.NO_CONTENT).send();
-      } else {
-        res.status(HttpStatus.UNAUTHORIZED).send('User not authenticated');
-      }
-    } catch (error) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Logout failed');
+    const user = req.user;
+    if (user) {
+      await this.logoutService.logoutUser(user['userId']);
+      // Очищаем куки, связанные с токенами
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken');
+      res.status(HttpStatus.NO_CONTENT).send();
+    } else {
+      res.status(HttpStatus.UNAUTHORIZED).send('User not authenticated');
     }
   }
 }

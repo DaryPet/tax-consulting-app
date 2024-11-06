@@ -4,7 +4,7 @@ import { Document } from '../../documents/enteties/document.entity';
 import { Booking } from '../../booking/entities/booking.entity';
 import { Testimonial } from 'src/testimonial/entities/testimonial.entity';
 
-@Entity() // Декоратор, обозначающий, что этот класс представляет сущность базы данных
+@Entity('users') // Декоратор, обозначающий, что этот класс представляет сущность базы данных
 export class User {
   @PrimaryGeneratedColumn() // Автоматически генерируемый уникальный идентификатор пользователя
   id: number;
