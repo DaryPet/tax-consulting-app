@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Session } from '../../auth/enteties/session.entity';
 import { Document } from '../../documents/enteties/document.entity';
+import { Booking } from '../../booking/entities/booking.entity';
+import { Testimonial } from 'src/testimonial/entities/testimonial.entity';
 
 @Entity() // Декоратор, обозначающий, что этот класс представляет сущность базы данных
 export class User {
@@ -27,4 +29,10 @@ export class User {
 
   @OneToMany(() => Document, (document) => document.uploadedBy) // Связь с документами, которые загрузил пользователь
   documents: Document[];
+
+  @OneToMany(() => Booking, (booking) => booking.user)
+  bookings: Booking[]; // Связь "один ко многим" с бронированиями
+
+  @OneToMany(() => Testimonial, (testimonial) => testimonial.user)
+  testimonials: Testimonial[]; // Связь "Один ко Многим" с отзывами
 }

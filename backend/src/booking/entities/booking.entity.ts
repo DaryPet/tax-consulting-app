@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Booking {
@@ -22,4 +23,10 @@ export class Booking {
 
   @Column()
   time: string;
+
+  @ManyToOne(() => User, (user) => user.bookings, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  user: User;
 }
