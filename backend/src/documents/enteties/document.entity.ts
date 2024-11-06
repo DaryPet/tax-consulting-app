@@ -27,7 +27,10 @@ export class Document {
 
   // @Column()
   // uploadedBy: string; // имя пользователя или ID пользователя, который загрузил документ
-  @ManyToOne(() => User, (user) => user.documents, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.documents, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   uploadedBy: User; // Связь с пользователем, который загрузил документ
 }
 export default Document;
