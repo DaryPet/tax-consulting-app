@@ -19,21 +19,15 @@ export class MailerService {
   }
 
   async sendBookingConfirmation(booking: Booking, manageLink: string) {
-    try {
-      const mailOptions = {
-        from: process.env.SMTP_USER,
-        to: booking.email,
-        subject: 'Booking Confirmation and Management Link',
-        text: `Hello ${booking.name}, your booking for ${booking.service} on ${booking.date} at ${booking.time} has been confirmed! You can manage your booking using the following link: ${manageLink}`,
-      };
-
-      await this.transporter.sendMail(mailOptions);
-      console.log(
-        `Booking confirmation email sent successfully to ${booking.email}`,
-      );
-    } catch (error) {
-      console.error('Error while sending booking confirmation email:', error);
-      throw new Error('Unable to send booking confirmation email');
-    }
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: booking.email,
+      subject: 'Booking Confirmation and Management Link',
+      text: `Hello ${booking.name}, your booking for ${booking.service} on ${booking.date} at ${booking.time} has been confirmed! You can manage your booking using the following link: ${manageLink}`,
+    };
+    await this.transporter.sendMail(mailOptions);
+    console.log(
+      `Booking confirmation email sent successfully to ${booking.email}`,
+    );
   }
 }

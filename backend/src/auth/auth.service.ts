@@ -28,24 +28,19 @@ export class AuthService {
     console.log('Найден пользователь:', user);
 
     // Сравнение введенного пароля с хэшированным паролем из базы данных
-    try {
-      // Лог введенного пароля и хэшированного пароля для проверки
-      console.log('Введенный пароль:', pass);
-      console.log('Хэшированный пароль в базе данных:', user.password);
 
-      // Проверка совпадения паролей
-      const isPasswordMatching = await bcrypt.compare(pass, user.password);
-      console.log('Результат сравнения паролей:', isPasswordMatching);
+    // Лог введенного пароля и хэшированного пароля для проверки
+    console.log('Введенный пароль:', pass);
+    console.log('Хэшированный пароль в базе данных:', user.password);
 
-      if (!isPasswordMatching) {
-        console.log('Пароль не совпадает');
-        return null;
-      }
-    } catch (error) {
-      console.error('Ошибка при сравнении паролей:', error);
+    // Проверка совпадения паролей
+    const isPasswordMatching = await bcrypt.compare(pass, user.password);
+    console.log('Результат сравнения паролей:', isPasswordMatching);
+
+    if (!isPasswordMatching) {
+      console.log('Пароль не совпадает');
       return null;
     }
-
     console.log('Успешная проверка пользователя');
 
     // Возврат пользователя без пароля
@@ -98,7 +93,8 @@ export class AuthService {
       return user;
     } catch (error) {
       console.error('Ошибка при регистрации пользователя:', error);
-      throw new Error('Ошибка при регистрации');
+      // throw new Error('Ошибка при регистрации');
+      throw error;
     }
   }
 

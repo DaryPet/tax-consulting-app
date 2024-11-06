@@ -20,6 +20,7 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
+    console.log('Запрос на регистрацию получен с данными:', createUserDto);
     return this.authService.register(createUserDto);
   }
 
