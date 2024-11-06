@@ -32,9 +32,6 @@ export class TestimonialService {
     });
   }
 
-  // findOne(id: number): Promise<Testimonial> {
-  //   return this.testimonialRepository.findOneBy({ id });
-  // }
   // Получение конкретного отзыва по ID
   async findOne(id: number, user: any): Promise<Testimonial> {
     const testimonial = await this.testimonialRepository.findOne({
@@ -52,13 +49,6 @@ export class TestimonialService {
     return testimonial;
   }
 
-  // async update(
-  //   id: number,
-  //   updatedTestimonial: Partial<Testimonial>,
-  // ): Promise<Testimonial> {
-  //   await this.testimonialRepository.update(id, updatedTestimonial);
-  //   return this.testimonialRepository.findOneBy({ id });
-  // }
   // Обновление отзыва
   async update(
     id: number,
@@ -78,9 +68,6 @@ export class TestimonialService {
     return await this.testimonialRepository.save(testimonial);
   }
 
-  // async remove(id: number): Promise<void> {
-  //   await this.testimonialRepository.delete(id);
-  // }
   // Удаление отзыва
   async remove(id: number, user: any): Promise<void> {
     const testimonial = await this.findOne(id, user);

@@ -21,7 +21,6 @@ import { Request } from 'express';
 import { OptionalJwtAuthGuard } from 'src/auth/guards/optional-jwt-auth.guard';
 
 @Controller('booking')
-// @UseGuards(JwtAuthGuard, RolesGuard)
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
   @Get('available-slots')
@@ -29,14 +28,6 @@ export class BookingController {
     return await this.bookingService.findAvailableSlots(date);
   }
   // Создание нового бронирования
-  // @Post()
-  // async create(
-  //   @Body() bookingData: Partial<Booking>,
-  //   @Req() req: Request,
-  // ): Promise<Booking> {
-  //   const user = req.user || null;
-  //   return await this.bookingService.create(bookingData, user);
-  // }
   @Post()
   @UseGuards(OptionalJwtAuthGuard) // Используем модифицированный Guard, который не обязательно требует авторизации
   async create(
@@ -92,7 +83,6 @@ export class BookingController {
   }
 
   // Удаление бронирования — пользователь может удалять только свои бронирования
-  // @UseGuards(JwtAuthGuard)
   @UseGuards(OptionalJwtAuthGuard)
   @Delete(':id')
   async remove(

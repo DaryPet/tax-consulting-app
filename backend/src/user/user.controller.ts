@@ -27,10 +27,6 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
-  // @Get()
-  // async getAllUsers(): Promise<User[]> {
-  //   return await this.userService.findAll();
-  // }
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Role('admin') // Только администраторы могут видеть всех пользователей
   @Get()
@@ -38,10 +34,6 @@ export class UserController {
     return await this.userService.findAll();
   }
 
-  // @Get(':id')
-  // async getUserById(@Param('id') id: number): Promise<User> {
-  //   return await this.userService.findById(id);
-  // }
   @UseGuards(JwtAuthGuard) // Доступ только авторизованным пользователям
   @Get(':id')
   async getUserById(
@@ -59,14 +51,6 @@ export class UserController {
 
     return await this.userService.findById(id);
   }
-
-  // @Patch(':id')
-  // async updateUser(
-  //   @Param('id') id: number,
-  //   @Body() updateData: Partial<User>,
-  // ): Promise<User> {
-  //   return await this.userService.updateUser(id, updateData);
-  // }
 
   @UseGuards(JwtAuthGuard) // Доступ только авторизованным пользователям
   @Patch(':id')
@@ -87,10 +71,6 @@ export class UserController {
     return await this.userService.updateUser(id, updateData);
   }
 
-  // @Delete(':id')
-  // async deleteUser(@Param('id') id: number): Promise<void> {
-  //   return await this.userService.deleteUser(id);
-  // }
   @UseGuards(JwtAuthGuard, RolesGuard) // Ограничиваем удаление пользователей
   @Role('admin') // Только администратор может удалять пользователей
   @Delete(':id')

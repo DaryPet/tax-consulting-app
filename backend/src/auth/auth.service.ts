@@ -75,28 +75,6 @@ export class AuthService {
       refresh_token: refreshToken,
     };
   }
-  // async register(createUserDto: CreateUserDto) {
-  //   try {
-  //     // Генерация соли и хэширование пароля
-  //     const salt = await bcrypt.genSalt(10);
-  //     console.log('Сгенерированная соль:', salt); // Лог соли для хэширования
-
-  //     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-  //     console.log('Хэшированный пароль:', hashedPassword); // Лог хэшированного пароля
-
-  //     // Создание пользователя с захэшированным паролем
-  //     const user = await this.userService.create({
-  //       ...createUserDto,
-  //       password: hashedPassword,
-  //     });
-
-  //     console.log('Созданный пользователь:', user);
-  //     return user;
-  //   } catch (error) {
-  //     console.error('Ошибка при регистрации пользователя:', error);
-  //     throw new Error('Ошибка при регистрации');
-  //   }
-  // }
   async register(createUserDto: CreateUserDto) {
     try {
       // Генерация соли и хэширование пароля

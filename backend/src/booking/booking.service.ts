@@ -44,53 +44,6 @@ export class BookingService {
     return !existingBooking;
   }
 
-  // Создание нового бронирования
-  // async create(bookingData: Partial<Booking>, user?: User): Promise<Booking> {
-  //   // Генерация уникального токена для бронирования
-  //   const uniqueToken = randomBytes(16).toString('hex');
-
-  //   // Проверка на выходные
-  //   const bookingDate = new Date(bookingData.date);
-  //   const isWeekend = bookingDate.getDay() === 0 || bookingDate.getDay() === 6;
-  //   if (isWeekend) {
-  //     throw new BadRequestException('Booking is not allowed on weekends.');
-  //   }
-
-  //   // Проверяем, является ли время допустимым
-  //   if (!this.availableTimeSlots.includes(bookingData.time)) {
-  //     throw new BadRequestException(
-  //       'The selected time is not available for booking.',
-  //     );
-  //   }
-
-  //   const isAvailable = await this.isTimeSlotAvailable(
-  //     bookingData.date,
-  //     bookingData.time,
-  //   );
-  //   if (!isAvailable) {
-  //     throw new BadRequestException('Selected time slot is already taken.');
-  //   }
-  //   // Если пользователь указан, находим его в базе данных, чтобы гарантировать правильную сущность User
-  //   let foundUser: User = null;
-  //   console.log(foundUser);
-  //   if (user) {
-  //     foundUser = await this.userRepository.findOne({ where: { id: user.id } });
-  //     if (!foundUser) {
-  //       throw new NotFoundException('User not found');
-  //     }
-  //   }
-  //   const newBooking = this.bookingRepository.create({
-  //     ...bookingData,
-  //     user: foundUser,
-  //     uniqueToken,
-  //   });
-  //   console.log(newBooking);
-  //   // const newBooking = this.bookingRepository.create({ ...bookingData, user });
-  //   const savedBooking = await this.bookingRepository.save(newBooking);
-  //   const manageLink = `https://yourapp.com/manage-booking/${savedBooking.id}?token=${savedBooking.uniqueToken}`;
-  //   await this.mailerService.sendBookingConfirmation(savedBooking, manageLink);
-  //   return savedBooking;
-  // }
   async create(bookingData: Partial<Booking>, user?: User): Promise<Booking> {
     const uniqueToken = randomBytes(16).toString('hex');
 
@@ -187,26 +140,6 @@ export class BookingService {
 
     return booking;
   }
-  // async update(
-  //   id: number,
-  //   updatedBooking: Partial<Booking>,
-  //   user?: User,
-  //   token?: string,
-  // ): Promise<Booking> {
-  //   const booking = await this.findOne(id, user, token);
-  //   if (updatedBooking.date && updatedBooking.time) {
-  //     const isAvailable = await this.isTimeSlotAvailable(
-  //       updatedBooking.date,
-  //       updatedBooking.time,
-  //     );
-  //     if (!isAvailable) {
-  //       throw new BadRequestException('Selected time slot is already taken.');
-  //     }
-  //   }
-
-  //   Object.assign(booking, updatedBooking);
-  //   return await this.bookingRepository.save(booking);
-  // }
   async update(
     id: number,
     updatedBooking: Partial<Booking>,

@@ -41,13 +41,6 @@ export class DocumentService {
     // Логируем для диагностики
     console.log('Target User:', targetUser);
     console.log('Creating document for user ID:', userId);
-    // Создаем новый документ
-    // const newDocument = this.documentRepository.create({
-    //   ...createDocumentDto,
-    //   filename,
-    //   filepath: fullPath,
-    //   uploadedBy: targetUser,
-    // });
     // Создаем новый экземпляр документа вручную
     const newDocument = new Document();
     newDocument.filename = filename;
