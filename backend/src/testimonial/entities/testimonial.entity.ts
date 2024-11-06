@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Testimonial {
@@ -6,7 +13,7 @@ export class Testimonial {
   id: number;
 
   @Column()
-  username: string;
+  name: string;
 
   @Column()
   title: string;
@@ -14,6 +21,12 @@ export class Testimonial {
   @Column()
   content: string;
 
-  // @Column()
-  // date: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.testimonials, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  user: User; // Связь с пользователем, который оставил отзыв
 }
