@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from '../../user/entities/user.entity'; // Импортируем сущность User
 
 @Entity()
 export class Document {
@@ -23,6 +25,9 @@ export class Document {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  uploadedBy: string; // имя пользователя или ID пользователя, который загрузил документ
+  // @Column()
+  // uploadedBy: string; // имя пользователя или ID пользователя, который загрузил документ
+  @ManyToOne(() => User, (user) => user.documents, { onDelete: 'CASCADE' })
+  uploadedBy: User; // Связь с пользователем, который загрузил документ
 }
+export default Document;
