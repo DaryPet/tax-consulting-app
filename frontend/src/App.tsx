@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Navigate, Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import Layout from "./components/Layout/Layout";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function App() {
+const HomePage = lazy(() => import("./pages/HomePage"));
+
+const ServicePage = lazy(() => import("./pages/ServicePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const UserPage = lazy(() => import("./pages/UserPage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+
+export default function App() {
+  const { user } = useSelector((state: RootState) => state.auth);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Layout>
+        <Suspense fallback={<div>Загрузка...</div>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/services" element={<ServicePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/user-profile"
+              element={user ? <UserPage /> : <Navigate to="/login" replace />}
+            />
+            <Route
+              path="/admin"
+              element={
+                user && user.role === "admin" ? (
+                  <AdminPage />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+      </Layout>
+      <ToastContainer />
     </div>
   );
 }
-
-export default App;
