@@ -144,4 +144,15 @@ export class AuthService {
       refresh_token: newRefreshToken,
     };
   }
+  async getCurrentUser(user: any) {
+    // Найти пользователя по ID из данных в токене (req.user)
+    const currentUser = await this.userService.findById(user.id);
+    if (!currentUser) {
+      throw new Error('User not found');
+    }
+
+    // Возвращаем пользователя без пароля
+    const { password: _password, ...result } = currentUser;
+    return result;
+  }
 }

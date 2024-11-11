@@ -8,6 +8,7 @@ import {
   UnauthorizedException,
   Req,
   Res,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -78,5 +79,13 @@ export class AuthController {
     // Очищаем refresh_token из куки
     res.clearCookie('refresh_token');
     return res.send();
+  }
+  // Новый метод для получения информации о текущем пользователе
+  @UseGuards(JwtAuthGuard) // Используем guard для защиты этого маршрута
+  @Get('me')
+  async getCurrentUser(@Req() req: Request) {
+    const user = req.user; // req.user будет содержать информацию о пользователе, если JwtAuthGuard успешно отработал
+    console.log('Текущий пользователь (req.user):', req.user);
+    return this.authService.getCurrentUser(user);
   }
 }
