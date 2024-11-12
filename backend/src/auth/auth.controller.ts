@@ -67,8 +67,8 @@ export class AuthController {
     return res.json({ access_token });
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('logout')
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: Request, @Res() res: Response) {
     const refreshToken = req.cookies['refresh_token'];
@@ -76,9 +76,15 @@ export class AuthController {
       throw new UnauthorizedException('Refresh token is required');
     }
     await this.authService.logout(refreshToken);
-    // Очищаем refresh_token из куки
-    res.clearCookie('refresh_token');
-    return res.send();
+    // Очищаем куку с refresh_token, чтобы завершить сессию
+    res.clearCookie('refresh_token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+
+    // return res.send();
+    return res.status(HttpStatus.NO_CONTENT).send();
   }
   // Новый метод для получения информации о текущем пользователе
   @UseGuards(JwtAuthGuard) // Используем guard для защиты этого маршрута
