@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUsers, fetchCurrentUser } from "../../redux/operations";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import styles from "./LoginPage.module.css";
+import styles from "./loginPage.module.css";
 // import { loginUser } from "../redux/slices/authSlice";
 
 const LoginPage: React.FC = () => {
