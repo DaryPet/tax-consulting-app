@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const HomePage = lazy(() => import("./pages/HomePage"));
 
 const ServicePage = lazy(() => import("./pages/ServicePage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const UserPage = lazy(() => import("./pages/UserPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));

@@ -14,6 +14,7 @@ export const USERS_API_URL = `${BASE_URL}/api/user/`;
 export const AUTH_LOGIN_URL = `${AUTH_API_URL}login`;
 export const AUTH_LOGOUT_URL = `${AUTH_API_URL}logout`;
 export const AUTH_REGISTER_URL = `${AUTH_API_URL}register`;
+export const AUTH_ME_URL = `${AUTH_API_URL}me`;
 
 // Эндпоинты для отзывов (доступны для всех пользователей)
 export const TESTIMONIALS_URL = `${TESTIMONIALS_API_URL}`;

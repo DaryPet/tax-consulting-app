@@ -1,5 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { login, register, logout } from "../../services/authService";
+import { createSlice } from "@reduxjs/toolkit";
+
+import {
+  loginUsers,
+  fetchCurrentUser,
+  registerUser,
+  logoutUser,
+} from "../operations";
 import { toast } from "react-toastify";
 
 interface User {
@@ -12,20 +18,26 @@ interface User {
 // Типизация состояния авторизаци
 interface AuthState {
   user: User | null;
-  isAuthenticated: boolean;
-  status: "idle" | "loading" | "failed";
+  token: string | null;
+  isLoggedIn: boolean;
+  loading: boolean;
+  isRefreshing: boolean;
   error: string | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
 }
 
 // Error messages
-const LOGIN_ERROR_MESSAGE = "Error while logging in";
-const REGISTER_ERROR_MESSAGE = "Error during registration";
-const LOGOUT_ERROR_MESSAGE = "Error while logging out";
+// const LOGIN_ERROR_MESSAGE = "Error while logging in";
+// const REGISTER_ERROR_MESSAGE = "Error during registration";
+// const LOGOUT_ERROR_MESSAGE = "Error while logging out";
 
 // Начальное состояние
 const initialState: AuthState = {
   user: null,
-  isAuthenticated: false,
+  token: null,
+  isLoggedIn: false,
+  isRefreshing: false,
+  loading: false,
   status: "idle",
   error: null,
   //   _persist: {
@@ -33,135 +45,122 @@ const initialState: AuthState = {
   //     rehydrated: false,
   //   },
 };
-
-// Асинхронный экшен для входа
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (
-    { username, password }: { username: string; password: string },
-    thunkAPI
-  ) => {
-    try {
-      console.log("Dispatching login request with username:", username);
-      const data = await login(username, password);
-      console.log("Server response:", data);
-      return data; // Вернем данные пользователя (например, токен и информация о пользователе)
-    } catch (error) {
-      return thunkAPI.rejectWithValue(LOGIN_ERROR_MESSAGE);
-    }
-  }
-);
-
-// Асинхронный экшен для регистрации
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (
-    {
-      name,
-      username,
-      password,
-    }: { name: string; username: string; password: string },
-    thunkAPI
-  ) => {
-    try {
-      const data = await register(name, username, password);
-      return data; // Вернем данные пользователя после успешной регистрации
-    } catch (error) {
-      return thunkAPI.rejectWithValue(REGISTER_ERROR_MESSAGE);
-    }
-  }
-);
-
-// Асинхронный экшен для выхода
-export const logoutUser = createAsyncThunk(
-  "auth/logoutUser",
-  async (_, thunkAPI) => {
-    try {
-      await logout();
-      return;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(LOGOUT_ERROR_MESSAGE);
-    }
-  }
-);
-
 // Создание слайса для управления авторизацией
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: (builder) =>
     builder
       // Логика обработки loginUser экшена
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUsers.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
         state.error = null;
       })
-      .addCase(
-        loginUser.fulfilled,
-        (state, action: PayloadAction<{ user: User }>) => {
-          console.log("Login fulfilled, received data:", action.payload);
-          state.status = "idle";
-          state.user = action.payload.user;
-          state.isAuthenticated = true;
-          state.error = null;
-          toast.success("You have successfully logged in");
+      .addCase(loginUsers.fulfilled, (state, action) => {
+        const { access_token } = action.payload;
+        if (!access_token) {
+          state.status = "failed";
+          state.loading = false;
+          state.error = "Invalid response from server during login";
+          return;
         }
-      )
-      .addCase(loginUser.rejected, (state, action) => {
+        state.user = action.payload.user;
+        state.token = access_token;
+        state.isLoggedIn = true;
+        state.loading = false;
+        state.status = "succeeded";
+        toast.success("You have successfully logged in");
+      })
+      .addCase(loginUsers.rejected, (state, action) => {
         state.status = "failed";
-        const errorMessage = (action.payload as string) || LOGIN_ERROR_MESSAGE;
-
+        state.loading = false;
+        const errorMessage = action.payload as string;
         state.error = errorMessage;
-        // Добавляем уведомление об ошибке входа
+        // \\\\\\\\\\\\\\\\\\\\
         console.error("Invalid data received:", action.payload);
         toast.error(errorMessage);
+      })
+      // Обработка рефреша пользователя
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.isRefreshing = true;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.isRefreshing = false;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isRefreshing = false;
       })
       // Логика обработки registerUser экшена
       .addCase(registerUser.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
         state.error = null;
       })
-      .addCase(
-        registerUser.fulfilled,
-        (state, action: PayloadAction<{ user: User }>) => {
-          state.status = "idle";
-          state.user = action.payload.user;
-          state.isAuthenticated = true;
-          state.error = null;
-          toast.success("You have successfully registered");
-        }
-      )
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.loading = false;
+        state.error = null;
+        toast.success("You have successfully registered");
+      })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";
-        const errorMessage =
-          (action.payload as string) || REGISTER_ERROR_MESSAGE;
+        state.loading = false;
+        const errorMessage = action.payload as string;
         state.error = errorMessage;
         console.error("Register error: ", action.error);
         // Добавляем уведомление об ошибке входа
         toast.error(errorMessage);
       })
-      // Логика обработки logoutUser экшена
+      .addCase(registerUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      // Обработка логина
+      .addCase(loginUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUsers.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.loading = false;
+      })
+      .addCase(loginUsers.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      // Обработка выхода
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
+        state.loading = true;
         state.error = null;
       })
       .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
         state.user = null;
-        state.isAuthenticated = false;
-        state.status = "idle";
+        state.isLoggedIn = false;
+        state.status = "succeeded";
         state.error = null;
         toast.success("You have successfully logged out");
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.status = "failed";
-        const errorMessage = (action.payload as string) || LOGOUT_ERROR_MESSAGE;
+        state.loading = false;
+        const errorMessage = action.payload as string;
         state.error = errorMessage;
+        // \\\\\\\\\\\\\\\\\\\\\
         console.error("Logout error: ", action.error);
         toast.error(errorMessage);
-      });
-  },
+      }),
 });
 
-// Экспорт редьюсеров и экшенов
 export default authSlice.reducer;
