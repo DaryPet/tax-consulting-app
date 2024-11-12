@@ -54,20 +54,21 @@ export const loginUsers = createAsyncThunk(
     }
   }
 );
+
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, thunkAPI) => {
     try {
       console.log("Начало выполнения операции logout");
       const state: any = thunkAPI.getState();
-      const token = state.auth.token; // Получаем токен из состояния
-
+      const token = state.auth.token;
+      console.log(token);
       if (!token) {
-        return thunkAPI.rejectWithValue("No token available");
+        console.error("Токен отсутствует, невозможно выполнить логаут.");
+        return thunkAPI.rejectWithValue("No token availiable");
       }
-
-      await logout(token); // Здесь мы не передаем токен, так как теперь передаем куки
-      return; // В случае успеха ничего не возвращаем
+      await logout(token); // Без передачи токена, так как токен берется из куков
+      return;
     } catch (error) {
       console.error("Ошибка при выполнении logout:", error);
       return thunkAPI.rejectWithValue("Error while logging out");
