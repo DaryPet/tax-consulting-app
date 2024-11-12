@@ -102,12 +102,18 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        const { access_token } = action.payload;
+        if (!access_token) {
+          state.status = "failed";
+          state.loading = false;
+          state.error = "Invalid response from server during registration";
+          return;
+        }
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.token = access_token;
         state.isLoggedIn = true;
         state.loading = false;
-        state.error = null;
+        state.status = "succeeded";
         toast.success("You have successfully registered");
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -119,25 +125,6 @@ const authSlice = createSlice({
         // Добавляем уведомление об ошибке входа
         toast.error(errorMessage);
       })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
-      })
-      // Обработка логина
-      .addCase(loginUsers.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUsers.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isLoggedIn = true;
-        state.loading = false;
-      })
-      .addCase(loginUsers.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
-      })
       // Обработка выхода
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
@@ -147,6 +134,7 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.loading = false;
         state.user = null;
+        state.token = null;
         state.isLoggedIn = false;
         state.status = "succeeded";
         state.error = null;

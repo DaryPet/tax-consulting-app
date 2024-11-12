@@ -1,16 +1,17 @@
-// frontend/src/Layout/Layout.tsx
-import React, { ReactNode } from "react";
+// frontend/src/components/Layout/Layout.tsx
+import React from "react";
+import Header from "../Header/Header";
+// import styles from "./Layout.module.css";
 
-type LayoutProps = {
-  children: ReactNode;
-};
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
-      <header>Header Content</header>
+      <Header />
       <main>{children}</main>
-      <footer>Footer Content</footer>
     </div>
   );
 };

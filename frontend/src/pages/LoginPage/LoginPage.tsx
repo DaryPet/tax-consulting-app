@@ -12,14 +12,15 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { user, status, error } = useSelector((state: RootState) => state.auth);
+  const { status, error } = useSelector((state: RootState) => state.auth);
 
   const handleLogin = async () => {
     try {
       await dispatch(loginUsers({ username, password })).unwrap();
+      const userResponse = await dispatch(fetchCurrentUser()).unwrap();
 
-      await dispatch(fetchCurrentUser()).unwrap();
-      if (user && user.role === "admin") {
+      // await dispatch(fetchCurrentUser()).unwrap();
+      if (userResponse.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/user-profile");
