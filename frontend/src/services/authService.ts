@@ -28,24 +28,20 @@ export const register = async (
 
 // Вход пользователя в систему
 export const login = async (username: string, password: string) => {
-  const response = await axios.post(AUTH_LOGIN_URL, {
-    username,
-    password,
-  });
+  const response = await axios.post(
+    AUTH_LOGIN_URL,
+    {
+      username,
+      password,
+    },
+    {
+      withCredentials: true,
+    }
+  );
   return response.data; // Ожидаемый ответ: { user, token }
 };
 
-// // Выход пользователя из системы
-// export const logout = async () => {
-//   const response = await axios.post(
-//     AUTH_LOGOUT_URL,
-//     {},
-//     { withCredentials: true }
-//   );
-//   return response.data;
-// };
-// Выход пользователя из системы
-export const logout = async () => {
+export const logout = async (token: string) => {
   try {
     console.log("Отправка запроса на logout...");
     const response = await axios.post(
@@ -53,6 +49,9 @@ export const logout = async () => {
       {},
       {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // Передаем токен в заголовке
+        },
       }
     );
     console.log("Успешный logout:", response.data);
@@ -77,6 +76,7 @@ export const fetchUserData = async (token: string) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    withCredentials: true,
   });
   return response.data;
 };

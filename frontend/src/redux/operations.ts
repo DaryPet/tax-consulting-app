@@ -54,41 +54,19 @@ export const loginUsers = createAsyncThunk(
     }
   }
 );
-
-// Асинхронная операция для выхода пользователя
-// export const logoutUser = createAsyncThunk(
-//   "auth/logoutUser",
-//   async (_, thunkAPI) => {
-//     try {
-//       await logout();
-//       return;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue("Error while logging out");
-//     }
-//   }
-// );
-// redux/operations.ts
-// export const logoutUser = createAsyncThunk(
-//   "auth/logoutUser",
-//   async (_, thunkAPI) => {
-//     try {
-//       console.log("Начало операции logout");
-//       const response = await logout();
-//       console.log("Ответ от сервера на logout:", response);
-//       return response;
-//     } catch (error) {
-//       console.error("Ошибка при выполнении logout:", error);
-//       return thunkAPI.rejectWithValue("Error while logging out");
-//     }
-//   }
-// );
-// Асинхронная операция для выхода пользователя
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, thunkAPI) => {
     try {
       console.log("Начало выполнения операции logout");
-      await logout(); // Здесь мы не передаем токен, так как теперь передаем куки
+      const state: any = thunkAPI.getState();
+      const token = state.auth.token; // Получаем токен из состояния
+
+      if (!token) {
+        return thunkAPI.rejectWithValue("No token available");
+      }
+
+      await logout(token); // Здесь мы не передаем токен, так как теперь передаем куки
       return; // В случае успеха ничего не возвращаем
     } catch (error) {
       console.error("Ошибка при выполнении logout:", error);
