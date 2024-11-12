@@ -59,8 +59,8 @@ export class AuthController {
     // Обновляем refresh_token в куки
     res.cookie('refresh_token', new_refresh_token, {
       httpOnly: true,
-      secure: true, // Используйте только при HTTPS
-      sameSite: 'strict',
+      secure: false, // Используйте только при HTTPS
+      sameSite: 'lax',
     });
 
     // Возвращаем новый access_token клиенту
