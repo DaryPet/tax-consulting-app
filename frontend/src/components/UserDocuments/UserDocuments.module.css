@@ -1,0 +1,69 @@
+.documentsContainer {
+  margin-top: 40px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.fileInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.fileInput {
+  margin-right: 10px;
+}
+
+.uploadButton {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+  background-color: #45a049;
+}
+
+.uploadButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.documentsList {
+  margin-top: 20px;
+  /* display: flex;
+  flex-direction: column; */
+  text-align: center;
+}
+.titleList {
+  color: aqua;
+}
+.nodocuments {
+  text-align: center;
+}
+.documentsList h3 {
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.documentItem {
+  margin-bottom: 10px;
+}
+
+.documentLink {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.documentLink:hover {
+  color: #0056b3;
+}

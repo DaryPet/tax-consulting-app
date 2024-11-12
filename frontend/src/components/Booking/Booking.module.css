@@ -1,0 +1,39 @@
+.bookingSection {
+  margin-top: 40px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar {
+  max-width: 350px; /* Устанавливаем максимальную ширину для календаря */
+  width: 100%;
+  margin: 0 auto; /* Центрируем календарь */
+  background: #fefefe;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bookButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.bookButton:hover {
+  background: #3a7bc1;
+}

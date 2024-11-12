@@ -6,8 +6,8 @@ const BASE_URL = "https://tax-consulting-app.onrender.com";
 // URL для различных модулей вашего API
 export const AUTH_API_URL = `${BASE_URL}/auth/`;
 export const TESTIMONIALS_API_URL = `${BASE_URL}/api/testimonials/`;
-export const DOCUMENTS_API_URL = `${BASE_URL}/api/documents/`;
-export const BOOKING_API_URL = `${BASE_URL}/api/booking/`;
+export const DOCUMENTS_API_URL = `${BASE_URL}/documents/`;
+export const BOOKING_API_URL = `${BASE_URL}/booking/`;
 export const USERS_API_URL = `${BASE_URL}/api/user/`;
 
 // Эндпоинты для авторизации
