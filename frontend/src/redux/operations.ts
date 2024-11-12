@@ -55,19 +55,36 @@ export const loginUsers = createAsyncThunk(
   }
 );
 
+// export const logoutUser = createAsyncThunk(
+//   "auth/logoutUser",
+//   async (_, thunkAPI) => {
+//     try {
+//       console.log("Начало выполнения операции logout");
+//       const state: any = thunkAPI.getState();
+//       const token = state.auth.token;
+//       console.log(token);
+//       if (!token) {
+//         console.error("Токен отсутствует, невозможно выполнить логаут.");
+//         return thunkAPI.rejectWithValue("No token availiable");
+//       }
+//       await logout(token); // Без передачи токена, так как токен берется из куков
+//       return;
+//     } catch (error) {
+//       console.error("Ошибка при выполнении logout:", error);
+//       return thunkAPI.rejectWithValue("Error while logging out");
+//     }
+//   }
+// );
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, thunkAPI) => {
     try {
       console.log("Начало выполнения операции logout");
-      const state: any = thunkAPI.getState();
-      const token = state.auth.token;
-      console.log(token);
-      if (!token) {
-        console.error("Токен отсутствует, невозможно выполнить логаут.");
-        return thunkAPI.rejectWithValue("No token availiable");
-      }
-      await logout(token); // Без передачи токена, так как токен берется из куков
+
+      // Вызываем logout без передачи токена, так как refresh_token будет взят из куков
+      await logout(); // Обновленный `logout` в `authService.ts` использует куки для отправки refresh_token
+      console.log("Логаут завершен");
+
       return;
     } catch (error) {
       console.error("Ошибка при выполнении logout:", error);
