@@ -16,8 +16,10 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     try {
+      console.log("Запуск handleLogin");
       await dispatch(loginUsers({ username, password })).unwrap();
       const userResponse = await dispatch(fetchCurrentUser()).unwrap();
+      console.log("Логин прошел успешно");
 
       // await dispatch(fetchCurrentUser()).unwrap();
       if (userResponse.role === "admin") {
