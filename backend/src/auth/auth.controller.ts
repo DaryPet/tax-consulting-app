@@ -71,6 +71,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: Request, @Res() res: Response) {
+    console.log('Запрос на логаут получен');
+    console.log('Пользователь в req.user:', req.user);
     const refreshToken = req.cookies['refresh_token'];
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is required');
@@ -82,7 +84,6 @@ export class AuthController {
       secure: false,
       sameSite: 'lax',
     });
-
     // return res.send();
     return res.status(HttpStatus.NO_CONTENT).send();
   }
