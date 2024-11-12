@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (req && req.headers['authorization']) {
           return ExtractJwt.fromAuthHeaderAsBearerToken()(req); // Извлечение токена из заголовка Authorization (как было раньше)
         } else if (req && req.cookies) {
-          return req.cookies['accessToken']; // Извлечение токена из куки, если нет заголовка
+          return req.cookies['refresh_token']; // Извлечение токена из куки, если нет заголовка
         }
         return null; // Возвращаем null, если токен не найден
       },
