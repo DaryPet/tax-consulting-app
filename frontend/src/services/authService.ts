@@ -49,9 +49,9 @@ export const logout = async (token: string) => {
       {},
       {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`, // Передаем токен в заголовке
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`, // Передаем токен в заголовке
+        // },
       }
     );
     console.log("Успешный logout:", response.data);
