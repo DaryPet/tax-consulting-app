@@ -85,7 +85,7 @@ export class AuthController {
   @Get('me')
   async getCurrentUser(@Req() req: Request) {
     const user = req.user; // req.user будет содержать информацию о пользователе, если JwtAuthGuard успешно отработал
-    console.log('Текущий пользователь (req.user):', req.user);
+    console.log('Текущий пользователь вот (req.user):', req.user);
     return this.authService.getCurrentUser(user);
   }
 }
