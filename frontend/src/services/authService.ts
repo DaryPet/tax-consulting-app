@@ -41,24 +41,43 @@ export const login = async (username: string, password: string) => {
   return response.data; // Ожидаемый ответ: { user, token }
 };
 
-export const logout = async (token: string) => {
+// export const logout = async (token: string) => {
+//   try {
+//     console.log("Отправка запроса на logout...");
+//     const response = await axios.post(
+//       AUTH_LOGOUT_URL,
+//       {},
+//       {
+//         withCredentials: true,
+//         headers: {
+//           Authorization: `Bearer ${token}`, // Передаем токен в заголовке
+//         },
+//       }
+//     );
+//     console.log("Успешный logout:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Ошибка при выполнении logout:", error);
+
+//     throw error;
+//   }
+// };
+export const logout = async () => {
   try {
     console.log("Отправка запроса на logout...");
+
     const response = await axios.post(
       AUTH_LOGOUT_URL,
       {},
       {
-        withCredentials: true,
-        // headers: {
-        //   Authorization: `Bearer ${token}`, // Передаем токен в заголовке
-        // },
+        withCredentials: true, // Отправляем куки, чтобы сервер получил refresh_token
       }
     );
+
     console.log("Успешный logout:", response.data);
     return response.data;
   } catch (error) {
     console.error("Ошибка при выполнении logout:", error);
-
     throw error;
   }
 };
