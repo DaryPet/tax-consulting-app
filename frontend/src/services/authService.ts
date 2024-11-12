@@ -9,14 +9,20 @@ import {
 // Регистрация пользователя
 export const register = async (
   name: string,
+  username: string,
   email: string,
   password: string
 ) => {
-  const response = await axios.post(AUTH_REGISTER_URL, {
-    name,
-    email,
-    password,
-  });
+  const response = await axios.post(
+    AUTH_REGISTER_URL,
+    {
+      name,
+      email,
+      password,
+      username,
+    },
+    { withCredentials: true }
+  );
   return response.data; // Ожидаемый ответ: { user, token }
 };
 
@@ -29,10 +35,33 @@ export const login = async (username: string, password: string) => {
   return response.data; // Ожидаемый ответ: { user, token }
 };
 
+// // Выход пользователя из системы
+// export const logout = async () => {
+//   const response = await axios.post(
+//     AUTH_LOGOUT_URL,
+//     {},
+//     { withCredentials: true }
+//   );
+//   return response.data;
+// };
 // Выход пользователя из системы
 export const logout = async () => {
-  const response = await axios.post(AUTH_LOGOUT_URL);
-  return response.data;
+  try {
+    console.log("Отправка запроса на logout...");
+    const response = await axios.post(
+      AUTH_LOGOUT_URL,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("Успешный logout:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при выполнении logout:", error);
+
+    throw error;
+  }
 };
 // Получение текущего пользователя (маршрут `/auth/me`)
 export const getCurrentUser = async () => {
