@@ -1,4 +1,3 @@
-// frontend/src/redux/services/auth.service.ts
 import axios from "axios";
 import {
   AUTH_LOGIN_URL,
@@ -18,7 +17,7 @@ export const register = async (
     email,
     password,
   });
-  return response.data;
+  return response.data; // Ожидаемый ответ: { user, token }
 };
 
 // Вход пользователя в систему
@@ -27,7 +26,7 @@ export const login = async (username: string, password: string) => {
     username,
     password,
   });
-  return response.data;
+  return response.data; // Ожидаемый ответ: { user, token }
 };
 
 // Выход пользователя из системы

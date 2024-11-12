@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import {
   loginUsers,
   fetchCurrentUser,
@@ -18,11 +19,11 @@ interface User {
 interface AuthState {
   user: User | null;
   token: string | null;
-  loading: boolean;
   isLoggedIn: boolean;
+  loading: boolean;
   isRefreshing: boolean;
-  status: "idle" | "loading" | "failed" | "succeeded";
   error: string | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
 }
 
 // Error messages
@@ -49,7 +50,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: (builder) =>
     builder
       // Логика обработки loginUser экшена
       .addCase(loginUsers.pending, (state) => {
@@ -118,7 +119,26 @@ const authSlice = createSlice({
         // Добавляем уведомление об ошибке входа
         toast.error(errorMessage);
       })
-      // Логика обработки logoutUser экшена
+      .addCase(registerUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      // Обработка логина
+      .addCase(loginUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUsers.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+        state.loading = false;
+      })
+      .addCase(loginUsers.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      // Обработка выхода
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -140,8 +160,7 @@ const authSlice = createSlice({
         // \\\\\\\\\\\\\\\\\\\\\
         console.error("Logout error: ", action.error);
         toast.error(errorMessage);
-      });
-  },
+      }),
 });
 
 export default authSlice.reducer;
