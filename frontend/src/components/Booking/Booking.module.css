@@ -1,4 +1,4 @@
-.bookingSection {
+/* .bookingSection {
   margin-top: 40px;
   padding: 20px;
   background: #fff;
@@ -14,9 +14,9 @@
 }
 
 .calendar {
-  max-width: 350px; /* Устанавливаем максимальную ширину для календаря */
+  max-width: 350px; 
   width: 100%;
-  margin: 0 auto; /* Центрируем календарь */
+  margin: 0 auto; 
   background: #fefefe;
   padding: 20px;
   border-radius: 10px;
@@ -36,4 +36,120 @@
 
 .bookButton:hover {
   background: #3a7bc1;
+} */
+.bookingSection {
+  margin-top: 40px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.bookingForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.inputGroup label {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.inputGroup input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+.inputGroup input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.calendarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar {
+  max-width: 350px; /* Устанавливаем максимальную ширину для календаря */
+  width: 100%;
+  margin: 0 auto; /* Центрируем календарь */
+  background: #fefefe;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeSelection {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.timeSelection select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  max-width: 300px;
+  transition: border-color 0.3s;
+}
+
+.timeSelection select:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.bookButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 16px;
+}
+
+.bookButton:hover {
+  background: #3a7bc1;
+}
+
+.successMessage {
+  margin-top: 30px;
+  padding: 20px;
+  background: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  color: #388e3c;
+  text-align: center;
+}
+
+.successMessage h3 {
+  margin: 0 0 10px;
+}
+
+.successMessage p {
+  margin: 0;
+  line-height: 1.5;
 }

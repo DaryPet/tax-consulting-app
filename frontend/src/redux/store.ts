@@ -32,6 +32,7 @@ export const store = configureStore({
     documents: documentReducer,
     testimonials: testimonialReducer,
     booking: bookingReducer,
+    document: documentReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
