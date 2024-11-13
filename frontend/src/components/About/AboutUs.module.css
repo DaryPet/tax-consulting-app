@@ -1,0 +1,21 @@
+.aboutContainer {
+  text-align: center;
+  margin: 0 auto;
+  padding: 40px;
+  background-image: url("../../assets/images/about.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #1545d5;
+}
+
+.description {
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  color: #2b77db;
+  text-align: center;
+}

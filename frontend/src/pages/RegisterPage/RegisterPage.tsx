@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../redux/operations";
-import styles from "./RegisterPage.module.css";
+import styles from "../FormPage.module.css";
 
 const RegisterPage: React.FC = () => {
   const [name, setName] = useState("");
@@ -34,7 +34,7 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className={styles.registerContainer}>
+    <div className={styles.container}>
       <h2 className={styles.title}>Register</h2>
       <div className={styles.form}>
         <input

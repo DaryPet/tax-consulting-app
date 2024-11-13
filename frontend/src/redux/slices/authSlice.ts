@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store.js";
 
 import {
   loginUsers,
@@ -13,6 +14,7 @@ interface User {
   name: string;
   username: string;
   email: string;
+  phone?: string;
   role: "user" | "admin";
 }
 // Типизация состояния авторизаци
@@ -151,4 +153,7 @@ const authSlice = createSlice({
       }),
 });
 
+export const selectAuthUser = (state: RootState) => state.auth.user; // Получить объект пользователя
+export const selectAuthToken = (state: RootState) => state.auth.token; // Получить токен авторизации
+export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
 export default authSlice.reducer;

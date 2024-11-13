@@ -1,0 +1,71 @@
+.modal {
+  background: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.closeButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  float: right;
+}
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Модальное окно */
+.modal {
+  position: fixed; /* Модалка фиксирована относительно окна браузера */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Центрируем модальное окно по экрану */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* Устанавливаем высокий z-index для поверхностного отображения */
+}
+
+/* Затемненный фон (бекдроп) */
+.overlay {
+  position: fixed; /* Фиксированный, чтобы покрывать весь экран */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Темный, полупрозрачный фон */
+  z-index: 1000; /* z-index ниже, чем у модального окна */
+}
+
+/* Кнопка закрытия модального окна */
+.closeButton {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  float: right;
+}

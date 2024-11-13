@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import documentReducer from "./slices/documentSlice";
+import testimonialReducer from "./slices/testimonialSlice";
+import bookingReducer from "./slices/bookingSlice";
 import authReducer from "./slices/authSlice";
 import {
   persistStore,
@@ -28,6 +30,8 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     documents: documentReducer,
+    testimonials: testimonialReducer,
+    booking: bookingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

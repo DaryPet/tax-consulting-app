@@ -5,10 +5,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Booking from "./components/Booking/Booking";
 
-const HomePage = lazy(() => import("./pages/HomePage"));
+const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
-const ServicePage = lazy(() => import("./pages/ServicePage"));
+// const ServicePage = lazy(() => import("./pages/ServicePage"));
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
 const UserPage = lazy(() => import("./pages/UserPage/UserPage"));
@@ -23,9 +24,10 @@ export default function App() {
         <Suspense fallback={<div>Загрузка...</div>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/services" element={<ServicePage />} />
+            {/* <Route path="/services" element={<ServicePage />} /> */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/booking" element={<Booking />} />
             <Route
               path="/user-profile"
               element={user ? <UserPage /> : <Navigate to="/login" replace />}

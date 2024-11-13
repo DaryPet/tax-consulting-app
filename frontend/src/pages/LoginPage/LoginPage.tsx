@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUsers, fetchCurrentUser } from "../../redux/operations";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-import styles from "./loginPage.module.css";
+import styles from "../FormPage.module.css";
 // import { loginUser } from "../redux/slices/authSlice";
 
 const LoginPage: React.FC = () => {
@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
+    <div className={styles.container}>
       <h2 className={styles.title}>Login</h2>
       <div className={styles.form}>
         <input
