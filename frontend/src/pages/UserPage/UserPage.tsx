@@ -29,10 +29,11 @@
 import React from "react";
 import UserDocuments from "../../components/UserDocuments/UserDocuments";
 import Booking from "../../components/Booking/Booking";
-import Testimonials from "../../components/Testimonials/TestimonialList";
+// import Testimonials from "../../components/Testimonials/TestimonialList";
 import { useSelector } from "react-redux";
 import { selectAuthUser } from "../../redux/slices/authSlice";
 import styles from "./UserPage.module.css";
+// import TestimonialForm from "../../components/TestimonialForm/TestimonialForm";
 
 const UserPage: React.FC = () => {
   const user = useSelector(selectAuthUser);
@@ -58,7 +59,7 @@ const UserPage: React.FC = () => {
 
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Testimonials</h2>
-        <Testimonials />
+        {/* <Testimonials /> */}
       </div>
     </div>
   );

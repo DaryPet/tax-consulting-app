@@ -3,8 +3,9 @@ import styles from "./HomePage.module.css";
 import AboutUs from "../../components/About/AboutUs";
 import ServiceList from "../../components/Service/ServiceList";
 import TeamList from "../../components/Team/TeamList";
-import TestimonialsList from "../../components/Testimonials/TestimonialList";
+// import TestimonialsList from "../../components/Testimonials/TestimonialList";
 import InfoCardsList from "../../components/InfoCards/InfoCardsList";
+import Testimonials from "../../components/Testimonials/Testimonials";
 
 const HomePage: React.FC = () => {
   return (
@@ -35,7 +36,7 @@ const HomePage: React.FC = () => {
         {/* Testimonials Section */}
         <section className={styles.testimonialsSection}>
           <h2 className={styles.sectionTitle}>Testimonials</h2>
-          <TestimonialsList />
+          <Testimonials />
         </section>
 
         {/* Footer Placeholder */}
