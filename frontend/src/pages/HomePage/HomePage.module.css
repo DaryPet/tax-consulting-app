@@ -1,14 +1,5 @@
-.homeContainer {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
-
-.header,
-.footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #f0f0f0;
+.homePage {
+  background-color: #aac2e7;
 }
 
 .serviceSection,
