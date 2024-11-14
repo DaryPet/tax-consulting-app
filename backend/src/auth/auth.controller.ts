@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Request, Response } from 'express';
+import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard.js';
 
 @Controller('auth')
 export class AuthController {
@@ -69,10 +70,15 @@ export class AuthController {
 
   @Post('logout')
   // @UseGuards(JwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: Request, @Res() res: Response) {
     console.log('Запрос на логаут получен');
     console.log('Пользователь в req.user:', req.user);
+    // Логи для дебага
+    console.log('Cookies в запросе:', req.cookies);
+    console.log('Заголовки в запросе:', req.headers);
+
     const refreshToken = req.cookies['refresh_token'];
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is required');
