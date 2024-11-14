@@ -1,0 +1,129 @@
+/* frontend/src/components/Footer/Footer.module.css */
+
+.footer {
+  background-color: #1d5396; /* Темно-синий фон для футера */
+  color: #fff; /* Белый текст */
+  padding: 40px 20px;
+}
+
+.footerContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navLinks,
+.contactInfo,
+.socialLinks,
+.newsletter {
+  flex: 1 1 220px; /* Минимальная ширина и равномерное распределение */
+}
+
+.navLinks h3,
+.contactInfo h3,
+.socialLinks h3,
+.newsletter h3 {
+  margin-bottom: 15px;
+  font-size: 1.4em;
+  color: #fefefe;
+}
+
+.navLinks ul {
+  list-style: none;
+  padding: 0;
+}
+
+.navLinks li {
+  margin-bottom: 10px;
+}
+
+.navLinks a {
+  color: #e1e1e1;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navLinks a:hover {
+  color: #ffffff; /* Белый цвет при наведении */
+}
+
+.contactInfo p {
+  margin-bottom: 10px;
+  font-size: 0.95em;
+}
+
+.socialLinks .icons {
+  display: flex;
+  gap: 15px;
+}
+
+.socialLinks a {
+  color: #ffffff;
+  font-size: 1.5em;
+  transition: color 0.3s;
+}
+
+.socialLinks a:hover {
+  color: #ffce45; /* Немного золотистый цвет для иконок при наведении */
+}
+
+.newsletter form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.newsletter input {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  font-size: 1em;
+}
+
+.newsletter button {
+  padding: 10px;
+  background: #ffce45; /* Золотистый цвет для кнопки */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  color: #1d5396;
+  font-weight: bold;
+}
+
+.newsletter button:hover {
+  background: #e5b63c;
+}
+
+.footerBottom {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #fff;
+  padding-top: 20px;
+}
+
+.footerBottom p {
+  margin-bottom: 10px;
+}
+
+.footerLinks {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+}
+
+.footerLinks a {
+  color: #e1e1e1;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.footerLinks a:hover {
+  color: #ffffff; /* Подсветка при наведении */
+}

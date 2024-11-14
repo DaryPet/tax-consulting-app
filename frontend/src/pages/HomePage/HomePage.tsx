@@ -1,47 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./HomePage.module.css";
 import AboutUs from "../../components/About/AboutUs";
 import ServiceList from "../../components/Service/ServiceList";
 import TeamList from "../../components/Team/TeamList";
-// import TestimonialsList from "../../components/Testimonials/TestimonialList";
 import InfoCardsList from "../../components/InfoCards/InfoCardsList";
 import Testimonials from "../../components/Testimonials/Testimonials";
+import { useLocation } from "react-router-dom";
+import Booking from "../../components/Booking/Booking";
 
 const HomePage: React.FC = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Проверяем, был ли передан id целевой секции через state
+    if (location.state && (location.state as any).targetId) {
+      const targetId = (location.state as any).targetId;
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
   return (
-    <div className="container">
-      <div className={styles.homeContainer}>
-        {/* Header Placeholder */}
-        <header className={styles.header}>Header Placeholder</header>
-
-        {/* About Section */}
-        <section className={styles.aboutSection}>
-          <AboutUs />
-        </section>
-        <section>
-          <InfoCardsList />
-        </section>
-        {/* Service Section */}
-        <section className={styles.serviceSection}>
-          <h2 className={styles.sectionTitle}>Our Services</h2>
-          <ServiceList />
-        </section>
-
-        {/* Team Section */}
-        <section className={styles.teamSection}>
-          <h2 className={styles.sectionTitle}>Meet the Team</h2>
-          <TeamList />
-        </section>
-
-        {/* Testimonials Section */}
-        <section className={styles.testimonialsSection}>
-          <h2 className={styles.sectionTitle}>Testimonials</h2>
-          <Testimonials />
-        </section>
-
-        {/* Footer Placeholder */}
-        <footer className={styles.footer}>Footer Placeholder</footer>
-      </div>
+    <div className={styles.homePage}>
+      <section id="about" className={styles.section}>
+        <AboutUs />
+      </section>
+      <section id="about" className={styles.section}>
+        <InfoCardsList />
+      </section>
+      <section id="services" className={styles.section}>
+        <p className={styles.sectionTitle}>Our service</p>
+        <ServiceList />
+      </section>
+      <section id="team" className={styles.section}>
+        <p className={styles.sectionTitle}>Our team</p>
+        <TeamList />
+      </section>
+      <section id="testimonials" className={styles.section}>
+        <p className={styles.sectionTitle}>Testimonials</p>
+        <Testimonials />
+      </section>
+      <section id="booking" className={styles.section}>
+        <Booking />
+      </section>
     </div>
   );
 };

@@ -5,8 +5,16 @@ import styles from "./Header.module.css";
 
 const Header: React.FC = () => {
   return (
+    // <div className={styles.headerContainer}>
+    //   <header className={styles.header}>
+    //     <Navigation />
+    //   </header>
+    // </div>
     <header className={styles.header}>
-      <Navigation />
+      <div className={styles.logo}>
+        <a href="/">FortuneTax Solutions</a> {/* Логотип */}
+      </div>
+      <Navigation /> {/* Навигация */}
     </header>
   );
 };
