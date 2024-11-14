@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import documentReducer from "./slices/documentSlice";
 import testimonialReducer from "./slices/testimonialSlice";
 import bookingReducer from "./slices/bookingSlice";
-import authReducer from "./slices/authSlice";
+import authReducer, { initializeAuthState } from "./slices/authSlice";
 import {
   persistStore,
   persistReducer,
@@ -19,7 +19,7 @@ import storage from "redux-persist/lib/storage";
 const authPersistConfig = {
   key: "auth",
   storage,
-  whitelist: ["token"],
+  whitelist: ["token", "user"],
 };
 
 // Создание persist reducer для auth
@@ -42,9 +42,15 @@ export const store = configureStore({
     }),
   devTools: process.env.NODE_ENV !== "production",
 });
-
-// Экспорт persistor для использования в корневом компоненте
 export const persistor = persistStore(store);
+
+persistor.subscribe(() => {
+  if (persistor.getState().bootstrapped) {
+    // Если состояние уже восстановлено, инициализируем состояние авторизации
+    store.dispatch(initializeAuthState());
+  }
+});
+// Экспорт persistor для использования в корневом компоненте
 
 // Типы для использования в селекторах
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,8 +1,6 @@
-/* frontend/src/components/Footer/Footer.module.css */
-
 .footer {
-  background-color: #1d5396; /* Темно-синий фон для футера */
-  color: #fff; /* Белый текст */
+  background-color: #aac2e7;
+  color: #fff;
   padding: 40px 20px;
 }
 

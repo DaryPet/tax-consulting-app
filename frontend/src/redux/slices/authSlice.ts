@@ -51,7 +51,22 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    initializeAuthState: (state) => {
+      console.log("Инициализация состояния:"); // Я ИЗМЕНИЛ ЗДЕСЬ: Добавляем лог
+      console.log("user:", state.user); // Я ИЗМЕНИЛ ЗДЕСЬ: Логируем пользователя
+      console.log("token:", state.token);
+      if (state.user && state.token) {
+        state.isLoggedIn = true;
+        console.log("isLoggedIn установлено в true"); // Устанавливаем isLoggedIn в true, если есть токен и пользователь
+      } else {
+        state.isLoggedIn = false;
+        state.user = null; // Я ИЗМЕНИЛ ЗДЕСЬ: Сбрасываем данные пользователя при отсутствии полной информации
+        state.token = null;
+        console.log("isLoggedIn установлено в false");
+      }
+    },
+  },
   extraReducers: (builder) =>
     builder
       // Логика обработки loginUser экшена
@@ -61,14 +76,21 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUsers.fulfilled, (state, action) => {
-        const { access_token } = action.payload;
-        if (!access_token) {
-          state.status = "failed";
-          state.loading = false;
-          state.error = "Invalid response from server during login";
-          return;
-        }
-        state.user = action.payload.user;
+        // const { access_token } = action.payload;
+        // if (!access_token) {
+        //   state.status = "failed";
+        //   state.loading = false;
+        //   state.error = "Invalid response from server during login";
+        //   return;
+        // }
+        // state.user = action.payload.user;
+        // state.token = access_token;
+        // state.isLoggedIn = true;
+        // state.loading = false;
+        // state.status = "succeeded";
+        // toast.success("You have successfully logged in");
+        const { access_token, user } = action.payload;
+        state.user = user;
         state.token = access_token;
         state.isLoggedIn = true;
         state.loading = false;
@@ -140,6 +162,7 @@ const authSlice = createSlice({
         state.isLoggedIn = false;
         state.status = "succeeded";
         state.error = null;
+        localStorage.removeItem("persist:auth");
         toast.success("You have successfully logged out");
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -153,6 +176,7 @@ const authSlice = createSlice({
       }),
 });
 
+export const { initializeAuthState } = authSlice.actions;
 export const selectAuthUser = (state: RootState) => state.auth.user; // Получить объект пользователя
 export const selectAuthToken = (state: RootState) => state.auth.token; // Получить токен авторизации
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
