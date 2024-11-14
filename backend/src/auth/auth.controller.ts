@@ -40,7 +40,7 @@ export class AuthController {
     // Устанавливаем refresh_token в HttpOnly куки для безопасности
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      secure: false, // Используйте только при HTTPS
+      secure: false,
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });

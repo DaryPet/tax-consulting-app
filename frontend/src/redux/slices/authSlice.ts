@@ -6,6 +6,7 @@ import {
   fetchCurrentUser,
   registerUser,
   logoutUser,
+  refreshUserToken,
 } from "../operations";
 import { toast } from "react-toastify";
 
@@ -17,7 +18,7 @@ interface User {
   phone?: string;
   role: "user" | "admin";
 }
-// Типизация состояния авторизаци
+
 interface AuthState {
   user: User | null;
   token: string | null;
@@ -28,40 +29,30 @@ interface AuthState {
   status: "idle" | "loading" | "succeeded" | "failed";
 }
 
-// Error messages
-// const LOGIN_ERROR_MESSAGE = "Error while logging in";
-// const REGISTER_ERROR_MESSAGE = "Error during registration";
-// const LOGOUT_ERROR_MESSAGE = "Error while logging out";
-
-// Начальное состояние
 const initialState: AuthState = {
   user: null,
-  token: null,
-  isLoggedIn: false,
+  token: localStorage.getItem("access_token"),
+  isLoggedIn: !localStorage.getItem("access_token"),
   isRefreshing: false,
   loading: false,
   status: "idle",
   error: null,
-  //   _persist: {
-  //     version: -1,
-  //     rehydrated: false,
-  //   },
 };
-// Создание слайса для управления авторизацией
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     initializeAuthState: (state) => {
-      console.log("Инициализация состояния:"); // Я ИЗМЕНИЛ ЗДЕСЬ: Добавляем лог
-      console.log("user:", state.user); // Я ИЗМЕНИЛ ЗДЕСЬ: Логируем пользователя
+      console.log("Инициализация состояния:");
+      console.log("user:", state.user);
       console.log("token:", state.token);
       if (state.user && state.token) {
         state.isLoggedIn = true;
-        console.log("isLoggedIn установлено в true"); // Устанавливаем isLoggedIn в true, если есть токен и пользователь
+        console.log("isLoggedIn установлено в true");
       } else {
         state.isLoggedIn = false;
-        state.user = null; // Я ИЗМЕНИЛ ЗДЕСЬ: Сбрасываем данные пользователя при отсутствии полной информации
+        state.user = null;
         state.token = null;
         console.log("isLoggedIn установлено в false");
       }
@@ -76,25 +67,13 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUsers.fulfilled, (state, action) => {
-        // const { access_token } = action.payload;
-        // if (!access_token) {
-        //   state.status = "failed";
-        //   state.loading = false;
-        //   state.error = "Invalid response from server during login";
-        //   return;
-        // }
-        // state.user = action.payload.user;
-        // state.token = access_token;
-        // state.isLoggedIn = true;
-        // state.loading = false;
-        // state.status = "succeeded";
-        // toast.success("You have successfully logged in");
         const { access_token, user } = action.payload;
         state.user = user;
         state.token = access_token;
         state.isLoggedIn = true;
         state.loading = false;
         state.status = "succeeded";
+        localStorage.setItem("access_token", access_token);
         toast.success("You have successfully logged in");
       })
       .addCase(loginUsers.rejected, (state, action) => {
@@ -106,7 +85,6 @@ const authSlice = createSlice({
         console.error("Invalid data received:", action.payload);
         toast.error(errorMessage);
       })
-      // Обработка рефреша пользователя
       .addCase(fetchCurrentUser.pending, (state) => {
         state.isRefreshing = true;
       })
@@ -119,7 +97,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
         state.isRefreshing = false;
       })
-      // Логика обработки registerUser экшена
       .addCase(registerUser.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -146,10 +123,27 @@ const authSlice = createSlice({
         const errorMessage = action.payload as string;
         state.error = errorMessage;
         console.error("Register error: ", action.error);
-        // Добавляем уведомление об ошибке входа
         toast.error(errorMessage);
       })
-      // Обработка выхода
+      .addCase(refreshUserToken.fulfilled, (state, action) => {
+        const { access_token } = action.payload;
+        state.token = access_token;
+        state.isLoggedIn = true;
+        state.loading = false;
+        state.status = "succeeded";
+        localStorage.setItem("access_token", access_token);
+        console.log("Token successfully refreshed");
+      })
+      .addCase(refreshUserToken.rejected, (state, action) => {
+        state.status = "failed";
+        state.loading = false;
+        state.isLoggedIn = false;
+        state.token = null;
+        state.user = null;
+        state.error = action.payload as string;
+        console.error("Refresh token error: ", action.error);
+        toast.error("Session expired. Please log in again.");
+      })
       .addCase(logoutUser.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -162,7 +156,7 @@ const authSlice = createSlice({
         state.isLoggedIn = false;
         state.status = "succeeded";
         state.error = null;
-        localStorage.removeItem("persist:auth");
+        localStorage.removeItem("access_token");
         toast.success("You have successfully logged out");
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -177,7 +171,7 @@ const authSlice = createSlice({
 });
 
 export const { initializeAuthState } = authSlice.actions;
-export const selectAuthUser = (state: RootState) => state.auth.user; // Получить объект пользователя
-export const selectAuthToken = (state: RootState) => state.auth.token; // Получить токен авторизации
+export const selectAuthUser = (state: RootState) => state.auth.user;
+export const selectAuthToken = (state: RootState) => state.auth.token;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
 export default authSlice.reducer;

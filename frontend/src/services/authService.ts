@@ -4,9 +4,9 @@ import {
   AUTH_LOGOUT_URL,
   AUTH_REGISTER_URL,
   AUTH_ME_URL,
+  AUTH_REFRESH_URL,
 } from "../config/apiConfig";
 
-// Регистрация пользователя
 export const register = async (
   name: string,
   username: string,
@@ -23,10 +23,9 @@ export const register = async (
     },
     { withCredentials: true }
   );
-  return response.data; // Ожидаемый ответ: { user, token }
+  return response.data;
 };
 
-// Вход пользователя в систему
 export const login = async (username: string, password: string) => {
   const response = await axios.post(
     AUTH_LOGIN_URL,
@@ -38,63 +37,50 @@ export const login = async (username: string, password: string) => {
       withCredentials: true,
     }
   );
-  return response.data; // Ожидаемый ответ: { user, token }
+  const { access_token } = response.data;
+
+  localStorage.setItem("access_token", access_token);
+  return response.data;
 };
-// Выход пользователя из системы
-export const logout = async (token: string) => {
+export const logout = async () => {
   try {
     console.log("Отправка запроса на logout...");
-
-    // Я ИЗМЕНИЛ ЗДЕСЬ: Добавим логи для проверки заголовков и кук перед отправкой запроса
-    console.log("Используем токен:", token);
 
     const response = await axios.post(
       AUTH_LOGOUT_URL,
       {},
       {
-        withCredentials: true, // Отправляем куки, чтобы сервер получил refresh_token
-        headers: {
-          Authorization: `Bearer ${token}`, // Передаем актуальный токен в заголовке
-        },
+        withCredentials: true,
       }
     );
 
-    console.log("Успешный logout:", response.data);
-    return response.data;
+    if (response.status === 200) {
+      console.log("Логаут успешно выполнен");
+      return response.data;
+    } else {
+      throw new Error(`Ошибка при логауте: ${response.status}`);
+    }
   } catch (error) {
-    console.error("Ошибка при выполнении logout:", error);
+    console.error("Ошибка при выполнении логаута:", error);
     throw error;
   }
 };
 
-// export const logout = async () => {
-//   try {
-//     console.log("Отправка запроса на logout...");
-
-//     const response = await axios.post(
-//       AUTH_LOGOUT_URL,
-//       {},
-//       {
-//         withCredentials: true, // Отправляем куки, чтобы сервер получил refresh_token
-//       }
-//     );
-
-//     console.log("Успешный logout:", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Ошибка при выполнении logout:", error);
-//     throw error;
-//   }
-// };
-// Получение текущего пользователя (маршрут `/auth/me`)
 export const getCurrentUser = async () => {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) {
+    throw new Error("Access token is missing");
+  }
+
   const response = await axios.get(AUTH_ME_URL, {
-    withCredentials: true, // Передаем куки
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+    withCredentials: true,
   });
-  return response.data; // Возвращаем текущего пользователя
+  return response.data;
 };
 
-// Рефреш данных пользователя по токену (если используется)
 export const fetchUserData = async (token: string) => {
   const response = await axios.get(AUTH_ME_URL, {
     headers: {
@@ -103,4 +89,64 @@ export const fetchUserData = async (token: string) => {
     withCredentials: true,
   });
   return response.data;
+};
+
+export const refreshToken = async () => {
+  try {
+    console.log("Отправка запроса на обновление токена...");
+
+    const response = await axios.post(
+      AUTH_REFRESH_URL,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    const { access_token } = response.data;
+    localStorage.setItem("access_token", access_token);
+
+    console.log("Ответ от сервера на обновление токена:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при обновлении токена:", error);
+    throw new Error("Error while refreshing token");
+  }
+};
+export const authenticatedRequest = async (url: string, options: any) => {
+  try {
+    const access_token = localStorage.getItem("access_token");
+    if (!access_token) {
+      throw new Error("Access token is missing");
+    }
+
+    const response = await axios(url, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        ...options.headers,
+      },
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.status === 401) {
+      try {
+        const newToken = await refreshToken();
+        const response = await axios(url, {
+          ...options,
+          headers: {
+            Authorization: `Bearer ${newToken}`,
+            ...options.headers,
+          },
+          withCredentials: true,
+        });
+        return response.data;
+      } catch (refreshError) {
+        throw refreshError;
+      }
+    } else {
+      throw error;
+    }
+  }
 };

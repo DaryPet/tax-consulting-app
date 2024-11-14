@@ -1,15 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Layout from "./components/Layout/Layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
+import { initializeAuthState } from "./redux/operations";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
-// const ServicePage = lazy(() => import("./pages/ServicePage"));
 const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
 const UserPage = lazy(() => import("./pages/UserPage/UserPage"));
@@ -17,7 +17,12 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
+  const dispatch = useDispatch<any>();
   const { user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    dispatch(initializeAuthState());
+  }, [dispatch]);
   return (
     <div>
       <Layout>
