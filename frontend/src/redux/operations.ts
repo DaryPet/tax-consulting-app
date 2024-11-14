@@ -4,11 +4,24 @@ import {
   register,
   logout,
   fetchUserData,
-  // getCurrentUser,
+  refreshToken,
 } from "../services/authService";
 import { RootState } from "./store.js";
 
-// Асинхронная операция для регистрации пользователя
+export const initializeAuthState = createAsyncThunk(
+  "auth/initializeAuthState",
+  async (_, { dispatch }) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      try {
+        await dispatch(fetchCurrentUser()).unwrap();
+      } catch (error) {
+        console.error("Failed to initialize auth state:", error);
+        localStorage.removeItem("access_token");
+      }
+    }
+  }
+);
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
@@ -32,14 +45,13 @@ export const registerUser = createAsyncThunk(
       const response = await register(name, username, email, password);
       // \\\\\\\\\\\\\\\\\\\
       console.log("Ответ от сервера:", response);
-      return response; // Ожидаемый ответ: { user, token }
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error during registration");
     }
   }
 );
 
-// Асинхронная операция для логина пользователя
 export const loginUsers = createAsyncThunk(
   "auth/loginUser",
   async (
@@ -49,33 +61,12 @@ export const loginUsers = createAsyncThunk(
     try {
       const response = await login(username, password);
       console.log(response);
-      return response; // Ожидаемый ответ: { user, token }
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue("Error while logging in");
     }
   }
 );
-
-// export const logoutUser = createAsyncThunk(
-//   "auth/logoutUser",
-//   async (_, thunkAPI) => {
-//     try {
-//       console.log("Начало выполнения операции logout");
-//       const state: any = thunkAPI.getState();
-//       const token = state.auth.token;
-//       console.log(token);
-//       if (!token) {
-//         console.error("Токен отсутствует, невозможно выполнить логаут.");
-//         return thunkAPI.rejectWithValue("No token availiable");
-//       }
-//       await logout(token); // Без передачи токена, так как токен берется из куков
-//       return;
-//     } catch (error) {
-//       console.error("Ошибка при выполнении logout:", error);
-//       return thunkAPI.rejectWithValue("Error while logging out");
-//     }
-//   }
-// );
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, { getState, rejectWithValue }) => {
@@ -89,9 +80,9 @@ export const logoutUser = createAsyncThunk(
         return rejectWithValue("No token available");
       }
 
-      console.log("Токен перед logout:", token); // Логируем токен перед логаутом
+      console.log("Токен перед logout:", token);
 
-      await logout(token);
+      await logout();
       console.log("Логаут завершен");
 
       return;
@@ -114,9 +105,25 @@ export const fetchCurrentUser = createAsyncThunk(
 
     try {
       const response = await fetchUserData(token);
-      return response; // Ожидаемый ответ: данные пользователя
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue("Failed to fetch user data");
+    }
+  }
+);
+export const refreshUserToken = createAsyncThunk(
+  "auth/refreshUserToken",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      console.log("Начало выполнения операции refresh token");
+
+      const response = await refreshToken();
+      console.log("Ответ от сервера на refresh:", response);
+
+      return response;
+    } catch (error) {
+      console.error("Ошибка при выполнении обновления токена:", error);
+      return rejectWithValue("Error while refreshing token");
     }
   }
 );
