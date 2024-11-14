@@ -80,6 +80,13 @@ const Navigation: React.FC = () => {
             </Link>
           </li>
         )}
+        {isLoggedIn && user?.role === "user" && (
+          <li className={styles.navItem}>
+            <Link to="/user-profile" className={styles.link}>
+              My Room
+            </Link>
+          </li>
+        )}
         {isLoggedIn && (
           <li className={styles.navItem}>
             <LogoutButton />

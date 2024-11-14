@@ -10,10 +10,9 @@ async function bootstrap() {
   // Настройка CORS
   app.enableCors({
     origin: 'http://localhost:3000',
-    credentials: true, // Разрешаем использование авторизационных куки
+    credentials: true,
   });
-  app.use(cookieParser()); // Используем cookie-parser для обработки куки
-  // app.useGlobalFilters(new AllExceptionsFilter());
+  app.use(cookieParser());
   await app.listen(3001);
 }
 bootstrap();
