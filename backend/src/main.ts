@@ -17,6 +17,6 @@ async function bootstrap() {
   });
   app.use(cookieParser()); // Используем cookie-parser для обработки куки
   // app.useGlobalFilters(new AllExceptionsFilter());
-  await app.listen(3001);
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();

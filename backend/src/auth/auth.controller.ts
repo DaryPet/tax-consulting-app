@@ -40,9 +40,10 @@ export class AuthController {
     // Устанавливаем refresh_token в HttpOnly куки для безопасности
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
     });
 
     // Возвращаем access_token для клиентской стороны
@@ -85,8 +86,10 @@ export class AuthController {
     // Обновляем refresh_token в куки
     res.cookie('refresh_token', new_refresh_token, {
       httpOnly: true,
-      secure: false, // Используйте только при HTTPS
-      sameSite: 'lax',
+      secure: true, // Используйте только при HTTPS
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
     });
 
     // Возвращаем новый access_token клиенту
@@ -112,8 +115,9 @@ export class AuthController {
     // Очищаем куку с refresh_token, чтобы завершить сессию
     res.clearCookie('refresh_token', {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
+      path: '/',
     });
     // return res.send();
     return res.status(HttpStatus.NO_CONTENT).send();
