@@ -41,12 +41,37 @@ export class AuthController {
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       secure: false, // Используйте только при HTTPS
-      sameSite: 'lax',
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     // Возвращаем access_token для клиентской стороны
     return res.json({ access_token });
   }
+  // @Post('login')
+  // async login(@Body() loginDto: any, @Res() res: Response) {
+  //   try {
+  //     const { access_token, refresh_token } =
+  //       await this.authService.login(loginDto);
+
+  //     // ИЗМЕНИЛ ЗДЕСЬ: Устанавливаем refresh_token в куку с нужными параметрами
+  //     res.cookie('refresh_token', refresh_token, {
+  //       httpOnly: true, // Защита куки от JavaScript
+  //       secure: false, // ИЗМЕНИЛ ЗДЕСЬ: Используйте false для локальной разработки, true для продакшн
+  //       sameSite: 'lax', // ИЗМЕНИЛ ЗДЕСЬ: Использовать 'Lax' для кросс-доменных запросов
+  //       maxAge: 24 * 60 * 60 * 1000, // 1 день
+  //     });
+
+  //     return res.status(HttpStatus.OK).json({
+  //       access_token,
+  //       user: { username: loginDto.username },
+  //     });
+  //   } catch (error) {
+  //     return res.status(HttpStatus.UNAUTHORIZED).json({
+  //       message: 'Invalid credentials',
+  //     });
+  //   }
+  // }
 
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
