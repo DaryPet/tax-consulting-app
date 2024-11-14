@@ -40,37 +40,22 @@ export const login = async (username: string, password: string) => {
   );
   return response.data; // Ожидаемый ответ: { user, token }
 };
-
-// export const logout = async (token: string) => {
-//   try {
-//     console.log("Отправка запроса на logout...");
-//     const response = await axios.post(
-//       AUTH_LOGOUT_URL,
-//       {},
-//       {
-//         withCredentials: true,
-//         headers: {
-//           Authorization: `Bearer ${token}`, // Передаем токен в заголовке
-//         },
-//       }
-//     );
-//     console.log("Успешный logout:", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Ошибка при выполнении logout:", error);
-
-//     throw error;
-//   }
-// };
-export const logout = async () => {
+// Выход пользователя из системы
+export const logout = async (token: string) => {
   try {
     console.log("Отправка запроса на logout...");
+
+    // Я ИЗМЕНИЛ ЗДЕСЬ: Добавим логи для проверки заголовков и кук перед отправкой запроса
+    console.log("Используем токен:", token);
 
     const response = await axios.post(
       AUTH_LOGOUT_URL,
       {},
       {
         withCredentials: true, // Отправляем куки, чтобы сервер получил refresh_token
+        headers: {
+          Authorization: `Bearer ${token}`, // Передаем актуальный токен в заголовке
+        },
       }
     );
 
@@ -81,6 +66,26 @@ export const logout = async () => {
     throw error;
   }
 };
+
+// export const logout = async () => {
+//   try {
+//     console.log("Отправка запроса на logout...");
+
+//     const response = await axios.post(
+//       AUTH_LOGOUT_URL,
+//       {},
+//       {
+//         withCredentials: true, // Отправляем куки, чтобы сервер получил refresh_token
+//       }
+//     );
+
+//     console.log("Успешный logout:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Ошибка при выполнении logout:", error);
+//     throw error;
+//   }
+// };
 // Получение текущего пользователя (маршрут `/auth/me`)
 export const getCurrentUser = async () => {
   const response = await axios.get(AUTH_ME_URL, {

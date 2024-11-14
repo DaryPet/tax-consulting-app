@@ -6,6 +6,7 @@ import {
   fetchUserData,
   // getCurrentUser,
 } from "../services/authService";
+import { RootState } from "./store.js";
 
 // Асинхронная операция для регистрации пользователя
 export const registerUser = createAsyncThunk(
@@ -77,18 +78,26 @@ export const loginUsers = createAsyncThunk(
 // );
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
-  async (_, thunkAPI) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
       console.log("Начало выполнения операции logout");
+      const state = getState() as RootState;
+      const token = state.auth.token;
 
-      // Вызываем logout без передачи токена, так как refresh_token будет взят из куков
-      await logout(); // Обновленный `logout` в `authService.ts` использует куки для отправки refresh_token
+      if (!token) {
+        console.error("Токен отсутствует, невозможно выполнить логаут.");
+        return rejectWithValue("No token available");
+      }
+
+      console.log("Токен перед logout:", token); // Логируем токен перед логаутом
+
+      await logout(token);
       console.log("Логаут завершен");
 
       return;
     } catch (error) {
       console.error("Ошибка при выполнении logout:", error);
-      return thunkAPI.rejectWithValue("Error while logging out");
+      return rejectWithValue("Error while logging out");
     }
   }
 );

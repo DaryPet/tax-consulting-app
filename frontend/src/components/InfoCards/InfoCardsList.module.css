@@ -18,10 +18,10 @@
   position: relative;
 }
 
-/* .card:hover {
+.card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-} */
+}
 
 .iconWrapper {
   background-color: #aac2e7;
