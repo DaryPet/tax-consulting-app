@@ -1,21 +1,21 @@
 .aboutContainer {
-  text-align: center;
+  /* text-align: center; */
   margin: 0 auto;
   padding: 40px;
-  background-image: url("../../assets/images/about.jpg");
+  background-image: url("../../assets/images/entrepreneur-working-with-bills.jpg");
   background-size: cover;
   background-position: center;
 }
 
 .title {
   font-size: 2.5rem;
-  color: #1545d5;
+  color: #1d5396;
 }
 
 .description {
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto;
-  font-size: 1.2rem;
-  color: #2b77db;
+  font-size: 2.2rem;
+  color: #1d5396;
   text-align: center;
 }
