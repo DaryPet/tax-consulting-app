@@ -1,46 +1,109 @@
-# Getting Started with Create React App
+# Project Name: TAX consulting App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The **Smart Booking & Document Management System** is a web application that enables users to easily manage documents, book meetings, and interact with the admin. This project is designed with an intuitive user interface, making it suitable for both registered and unregistered users who need to book appointments. The system provides tools for document management, meeting booking with automatic field filling, and administrative access to oversee all operations.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### 1. User Management
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Registration and Login**: Users can register to create an account and securely log in. Authentication is done via a standard email and password combination.
+- **User Dashboard**: Registered users have their own personal dashboard where they can:
+  - **Add Documents**: Upload important documents.
+  - **Delete Documents**: Remove documents that are no longer needed.
+  - **View Documents**: Review the uploaded documents at any time.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 2. Meeting Booking System
 
-### `npm test`
+- **Booking for All**: Both registered and unregistered users can book meetings.
+  - **Registered Users**: Automatically have booking fields (such as name and email) pre-filled.
+  - **Unregistered Users**: Can manually book a meeting without registration.
+- **Calendar Integration**:
+  - The calendar is configured to show **working days and hours** only.
+  - It checks availability and **prevents double booking** by marking time slots that are already taken as unavailable.
+- **Email Confirmation**: After booking a meeting, an email with booking confirmation is sent to the provided email address, ensuring the user has a record of their appointment.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. Admin Features
 
-### `npm run build`
+- **Admin Dashboard**:
+  - View **all meetings** scheduled by both registered and unregistered users.
+  - Access and manage **all documents** uploaded by registered users.
+  - Upload documents for specific registered users to make personalized resources available.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technologies Used
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The following technologies were used to create this system:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Backend**: Nest.js for building a scalable and modular server-side application.
+- **API**: GraphQL for providing a flexible and efficient API for interacting with the backend.
+- **Frontend**: React.js for creating a dynamic and responsive user interface.
+- **Database**: PostgreSQL for data storage, ensuring that user details, documents, and meeting information are stored securely.
+- **Authentication**: JWT (JSON Web Tokens) for handling user authentication and maintaining session security.
+- **Calendar Integration**: FullCalendar.js library for managing and displaying booking times.
+- **Email Service**: Nodemailer for sending booking confirmation emails to users.
 
-### `npm run eject`
+## Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To get a copy of the project up and running on your local machine for development and testing, follow these steps.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Node.js installed (version 14+ recommended)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installation
 
-## Learn More
+1. **Clone the repository**:
+   ```
+   git clone https://github.com/yourusername/smart-booking-system.git
+   ```
+2. **Navigate to the project directory**:
+   ```
+   cd smart-booking-system
+   ```
+3. **Install dependencies for both backend and frontend**:
+   ```
+   npm install
+   cd client
+   npm install
+   ```
+4. **Set up environment variables**:
+   Create a `.env` file in the root directory with the following:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   JWT_SECRET=<Your JWT Secret>
+   EMAIL_USER=<Your Email Address>
+   EMAIL_PASS=<Your Email Password>
+   ```
+
+5. **Run the application**:
+   - **Backend**: In the root directory, run:
+     ```
+     npm run start:dev
+     ```
+   - **Frontend**: Navigate to the client directory and run:
+     ```
+     npm start
+     ```
+
+### Usage
+
+- **User Registration and Login**: Go to `/register` or `/login` to create an account or log in.
+- **Book a Meeting**: Visit the booking page and choose an available time slot.
+- **Document Management**: After login, navigate to the dashboard to upload or manage documents.
+- **Admin Panel**: Admins can log in to view all documents, meetings, and manage user-specific uploads.
+
+## Future Enhancements
+
+- **Google Calendar Sync**: Allow users to sync their bookings with Google Calendar.
+- **Notifications**: Add SMS notifications in addition to email confirmations.
+- **Recurring Bookings**: Enable users to set up recurring meetings.
+
+## Contributing
+
+Contributions are welcome! Please create a pull request or open an issue if you have any suggestions or improvements.
+
+## Contact
+
+If you have any questions or need support, feel free to contact the project owner at [d7akkord@gmail.com].

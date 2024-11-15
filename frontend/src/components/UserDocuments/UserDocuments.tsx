@@ -90,7 +90,7 @@
 // };
 
 // export default Documents;
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import {
@@ -106,6 +106,9 @@ import {
 import { selectAuthToken } from "../../redux/slices/authSlice";
 import styles from "./UserDocuments.module.css";
 import { downloadDocumentApi } from "../../services/documentService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../Loader/Loader";
 
 const Documents: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -115,46 +118,20 @@ const Documents: React.FC = () => {
   const error = useSelector(selectDocumentError);
   const successMessage = useSelector(selectDocumentSuccess);
 
-  // Добавляем состояние для управления отображением сообщений
-  const [message, setMessage] = useState<string | null>(null);
-  const [messageType, setMessageType] = useState<"success" | "error" | null>(
-    null
-  );
-
   useEffect(() => {
     if (token) {
       dispatch(fetchUserDocuments(token));
     }
   }, [dispatch, token]);
 
-  // Устанавливаем сообщение об успехе или ошибке на основе Redux состояния
   useEffect(() => {
     if (successMessage) {
-      setMessage(successMessage);
-      setMessageType("success");
+      toast.success(successMessage, { autoClose: 2000 });
       dispatch(clearMessages());
-
-      // Очищаем сообщение через 2 секунды
-      const timer = setTimeout(() => {
-        setMessage(null);
-        setMessageType(null);
-      }, 2000);
-
-      return () => clearTimeout(timer);
     }
-
     if (error) {
-      setMessage(error);
-      setMessageType("error");
+      toast.error(error, { autoClose: 2000 });
       dispatch(clearMessages());
-
-      // Очищаем сообщение через 2 секунды
-      const timer = setTimeout(() => {
-        setMessage(null);
-        setMessageType(null);
-      }, 2000);
-
-      return () => clearTimeout(timer);
     }
   }, [successMessage, error, dispatch]);
 
@@ -171,22 +148,12 @@ const Documents: React.FC = () => {
     if (token) {
       try {
         await downloadDocumentApi(documentId, token);
-        setMessage("Document downloaded successfully");
-        setMessageType("success");
-        // Очищаем сообщение через 2 секунды
-        setTimeout(() => {
-          setMessage(null);
-          setMessageType(null);
-        }, 2000);
+        toast.success("Document downloaded successfully", { autoClose: 2000 });
       } catch (error) {
         console.error("Error downloading document:", error);
-        setMessage("Failed to download document. Please try again later.");
-        setMessageType("error");
-        // Очищаем сообщение через 2 секунды
-        setTimeout(() => {
-          setMessage(null);
-          setMessageType(null);
-        }, 2000);
+        toast.error("Failed to download document. Please try again later.", {
+          autoClose: 2000,
+        });
       }
     }
   };
@@ -200,44 +167,37 @@ const Documents: React.FC = () => {
   return (
     <div className={styles.documentsSection}>
       <h2>Upload and Manage Documents</h2>
-
-      {/* Сообщение об успехе или ошибке */}
-      {message && (
-        <div
-          className={
-            messageType === "success"
-              ? styles.successBanner
-              : styles.errorBanner
-          }
-        >
-          {message}
-        </div>
+      {loading ? (
+        // Отображаем лоадер, если идет загрузка
+        <Loader />
+      ) : (
+        <>
+          <input type="file" onChange={handleFileUpload} />
+          <div className={styles.documentsList}>
+            <h3>Your Documents:</h3>
+            {documents.length > 0 ? (
+              documents.map((document) => (
+                <div key={document.id} className={styles.documentItem}>
+                  <p>{document.filename}</p>
+                  <button
+                    onClick={() => handleDownload(document.id.toString())}
+                  >
+                    Download
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDelete(document.id.toString())}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>No documents found</p>
+            )}
+          </div>
+        </>
       )}
-
-      <input type="file" onChange={handleFileUpload} />
-      {loading && <p>Loading...</p>}
-
-      <div className={styles.documentsList}>
-        <h3>Your Documents:</h3>
-        {documents.length > 0 ? (
-          documents.map((document) => (
-            <div key={document.id} className={styles.documentItem}>
-              <p>{document.filename}</p>
-              <button onClick={() => handleDownload(document.id.toString())}>
-                Download
-              </button>
-              <button
-                className={styles.deleteButton}
-                onClick={() => handleDelete(document.id.toString())}
-              >
-                Delete
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No documents found</p>
-        )}
-      </div>
     </div>
   );
 };

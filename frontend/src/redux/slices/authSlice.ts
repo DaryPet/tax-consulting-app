@@ -32,7 +32,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem("access_token"),
-  isLoggedIn: !localStorage.getItem("access_token"),
+  isLoggedIn: !!localStorage.getItem("access_token"),
   isRefreshing: false,
   loading: false,
   status: "idle",
@@ -60,7 +60,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) =>
     builder
-      // Логика обработки loginUser экшена
       .addCase(loginUsers.pending, (state) => {
         state.status = "loading";
         state.loading = true;

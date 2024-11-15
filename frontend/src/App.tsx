@@ -6,7 +6,7 @@ import { RootState } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
-import { initializeAuthState } from "./redux/operations";
+// import { initializeAuthState } from "./redux/operations";
 import Loader from "../src/components/Loader/Loader";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
@@ -18,12 +18,12 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
-  const dispatch = useDispatch<any>();
+  // const dispatch = useDispatch<any>();
   const { user } = useSelector((state: RootState) => state.auth);
 
-  useEffect(() => {
-    dispatch(initializeAuthState());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(initializeAuthState());
+  // }, [dispatch]);
   return (
     <div>
       <Layout>

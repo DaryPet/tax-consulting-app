@@ -6,22 +6,6 @@ import {
   fetchUserData,
   refreshToken,
 } from "../services/authService";
-import { RootState } from "./store.js";
-
-export const initializeAuthState = createAsyncThunk(
-  "auth/initializeAuthState",
-  async (_, { dispatch }) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      try {
-        await dispatch(fetchCurrentUser()).unwrap();
-      } catch (error) {
-        console.error("Failed to initialize auth state:", error);
-        localStorage.removeItem("access_token");
-      }
-    }
-  }
-);
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
@@ -67,24 +51,29 @@ export const loginUsers = createAsyncThunk(
     }
   }
 );
+
+// export const logoutUser = createAsyncThunk(
+//   "auth/logoutUser",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       await logout();
+//     } catch (error) {
+//       return rejectWithValue("Error while logging out");
+//     }
+//   }
+// );
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       console.log("Начало выполнения операции logout");
-      const state = getState() as RootState;
-      const token = state.auth.token;
 
-      if (!token) {
-        console.error("Токен отсутствует, невозможно выполнить логаут.");
-        return rejectWithValue("No token available");
-      }
+      await logout(); // Вызываем функцию logout из authService для выполнения API-запроса
 
-      console.log("Токен перед logout:", token);
+      // Локально очищаем токен из LocalStorage
+      localStorage.removeItem("access_token");
 
-      await logout();
       console.log("Логаут завершен");
-
       return;
     } catch (error) {
       console.error("Ошибка при выполнении logout:", error);
@@ -93,36 +82,45 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+// \\\\\\\\\\\\\\\\\\\\\
+// export const fetchCurrentUser = createAsyncThunk(
+//   "auth/fetchCurrentUser",
+//   async (_, thunkAPI) => {
+//     const state: any = thunkAPI.getState();
+//     const token = state.auth.token;
+
+//     if (!token) {
+//       return thunkAPI.rejectWithValue("No token available");
+//     }
+
+//     try {
+//       const response = await fetchUserData(token);
+//       return response;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue("Failed to fetch user data");
+//     }
+//   }
+// );
 export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, thunkAPI) => {
-    const state: any = thunkAPI.getState();
-    const token = state.auth.token;
-
-    if (!token) {
-      return thunkAPI.rejectWithValue("No token available");
-    }
-
     try {
-      const response = await fetchUserData(token);
+      const response = await fetchUserData();
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue("Failed to fetch user data");
     }
   }
 );
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//
 export const refreshUserToken = createAsyncThunk(
   "auth/refreshUserToken",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      console.log("Начало выполнения операции refresh token");
-
       const response = await refreshToken();
-      console.log("Ответ от сервера на refresh:", response);
-
       return response;
     } catch (error) {
-      console.error("Ошибка при выполнении обновления токена:", error);
       return rejectWithValue("Error while refreshing token");
     }
   }
