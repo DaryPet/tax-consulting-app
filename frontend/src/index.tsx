@@ -9,6 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.css";
 import "modern-normalize";
+// import "./assets/favicon.png";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {

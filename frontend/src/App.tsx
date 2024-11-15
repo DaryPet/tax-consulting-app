@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
 import { initializeAuthState } from "./redux/operations";
+import Loader from "../src/components/Loader/Loader";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
@@ -26,7 +27,7 @@ export default function App() {
   return (
     <div>
       <Layout>
-        <Suspense fallback={<div>Загрузка...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             {/* <Route path="/services" element={<ServicePage />} /> */}
