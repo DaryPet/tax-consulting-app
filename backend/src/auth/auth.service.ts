@@ -1,10 +1,142 @@
+// import { Injectable } from '@nestjs/common';
+// import { JwtService } from '@nestjs/jwt';
+// import { UserService } from '../user/user.service';
+// import { CreateUserDto } from '../user/dto/create-user.dto';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
+// import { Session } from '../auth/enteties/session.entity.js';
+// import * as bcrypt from 'bcryptjs';
+
+// @Injectable()
+// export class AuthService {
+//   constructor(
+//     private userService: UserService,
+//     private jwtService: JwtService,
+//     @InjectRepository(Session)
+//     private sessionRepository: Repository<Session>,
+//   ) {}
+//   // \\\\\\\\\\\\\\\\\\\\\\\\
+//   private createSession(user: any) {
+//     const payload = { username: user.username, sub: user.id, role: user.role };
+//     const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+//     const refreshToken = this.jwtService.sign(payload, { expiresIn: '1d' });
+
+//     return {
+//       accessToken,
+//       refreshToken,
+//       accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000), // 15 минут
+//       refreshTokenValidUntil: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 день
+//     };
+//   }
+//   // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//   async validateUser(username: string, pass: string): Promise<any> {
+//     const user = await this.userService.findByUsername(username);
+//     if (!user) {
+//       console.log('Пользователь не найден');
+//       return null;
+//     }
+//     console.log('Найден пользователь:', user);
+//     console.log('Введенный пароль:', pass);
+//     console.log('Хэшированный пароль в базе данных:', user.password);
+
+//     const isPasswordMatching = await bcrypt.compare(pass, user.password);
+//     console.log('Результат сравнения паролей:', isPasswordMatching);
+
+//     if (!isPasswordMatching) {
+//       console.log('Пароль не совпадает');
+//       return null;
+//     }
+//     console.log('Успешная проверка пользователя');
+
+//     // Возврат пользователя без пароля
+//     const { password: _password, ...result } = user;
+//     return result;
+//   }
+//   // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//   async login(user: any) {
+//     // Сохранение сессии в базе данных
+//     const newSession = this.createSession(user);
+//     const session = this.sessionRepository.create({
+//       userId: user.id,
+//       ...newSession,
+//     });
+
+//     await this.sessionRepository.save(session);
+//     console.log('Сохраненная сессия:', session);
+//     return {
+//       access_token: newSession.accessToken,
+//       refresh_token: newSession.refreshToken,
+//       session_id: session.id,
+//     };
+//   }
+//   // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//   async register(createUserDto: CreateUserDto) {
+//     try {
+//       // Генерация соли и хэширование пароля
+//       const salt = await bcrypt.genSalt(10);
+//       console.log('Сгенерированная соль:', salt);
+
+//       const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+//       console.log('Хэшированный пароль:', hashedPassword);
+
+//       // Установка роли по умолчанию, если она не указана
+//       const role = createUserDto.role ? createUserDto.role : 'user';
+
+//       // Создание пользователя с захэшированным паролем и ролью
+//       const user = await this.userService.create({
+//         ...createUserDto,
+//         password: hashedPassword,
+//         role: role, // Устанавливаем роль ('user' по умолчанию или указанную)
+//       });
+
+//       console.log('Созданный пользователь:', user);
+//       return user;
+//     } catch (error) {
+//       console.error('Ошибка при регистрации пользователя:', error);
+//       // throw new Error('Ошибка при регистрации');
+//       throw error;
+//     }
+//   }
+//   // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//   async logout(sessionId: number, refreshToken: string) {
+//     console.log(
+//       `Пытаемся найти и удалить сессию с id: ${sessionId} и refreshToken: ${refreshToken}`,
+//     );
+
+//     const session = await this.sessionRepository.findOne({
+//       where: { id: sessionId, refreshToken },
+//     });
+
+//     if (!session) {
+//       console.error('Сессия не найдена по id:', sessionId);
+//       throw new Error('Session not found or already deleted');
+//     }
+
+//     await this.sessionRepository.delete({ id: sessionId });
+//     console.log('Сессия успешно удалена');
+//   }
+// }
+// // \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// // async getCurrentUser(user: any) {
+// //   // Найти пользователя по ID из данных в токене (req.user)
+// //   const currentUser = await this.userService.findById(user.id);
+// //   if (!currentUser) {
+// //     throw new Error('User not found');
+// //   }
+
+// //   // Возвращаем пользователя без пароля
+// //   const { password: _password, ...result } = currentUser;
+// //   return result;
+// // }
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Session } from '../auth/enteties/session.entity.js';
+import { Session } from '../auth/enteties/session.entity';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -13,27 +145,30 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     @InjectRepository(Session)
-    private sessionRepository: Repository<Session>, // Инъекция SessionRepository
+    private sessionRepository: Repository<Session>,
   ) {}
 
+  private createSession(user: any) {
+    const payload = { username: user.username, sub: user.id, role: user.role };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '1d' });
+
+    return {
+      accessToken,
+      refreshToken,
+      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000), // 15 минут
+      refreshTokenValidUntil: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 день
+    };
+  }
+
   async validateUser(username: string, pass: string): Promise<any> {
-    // Шаг 1: Найти пользователя по имени пользователя
     const user = await this.userService.findByUsername(username);
     if (!user) {
       console.log('Пользователь не найден');
       return null;
     }
-
-    // Лог найденного пользователя
     console.log('Найден пользователь:', user);
 
-    // Сравнение введенного пароля с хэшированным паролем из базы данных
-
-    // Лог введенного пароля и хэшированного пароля для проверки
-    console.log('Введенный пароль:', pass);
-    console.log('Хэшированный пароль в базе данных:', user.password);
-
-    // Проверка совпадения паролей
     const isPasswordMatching = await bcrypt.compare(pass, user.password);
     console.log('Результат сравнения паролей:', isPasswordMatching);
 
@@ -43,115 +178,106 @@ export class AuthService {
     }
     console.log('Успешная проверка пользователя');
 
-    // Возврат пользователя без пароля
     const { password: _password, ...result } = user;
     return result;
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id, role: user.role };
-    const accessToken = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d', // Пример срока действия для refresh token
-    });
-
-    // Сохранение сессии в базе данных
-    const newSession = this.sessionRepository.create({
+    const newSession = this.createSession(user);
+    const session = this.sessionRepository.create({
       userId: user.id,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      accessTokenValidUntil: new Date(Date.now() + 60 * 60 * 1000), // 1 час
-      refreshTokenValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 дней
+      ...newSession,
     });
-    await this.sessionRepository.save(newSession);
 
+    await this.sessionRepository.save(session);
+    console.log('Сохраненная сессия:', session);
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      access_token: newSession.accessToken,
+      refresh_token: newSession.refreshToken,
+      session_id: session.id,
     };
   }
+
   async register(createUserDto: CreateUserDto) {
     try {
-      // Генерация соли и хэширование пароля
       const salt = await bcrypt.genSalt(10);
-      console.log('Сгенерированная соль:', salt);
-
       const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-      console.log('Хэшированный пароль:', hashedPassword);
 
-      // Установка роли по умолчанию, если она не указана
       const role = createUserDto.role ? createUserDto.role : 'user';
-
-      // Создание пользователя с захэшированным паролем и ролью
       const user = await this.userService.create({
         ...createUserDto,
         password: hashedPassword,
-        role: role, // Устанавливаем роль ('user' по умолчанию или указанную)
+        role: role,
       });
 
       console.log('Созданный пользователь:', user);
       return user;
     } catch (error) {
       console.error('Ошибка при регистрации пользователя:', error);
-      // throw new Error('Ошибка при регистрации');
       throw error;
     }
   }
 
-  async logout(refreshToken: string) {
-    // Удаление сессии из базы данных, используя refreshToken
-    const session = await this.sessionRepository.findOneBy({ refreshToken });
-
-    if (!session) {
-      throw new Error('Session not found');
-    }
-
-    await this.sessionRepository.delete({ refreshToken });
-
-    return { message: 'Logout successful' };
-  }
-
-  async refreshToken(oldRefreshToken: string) {
-    // Проверка валидности refresh token и обновление сессии
-    const session = await this.sessionRepository.findOneBy({
-      refreshToken: oldRefreshToken,
+  async refreshUserSession(sessionId: number, refreshToken: string) {
+    console.log(
+      `Пытаемся найти сессию с id: ${sessionId} и refreshToken: ${refreshToken}`,
+    );
+    const session = await this.sessionRepository.findOne({
+      where: { id: sessionId, refreshToken },
     });
 
     if (!session) {
-      throw new Error('Invalid refresh token');
+      console.error('Сессия не найдена или неверный refreshToken');
+      throw new Error('Session not found');
     }
 
-    // Извлечение пользователя из базы данных по userId, хранящемуся в сессии
-    const user = await this.userService.findById(session.userId);
-    if (!user) {
-      throw new Error('User not found for the given session');
+    const isSessionTokenExpired = new Date() > session.refreshTokenValidUntil;
+
+    if (isSessionTokenExpired) {
+      console.error('Refresh token истек');
+      throw new Error('Session token expired');
     }
 
-    const payload = { username: user.username, sub: user.id, role: user.role };
-    const newAccessToken = this.jwtService.sign(payload);
-    const newRefreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const newSession = this.createSession({ id: session.userId });
+    session.accessToken = newSession.accessToken;
+    session.refreshToken = newSession.refreshToken;
+    session.accessTokenValidUntil = newSession.accessTokenValidUntil;
+    session.refreshTokenValidUntil = newSession.refreshTokenValidUntil;
 
-    session.accessToken = newAccessToken;
-    session.refreshToken = newRefreshToken;
-    session.accessTokenValidUntil = new Date(Date.now() + 60 * 60 * 1000); // 1 час
-    session.refreshTokenValidUntil = new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000,
-    ); // 7 дней
     await this.sessionRepository.save(session);
+    console.log('Обновленная сессия:', session);
 
     return {
-      access_token: newAccessToken,
-      refresh_token: newRefreshToken,
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      id: session.id,
     };
   }
+
+  async logout(sessionId: number, refreshToken: string) {
+    console.log(
+      `Пытаемся найти и удалить сессию с id: ${sessionId} и refreshToken: ${refreshToken}`,
+    );
+
+    const session = await this.sessionRepository.findOne({
+      where: { id: sessionId, refreshToken },
+    });
+
+    if (!session) {
+      console.error('Сессия не найдена по id:', sessionId);
+      throw new Error('Session not found or already deleted');
+    }
+
+    await this.sessionRepository.delete({ id: sessionId });
+    console.log('Сессия успешно удалена');
+  }
+
   async getCurrentUser(user: any) {
-    // Найти пользователя по ID из данных в токене (req.user)
     const currentUser = await this.userService.findById(user.id);
     if (!currentUser) {
       throw new Error('User not found');
     }
 
-    // Возвращаем пользователя без пароля
     const { password: _password, ...result } = currentUser;
     return result;
   }
