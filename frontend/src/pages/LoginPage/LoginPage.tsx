@@ -4,7 +4,6 @@ import { loginUsers, fetchCurrentUser } from "../../redux/operations";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import styles from "../FormPage.module.css";
-// import { loginUser } from "../redux/slices/authSlice";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -20,8 +19,6 @@ const LoginPage: React.FC = () => {
       await dispatch(loginUsers({ username, password })).unwrap();
       const userResponse = await dispatch(fetchCurrentUser()).unwrap();
       console.log("Логин прошел успешно");
-
-      // await dispatch(fetchCurrentUser()).unwrap();
       if (userResponse.role === "admin") {
         navigate("/admin");
       } else {

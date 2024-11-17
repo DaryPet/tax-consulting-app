@@ -1,42 +1,3 @@
-/* .bookingSection {
-  margin-top: 40px;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.calendarContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.calendar {
-  max-width: 350px; 
-  width: 100%;
-  margin: 0 auto; 
-  background: #fefefe;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.bookButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: #4a90e2;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.bookButton:hover {
-  background: #3a7bc1;
-} */
 .bookingSection {
   margin-top: 40px;
   padding: 20px;
@@ -80,6 +41,14 @@
   outline: none;
 }
 
+.inputGroup input.error {
+  border-color: #e74c3c;
+}
+.errorMessage {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 5px;
+}
 .calendarContainer {
   display: flex;
   flex-direction: column;
@@ -134,22 +103,60 @@
 .bookButton:hover {
   background: #3a7bc1;
 }
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 40px;
+  width: 400px;
+  max-width: 90%;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
 
-.successMessage {
-  margin-top: 30px;
-  padding: 20px;
-  background: #e8f5e9;
-  border: 1px solid #c8e6c9;
-  border-radius: 8px;
-  color: #388e3c;
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modalContent {
   text-align: center;
 }
 
-.successMessage h3 {
-  margin: 0 0 10px;
+.modalContent h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #007bff;
 }
 
-.successMessage p {
-  margin: 0;
-  line-height: 1.5;
+.modalContent p {
+  margin-bottom: 30px;
+  font-size: 16px;
+  color: #333;
+}
+
+.closeButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.closeButton:hover {
+  background-color: #0056b3;
 }

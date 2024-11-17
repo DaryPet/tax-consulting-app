@@ -19,6 +19,7 @@
   z-index: -1;
 }
 .title {
+  text-align: center;
   font-size: 2.5rem;
   color: #9db5d1;
 }

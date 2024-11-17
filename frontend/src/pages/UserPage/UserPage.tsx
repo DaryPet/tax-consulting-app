@@ -26,10 +26,6 @@ const UserPage: React.FC = () => {
           }}
         />
       </div>
-
-      {/* <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Testimonials</h2>
-      </div> */}
     </div>
   );
 };

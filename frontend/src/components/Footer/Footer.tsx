@@ -7,13 +7,13 @@ import {
   FaWhatsapp,
   FaLinkedinIn,
   FaEnvelope,
+  FaPhone,
 } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
-        {/* Навигация по страницам */}
         <div className={styles.navLinks}>
           <h3>Quick Links</h3>
           <ul>
@@ -38,16 +38,17 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        {/* Контакты */}
         <div className={styles.contactInfo}>
           <h3>Contact Us</h3>
           <p>
-            <FaEnvelope /> support@fortunetax.com
+            <FaEnvelope className={styles.icon} />
+            <a href="mailto:support@fortunetax.com">support@fortunetax.com</a>
           </p>
-          <p>Phone: +1 234 567 8900</p>
+          <p>
+            <FaPhone className={styles.icon} />{" "}
+            <a href="tel:+12345678900">+1 234 567 8900</a>
+          </p>
         </div>
-
-        {/* Социальные сети */}
         <div className={styles.socialLinks}>
           <h3>Follow Us</h3>
           <div className={styles.icons}>
@@ -81,8 +82,6 @@ const Footer: React.FC = () => {
             </a>
           </div>
         </div>
-
-        {/* Подписка на новости */}
         <div className={styles.newsletter}>
           <h3>Subscribe to Our Newsletter</h3>
           <form>

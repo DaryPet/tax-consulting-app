@@ -168,7 +168,6 @@ const Documents: React.FC = () => {
     <div className={styles.documentsSection}>
       <h2>Upload and Manage Documents</h2>
       {loading ? (
-        // Отображаем лоадер, если идет загрузка
         <Loader />
       ) : (
         <>

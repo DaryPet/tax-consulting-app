@@ -22,7 +22,6 @@ const RegisterPage: React.FC = () => {
       ).unwrap();
       console.log("Ответ от сервера:", response);
 
-      // Редирект на профиль пользователя после успешной регистрации
       if (response.role === "user") {
         navigate("/user-profile");
       } else {

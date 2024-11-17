@@ -83,7 +83,7 @@
 }
 
 .downloadButton {
-  background-color: #4caf50; /* Зеленый для скачивания */
+  background-color: #4caf50;
 }
 
 .downloadButton:hover {
@@ -91,7 +91,7 @@
 }
 
 .deleteButton {
-  background-color: #ff4d4f; /* Красный для удаления */
+  background-color: #ff4d4f;
 }
 
 .deleteButton:hover {
