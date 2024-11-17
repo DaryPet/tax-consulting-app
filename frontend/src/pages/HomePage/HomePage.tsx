@@ -12,7 +12,6 @@ const HomePage: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Проверяем, был ли передан id целевой секции через state
     if (location.state && (location.state as any).targetId) {
       const targetId = (location.state as any).targetId;
       const element = document.getElementById(targetId);

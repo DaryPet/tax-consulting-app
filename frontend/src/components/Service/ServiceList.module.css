@@ -59,7 +59,6 @@
   z-index: 1000; /* z-index ниже, чем у модального окна */
 }
 
-/* Кнопка закрытия модального окна */
 .closeButton {
   background: #007bff;
   color: white;

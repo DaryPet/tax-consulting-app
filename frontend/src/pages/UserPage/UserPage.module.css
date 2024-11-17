@@ -1,30 +1,7 @@
-/* .container {
-  max-width: 1200px;
-  display: flex;
-  gap: 40px;
-
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f9f9f9;
-}
-.section {
-  padding: 10px;
-}
-.sectionTitle {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #4a90e2;
-  border-bottom: 2px solid #4a90e2;
-  padding-bottom: 10px;
-} */
-/* frontend/src/components/UserPage/UserPage.module.css */
-
 .container {
   max-width: 1200px;
   display: flex;
-  gap: 20px; /* Уменьшаем gap для более плотного расположения секций */
+  gap: 20px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -34,10 +11,10 @@
 
 .section {
   padding: 20px;
-  flex: 1; /* Используем flex-grow, чтобы секции занимали равное пространство */
-  background-color: #ffffff; /* Белый фон для секций */
+  flex: 1;
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для улучшения визуального восприятия */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sectionTitle {
@@ -49,13 +26,12 @@
   padding-bottom: 10px;
 }
 
-/* Новые стили для уменьшения больших отступов по краям */
 .sectionDocuments {
-  flex: 1.2; /* Даем больше места для левой секции */
+  flex: 1.2;
 }
 
 .sectionBooking {
-  flex: 1; /* Даем немного меньше места для правой секции */
+  flex: 1;
 }
 
 .inputContainer {

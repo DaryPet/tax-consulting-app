@@ -17,7 +17,7 @@
 .contactInfo,
 .socialLinks,
 .newsletter {
-  flex: 1 1 220px; /* Минимальная ширина и равномерное распределение */
+  flex: 1 1 220px;
 }
 
 .navLinks h3,
@@ -45,12 +45,21 @@
 }
 
 .navLinks a:hover {
-  color: #ffffff; /* Белый цвет при наведении */
+  color: #ffffff;
 }
-
-.contactInfo p {
+.icon {
+  margin-right: 4px;
+}
+.contactInfo a {
   margin-bottom: 10px;
   font-size: 0.95em;
+  color: #ffffff;
+}
+.contactInfo a {
+  color: #ffffff;
+}
+.contactInfo a:hover {
+  color: #3a7bc1;
 }
 
 .socialLinks .icons {
@@ -65,7 +74,7 @@
 }
 
 .socialLinks a:hover {
-  color: #ffce45; /* Немного золотистый цвет для иконок при наведении */
+  color: #3a7bc1;
 }
 
 .newsletter form {
@@ -84,7 +93,7 @@
 
 .newsletter button {
   padding: 10px;
-  background: #ffce45; /* Золотистый цвет для кнопки */
+  background: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -94,7 +103,8 @@
 }
 
 .newsletter button:hover {
-  background: #e5b63c;
+  background: #3a7bc1;
+  color: white;
 }
 
 .footerBottom {
@@ -123,5 +133,5 @@
 }
 
 .footerLinks a:hover {
-  color: #ffffff; /* Подсветка при наведении */
+  color: #ffffff;
 }
