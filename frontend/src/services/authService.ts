@@ -5,6 +5,8 @@ import {
   AUTH_REGISTER_URL,
   AUTH_ME_URL,
   AUTH_REFRESH_URL,
+  USERS_URL,
+  USERS_ID_URL,
 } from "../config/apiConfig";
 
 export const register = async (
@@ -43,18 +45,6 @@ export const login = async (username: string, password: string) => {
   return response.data;
 };
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\
-// export const logout = async () => {
-//   console.log("Отправка запроса на logout...");
-
-//   const response = await axios.post(
-//     AUTH_LOGOUT_URL,
-//     {},
-//     {
-//       withCredentials: true,
-//     }
-//   );
-//   return response.data;
-// };
 export const logout = async () => {
   try {
     console.log("Отправка запроса на logout...");
@@ -108,7 +98,7 @@ export const fetchUserData = async () => {
   });
   return response.data;
 };
-
+// \\\\\\\\\\\\\\\\\\\
 export const refreshToken = async () => {
   try {
     console.log("Отправка запроса на обновление токена...");
@@ -128,6 +118,68 @@ export const refreshToken = async () => {
   } catch (error) {
     console.error("Ошибка при обновлении токена:", error);
     throw new Error("Error while refreshing token");
+  }
+};
+// \\\\\\\\\\\\\\\\\\\\\\\\
+export const getAllUsers = async () => {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) {
+    throw new Error("Access token is missing");
+  }
+  const response = await axios.get(USERS_URL, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+    withCredentials: true,
+  });
+  return response.data;
+};
+export const getUserById = async (id: string) => {
+  const access_token = localStorage.getItem("access_token");
+  if (!access_token) {
+    throw new Error("Access token is missing");
+  }
+
+  const response = await axios.get(USERS_ID_URL(id), {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+// \\\\\\\\\\\\\\\\\\\\\\\\
+export const fetchUserByName = async (
+  name: string,
+  token: string
+): Promise<{ id: number; name: string } | null> => {
+  try {
+    const response = await fetch(`${USERS_URL}?name=${name}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user by username");
+    }
+
+    const users = await response.json();
+    if (users.length === 0) {
+      return null;
+    }
+    const user = users.find((user: any) => user.name === name);
+    if (user) {
+      return { id: user.id, name: user.name };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user by username:", error);
+    throw new Error("Error fetching user by username");
   }
 };
 // export const authenticatedRequest = async (url: string, options: any) => {

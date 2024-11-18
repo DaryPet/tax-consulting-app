@@ -4,7 +4,7 @@ export const AUTH_API_URL = `${BASE_URL}/auth/`;
 export const TESTIMONIALS_API_URL = `${BASE_URL}/testimonial/`;
 export const DOCUMENTS_API_URL = `${BASE_URL}/documents/`;
 export const BOOKING_API_URL = `${BASE_URL}/booking/`;
-export const USERS_API_URL = `${BASE_URL}/user/`;
+export const USERS_API_URL = `${BASE_URL}/users/`;
 
 export const AUTH_LOGIN_URL = `${AUTH_API_URL}login`;
 export const AUTH_LOGOUT_URL = `${AUTH_API_URL}logout`;
@@ -26,4 +26,4 @@ export const BOOKING_ID_URL = (id: string) => `${BOOKING_API_URL}${id}`;
 export const BOOKING_MY_URL = `${BOOKING_API_URL}my`;
 
 export const USERS_URL = `${USERS_API_URL}`;
-export const USERS_ID_URL = (id: string) => `${USERS_API_URL}${id}`;
+export const USERS_ID_URL = (id: string) => `${USERS_API_URL}/${id}`;

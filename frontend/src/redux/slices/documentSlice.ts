@@ -1,88 +1,17 @@
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import {
-//   uploadDocument,
-//   fetchUserDocuments,
-// } from "../../services/documentService";
-
-// export interface DocumentState {
-//   items: any[];
-//   loading: boolean;
-//   error: string | null;
-// }
-
-// const initialState: DocumentState = {
-//   items: [],
-//   loading: false,
-//   error: null,
-// };
-
-// // Асинхронный thunk для загрузки документа
-// export const uploadDocumentThunk = createAsyncThunk(
-//   "documents/uploadDocument",
-//   async (file: File, { rejectWithValue }) => {
-//     try {
-//       return await uploadDocument(file);
-//     } catch (error) {
-//       return rejectWithValue("Ошибка при загрузке документа");
-//     }
-//   }
-// );
-
-// // Асинхронный thunk для получения всех документов пользователя
-// export const fetchUserDocumentsThunk = createAsyncThunk(
-//   "documents/fetchUserDocuments",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       return await fetchUserDocuments();
-//     } catch (error) {
-//       return rejectWithValue("Ошибка при получении документов");
-//     }
-//   }
-// );
-
-// export const documentSlice = createSlice({
-//   name: "documents",
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(uploadDocumentThunk.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(uploadDocumentThunk.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.items.push(action.payload);
-//       })
-//       .addCase(uploadDocumentThunk.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       })
-//       .addCase(fetchUserDocumentsThunk.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(fetchUserDocumentsThunk.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.items = action.payload;
-//       })
-//       .addCase(fetchUserDocumentsThunk.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       });
-//   },
-// });
-
-// export default documentSlice.reducer;
-// frontend/src/redux/slices/documentSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import {
   uploadDocumentApi,
   fetchUserDocumentsApi,
   deleteDocumentApi,
+  fetchAllDocumentsApi,
+  uploadDocumentForUserApi,
 } from "../../services/documentService";
 
+interface User {
+  id: number;
+  name: string;
+}
 // Интерфейсы для данных документов
 interface Document {
   id: number;
@@ -90,6 +19,7 @@ interface Document {
   description?: string;
   createdAt: string;
   filepath: string;
+  uploadedBy: User;
 }
 
 interface DocumentState {
@@ -133,6 +63,19 @@ export const fetchUserDocuments = createAsyncThunk<Document[], string>(
     }
   }
 );
+export const uploadDocumentForUser = createAsyncThunk<
+  void,
+  { userId: number; file: File; description: string; token: string }
+>(
+  "documents/uploadDocumentForUser",
+  async ({ userId, file, description, token }, { rejectWithValue }) => {
+    try {
+      await uploadDocumentForUserApi(String(userId), file, description, token);
+    } catch (error) {
+      return rejectWithValue("Error uploading document");
+    }
+  }
+);
 export const deleteDocument = createAsyncThunk<
   void,
   { documentId: string; token: string },
@@ -147,7 +90,17 @@ export const deleteDocument = createAsyncThunk<
     }
   }
 );
-
+export const fetchAllDocuments = createAsyncThunk<Document[], string>(
+  "documents/fetchAllDocuments",
+  async (token, { rejectWithValue }) => {
+    try {
+      const documents = await fetchAllDocumentsApi(token);
+      return documents;
+    } catch (error) {
+      return rejectWithValue("Error fetching all documents");
+    }
+  }
+);
 // Slice для документов
 const documentSlice = createSlice({
   name: "document",
@@ -206,6 +159,34 @@ const documentSlice = createSlice({
         );
       })
       .addCase(deleteDocument.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchAllDocuments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchAllDocuments.fulfilled,
+        (state, action: PayloadAction<Document[]>) => {
+          state.loading = false;
+          state.documents = action.payload;
+        }
+      )
+      .addCase(fetchAllDocuments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Обработка загрузки документа
+      .addCase(uploadDocumentForUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(uploadDocumentForUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(uploadDocumentForUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

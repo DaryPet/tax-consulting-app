@@ -3,6 +3,7 @@ import {
   BOOKING_API_URL,
   BOOKING_MY_URL,
 } from "../config/apiConfig";
+import { Booking } from "../redux/slices/bookingSlice";
 
 // Функция для получения доступных временных слотов
 export const fetchAvailableSlotsApi = async (
@@ -59,6 +60,21 @@ export const fetchUserBookingsApi = async (token: string): Promise<any> => {
   });
   if (!response.ok) {
     throw new Error("Failed to fetch user bookings");
+  }
+  return await response.json();
+};
+export const fetchAllBookingsApi = async (
+  token: string
+): Promise<Booking[]> => {
+  const response = await fetch(BOOKING_URL, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Токен обязателен для администратора
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch all bookings");
   }
   return await response.json();
 };

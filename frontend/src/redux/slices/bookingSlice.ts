@@ -4,10 +4,11 @@ import {
   fetchAvailableSlotsApi,
   createBookingApi,
   fetchUserBookingsApi,
+  fetchAllBookingsApi,
 } from "../../services/bookingService";
 
 // Интерфейсы для данных бронирования
-interface Booking {
+export interface Booking {
   id: number;
   name: string;
   email: string;
@@ -77,6 +78,18 @@ export const fetchUserBookings = createAsyncThunk<Booking[], string>(
     }
   }
 );
+export const fetchAllBookings = createAsyncThunk<Booking[], string>(
+  "booking/fetchAllBookings",
+  async (token, { rejectWithValue }) => {
+    try {
+      const bookings = await fetchAllBookingsApi(token);
+      console.log("Fetched bookings:", bookings);
+      return bookings;
+    } catch (error) {
+      return rejectWithValue("Error fetching all bookings");
+    }
+  }
+);
 
 // Slice для бронирования
 const bookingSlice = createSlice({
@@ -134,6 +147,21 @@ const bookingSlice = createSlice({
         }
       )
       .addCase(fetchUserBookings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchAllBookings.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        fetchAllBookings.fulfilled,
+        (state, action: PayloadAction<Booking[]>) => {
+          state.loading = false;
+          state.bookings = action.payload;
+        }
+      )
+      .addCase(fetchAllBookings.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
