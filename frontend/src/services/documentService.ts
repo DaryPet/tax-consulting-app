@@ -116,3 +116,41 @@ export const deleteDocumentApi = async (
     throw new Error("Failed to delete document");
   }
 };
+export const fetchAllDocumentsApi = async (token: string): Promise<any> => {
+  const response = await fetch(DOCUMENTS_URL, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch documents");
+  }
+  return await response.json();
+};
+
+export const uploadDocumentForUserApi = async (
+  userId: string,
+  file: File,
+  description: string,
+  token?: string
+): Promise<void> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("description", description);
+  formData.append("userId", userId);
+
+  const response = await fetch(DOCUMENTS_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload document");
+  }
+};

@@ -7,6 +7,7 @@ import {
   registerUser,
   logoutUser,
   refreshUserToken,
+  fetchAllUsers,
 } from "../operations";
 import { toast } from "react-toastify";
 
@@ -26,6 +27,7 @@ interface AuthState {
   loading: boolean;
   isRefreshing: boolean;
   error: string | null;
+  users: User[];
   status: "idle" | "loading" | "succeeded" | "failed";
 }
 
@@ -36,6 +38,7 @@ const initialState: AuthState = {
   isRefreshing: false,
   loading: false,
   status: "idle",
+  users: [],
   error: null,
 };
 
@@ -166,6 +169,22 @@ const authSlice = createSlice({
         // \\\\\\\\\\\\\\\\\\\\\
         console.error("Logout error: ", action.error);
         toast.error(errorMessage);
+      })
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload.sort((a: User, b: User) =>
+          a.username.localeCompare(b.username)
+        ); // Сортируем пользователей по имени пользователя
+        state.status = "succeeded";
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.status = "failed";
       }),
 });
 

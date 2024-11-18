@@ -5,6 +5,7 @@ import {
   logout,
   fetchUserData,
   refreshToken,
+  getAllUsers,
 } from "../services/authService";
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -52,16 +53,6 @@ export const loginUsers = createAsyncThunk(
   }
 );
 
-// export const logoutUser = createAsyncThunk(
-//   "auth/logoutUser",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       await logout();
-//     } catch (error) {
-//       return rejectWithValue("Error while logging out");
-//     }
-//   }
-// );
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, { rejectWithValue }) => {
@@ -82,25 +73,6 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-// \\\\\\\\\\\\\\\\\\\\\
-// export const fetchCurrentUser = createAsyncThunk(
-//   "auth/fetchCurrentUser",
-//   async (_, thunkAPI) => {
-//     const state: any = thunkAPI.getState();
-//     const token = state.auth.token;
-
-//     if (!token) {
-//       return thunkAPI.rejectWithValue("No token available");
-//     }
-
-//     try {
-//       const response = await fetchUserData(token);
-//       return response;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue("Failed to fetch user data");
-//     }
-//   }
-// );
 export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, thunkAPI) => {
@@ -113,7 +85,6 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//
 export const refreshUserToken = createAsyncThunk(
   "auth/refreshUserToken",
   async (_, { rejectWithValue }) => {
@@ -122,6 +93,17 @@ export const refreshUserToken = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue("Error while refreshing token");
+    }
+  }
+);
+export const fetchAllUsers = createAsyncThunk(
+  "auth/fetchAllUsers",
+  async (_, thunkAPI) => {
+    try {
+      const response = await getAllUsers();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Failed to fetch users data");
     }
   }
 );
