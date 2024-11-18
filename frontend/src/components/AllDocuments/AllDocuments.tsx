@@ -16,6 +16,7 @@ import { fetchUserByName } from "../../services/authService";
 import styles from "./AllDocuments.module.css";
 import { toast } from "react-toastify";
 import Loader from "../Loader/Loader";
+import { useParams } from "react-router-dom";
 
 const AllDocuments: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,11 +25,14 @@ const AllDocuments: React.FC = () => {
   const loading = useSelector(selectDocumentLoading);
   const error = useSelector(selectDocumentError);
   const successMessage = useSelector(selectDocumentSuccess);
+  const { userId: paramUserId } = useParams<{ userId: string }>();
   const [userName, setUserName] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>("");
-  const [userId, setUserId] = useState<number | null>(null);
-
+  // const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<number | null>(
+    paramUserId ? parseInt(paramUserId) : null
+  );
   // Фетчим все документы при первом рендере
   useEffect(() => {
     if (token) {
@@ -98,7 +102,6 @@ const AllDocuments: React.FC = () => {
     }
   };
 
-  // Удаление документа
   const handleDelete = (documentId: string) => {
     if (token) {
       dispatch(deleteDocument({ documentId, token }))
@@ -118,7 +121,7 @@ const AllDocuments: React.FC = () => {
 
   return (
     <section className={styles.allDocumentsContainer}>
-      <h2>Управление Документами</h2>
+      <h2>Manage Documents</h2>
       {loading && <Loader />}
 
       <div className={styles.uploadSection}>
@@ -162,7 +165,7 @@ const AllDocuments: React.FC = () => {
             <div key={document.id} className={styles.documentItem}>
               <p>{document.filename}</p>
               <p>description: {document.description}</p>
-              <p>Uploaded By: {document.uploadedBy?.name ?? "Неизвестно"}</p>
+              <p>Uploaded By: {document.uploadedBy?.name ?? "Unknown"}</p>
               <button
                 onClick={() =>
                   handleDownload(document.filepath, document.filename)

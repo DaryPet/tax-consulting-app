@@ -1,27 +1,47 @@
 import React from "react";
 import styles from "./AdminPage.module.css";
-import AllUsers from "../../components/AllUsers/AllUsers"; // Импортируем новый компонент AllUsers
-import AllBookings from "../../components/AllBookings/AllBookings";
-import AllDocuments from "../../components/AllDocuments/AllDocuments";
+import { Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const AdminPage: React.FC = () => {
   return (
-    <div className={styles.container}>
-      <h1>Личный Кабинет Admin</h1>
-      <section>
-        <h2>All clients</h2>
-        <AllUsers />{" "}
-        {/* Используем компонент AllUsers для отображения списка всех пользователей */}
-      </section>
-      <section>
-        <h2>Все Документы</h2>
-        <AllDocuments />
-        {/* Здесь нужно будет добавить компонент для отображения всех документов */}
-      </section>
-      <section>
-        <h2>Все Бронирования</h2>
-        <AllBookings />
-      </section>
+    <div className={styles.adminPageContainer}>
+      <h1>Admin Dashboard</h1>
+      <div className={styles.linkSection}>
+        <NavLink
+          to="users"
+          className={({ isActive }) =>
+            isActive
+              ? `${styles.adminLink} ${styles.activeAdminLink}`
+              : styles.adminLink
+          }
+        >
+          Manage Users
+        </NavLink>
+        <NavLink
+          to="bookings"
+          className={({ isActive }) =>
+            isActive
+              ? `${styles.adminLink} ${styles.activeAdminLink}`
+              : styles.adminLink
+          }
+        >
+          Manage Bookings
+        </NavLink>
+        <NavLink
+          to="documents"
+          className={({ isActive }) =>
+            isActive
+              ? `${styles.adminLink} ${styles.activeAdminLink}`
+              : styles.adminLink
+          }
+        >
+          Manage Documents
+        </NavLink>
+      </div>
+      <div className={styles.outletSection}>
+        <Outlet />
+      </div>
     </div>
   );
 };
