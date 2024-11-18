@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import Layout from "./components/Layout/Layout";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,6 +15,11 @@ const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
 const UserPage = lazy(() => import("./pages/UserPage/UserPage"));
 const AdminPage = lazy(() => import("./pages/AdminPage/AdminPage"));
+const AllUsers = lazy(() => import("./components/AllUsers/AllUsers"));
+const AllBookings = lazy(() => import("./components/AllBookings/AllBookings"));
+const AllDocuments = lazy(
+  () => import("./components/AllDocuments/AllDocuments")
+);
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
@@ -47,7 +52,12 @@ export default function App() {
                   <Navigate to="/login" replace />
                 )
               }
-            />
+            >
+              {/* Вложенные маршруты для секций админской панели */}
+              <Route path="users" element={<AllUsers />} />
+              <Route path="bookings" element={<AllBookings />} />
+              <Route path="documents" element={<AllDocuments />} />
+            </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

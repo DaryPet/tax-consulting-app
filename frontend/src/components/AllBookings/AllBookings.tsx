@@ -18,30 +18,31 @@ const AllBookings: React.FC = () => {
     }
   }, [dispatch, token]);
 
-  // Для отладки: проверим, какие бронирования мы получаем
   console.log("All bookings from Redux state:", bookings);
 
-  // Сортируем бронирования по дате и времени
   const sortedBookings = Array.from(bookings).sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
   return (
     <section className={styles.allBookingsContainer}>
-      <h2>Все Бронирования</h2>
+      <h2>All Bookings</h2>
       {loading && <p>Загрузка...</p>}
-      {error && <p className={styles.error}>Ошибка: {error}</p>}
+      {error && <p className={styles.error}>Error: {error}</p>}
       {!loading && sortedBookings.length > 0 ? (
         <ul className={styles.bookingsList}>
           {sortedBookings.map((booking) => (
             <li key={booking.id} className={styles.bookingItem}>
               <strong>{booking.name}</strong> - {booking.service} <br />
-              Дата: {booking.date}, Время: {booking.time}
+              Date: {booking.date}, Time: {booking.time}
+              <br />
+              Email: {booking.email} <br />
+              Phone: {booking.phone}
             </li>
           ))}
         </ul>
       ) : (
-        <p>Нет доступных бронирований.</p>
+        <p>There are no bookings</p>
       )}
     </section>
   );

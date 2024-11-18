@@ -1,0 +1,145 @@
+.allDocumentsContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.uploadSection {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.userSearchContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.inputField {
+  flex: 1;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.searchButton {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+  background-color: #0056b3;
+}
+
+.uploadButton {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+  background-color: #218838;
+}
+
+.documentsList {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.documentItem {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.documentItem p {
+  margin: 5px 0;
+}
+
+.downloadButton,
+.deleteButton {
+  margin-right: 10px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.downloadButton {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.downloadButton:hover {
+  background-color: #0056b3;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.error {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .allDocumentsContainer {
+    padding: 15px;
+  }
+
+  .uploadSection,
+  .documentsList {
+    padding: 15px;
+  }
+
+  .inputField {
+    padding: 6px;
+  }
+
+  .searchButton,
+  .uploadButton {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .documentItem {
+    padding: 8px;
+  }
+
+  .downloadButton,
+  .deleteButton {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+}
