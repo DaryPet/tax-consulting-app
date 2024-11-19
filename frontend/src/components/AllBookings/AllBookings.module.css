@@ -1,47 +1,104 @@
 .allBookingsContainer {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
-
 h2 {
-  color: #333;
-  font-weight: bold;
+  color: #007bff;
   margin-bottom: 20px;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
 .bookingsList {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .bookingItem {
+  background-color: #ffffff;
+  margin-bottom: 15px;
   padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  transition: background-color 0.3s ease;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s;
 }
 
 .bookingItem:hover {
-  background-color: #f0f0f0; /* Лёгкий серый фон при наведении */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 }
 
 .bookingItem strong {
   font-weight: bold;
-  color: #333;
+  color: #007bff;
+}
+
+.bookingItem p {
+  margin: 5px 0;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 1em;
+  margin-top: 15px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.paginationButton:hover {
+  background-color: #0056b3;
+}
+
+.paginationButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 1em;
+  color: #555;
+  margin: 0 10px;
+}
+
+.inputField {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  transition: border 0.3s;
+}
+
+.inputField:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }

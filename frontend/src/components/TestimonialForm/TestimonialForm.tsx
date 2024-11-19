@@ -26,18 +26,16 @@ const TestimonialForm: React.FC = () => {
 
   const [testimonial, setTestimonial] = useState<string>("");
 
-  // Подгружаем отзывы текущего пользователя при загрузке компонента
   useEffect(() => {
     if (token) {
       dispatch(fetchUserTestimonials(token));
     }
   }, [dispatch, token]);
 
-  // Управление сообщениями об успехе и ошибке через Toastify
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
-      setTestimonial(""); // Очищаем форму после успешного добавления
+      setTestimonial("");
       dispatch(clearMessages());
     }
 
@@ -47,7 +45,6 @@ const TestimonialForm: React.FC = () => {
     }
   }, [successMessage, error, dispatch]);
 
-  // Обработчик для добавления нового отзыва
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -63,7 +60,6 @@ const TestimonialForm: React.FC = () => {
     }
   };
 
-  // Обработчик для удаления отзыва
   const handleDelete = (testimonialId: string) => {
     if (token) {
       dispatch(deleteTestimonial({ testimonialId, token }));

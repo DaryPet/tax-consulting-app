@@ -56,9 +56,9 @@
 }
 
 .calendar {
-  max-width: 350px; /* Устанавливаем максимальную ширину для календаря */
+  max-width: 350px;
   width: 100%;
-  margin: 0 auto; /* Центрируем календарь */
+  margin: 0 auto;
   background: #fefefe;
   padding: 20px;
   border-radius: 10px;

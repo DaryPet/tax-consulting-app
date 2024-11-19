@@ -8,7 +8,6 @@ import {
   deleteBookingApi,
 } from "../../services/bookingService";
 
-// Интерфейсы для данных бронирования
 export interface Booking {
   id: number;
   name: string;
@@ -35,7 +34,6 @@ const initialState: BookingState = {
   successMessage: null,
 };
 
-// Асинхронный thunk для получения доступных временных слотов
 export const fetchAvailableSlots = createAsyncThunk<string[], string>(
   "booking/fetchAvailableSlots",
   async (date, { rejectWithValue }) => {
@@ -47,7 +45,6 @@ export const fetchAvailableSlots = createAsyncThunk<string[], string>(
   }
 );
 
-// Асинхронный thunk для создания бронирования (для зарегистрированного и незарегистрированного пользователя)
 export const createBooking = createAsyncThunk<
   void,
   {
@@ -61,14 +58,13 @@ export const createBooking = createAsyncThunk<
   }
 >("booking/createBooking", async (bookingData, { rejectWithValue }) => {
   try {
-    const { token, ...data } = bookingData; // Извлекаем токен из данных бронирования
-    await createBookingApi(data, token); // Передаем токен, если он есть
+    const { token, ...data } = bookingData;
+    await createBookingApi(data, token);
   } catch (error) {
     return rejectWithValue("Error creating booking");
   }
 });
 
-// Асинхронный thunk для получения всех бронирований текущего пользователя
 export const fetchUserBookings = createAsyncThunk<Booking[], string>(
   "booking/fetchUserBookings",
   async (token, { rejectWithValue }) => {
@@ -91,7 +87,7 @@ export const fetchAllBookings = createAsyncThunk<Booking[], string>(
     }
   }
 );
-// Добавьте новый thunk для удаления бронирования
+
 export const deleteBooking = createAsyncThunk<
   void,
   { bookingId: number; token: string }
@@ -106,7 +102,6 @@ export const deleteBooking = createAsyncThunk<
   }
 );
 
-// Slice для бронирования
 const bookingSlice = createSlice({
   name: "booking",
   initialState,
@@ -118,7 +113,6 @@ const bookingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Обработка получения доступных временных слотов
       .addCase(fetchAvailableSlots.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -134,8 +128,6 @@ const bookingSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Обработка создания бронирования
       .addCase(createBooking.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -148,8 +140,6 @@ const bookingSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Обработка получения всех бронирований текущего пользователя
       .addCase(fetchUserBookings.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -200,7 +190,6 @@ const bookingSlice = createSlice({
 
 export const { clearMessages } = bookingSlice.actions;
 
-// Селекторы для получения данных из состояния бронирования
 export const selectAvailableSlots = (state: RootState) =>
   state.booking.availableSlots;
 export const selectUserBookings = (state: RootState) => state.booking.bookings;

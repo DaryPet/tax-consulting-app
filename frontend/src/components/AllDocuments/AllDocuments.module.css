@@ -6,7 +6,9 @@
   margin: 20px auto;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-
+.title {
+  text-align: center;
+}
 .uploadSection {
   margin-bottom: 20px;
   padding: 20px;
@@ -38,9 +40,23 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 
 .searchButton:hover {
+  background-color: #0056b3;
+}
+.showAllButton {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ahowAllButton:hover {
   background-color: #0056b3;
 }
 
@@ -68,6 +84,9 @@
 }
 
 .documentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
@@ -75,13 +94,22 @@
   background-color: #f8f9fa;
 }
 
-.documentItem p {
+.documentDetails {
+  flex: 1;
+}
+
+.documentDetails p {
   margin: 5px 0;
+  text-align: left;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 10px;
 }
 
 .downloadButton,
 .deleteButton {
-  margin-right: 10px;
   padding: 6px 12px;
   font-size: 0.9rem;
   border: none;
@@ -93,6 +121,7 @@
 .downloadButton {
   background-color: #007bff;
   color: #ffffff;
+  margin-right: 4px;
 }
 
 .downloadButton:hover {
@@ -113,33 +142,35 @@
   font-weight: bold;
 }
 
-@media (max-width: 768px) {
-  .allDocumentsContainer {
-    padding: 15px;
-  }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-  .uploadSection,
-  .documentsList {
-    padding: 15px;
-  }
+.paginationButton {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
 
-  .inputField {
-    padding: 6px;
-  }
+.paginationButton:hover {
+  background-color: #0056b3;
+}
 
-  .searchButton,
-  .uploadButton {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-  }
+.paginationButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
 
-  .documentItem {
-    padding: 8px;
-  }
-
-  .downloadButton,
-  .deleteButton {
-    padding: 5px 10px;
-    font-size: 0.85rem;
-  }
+.pageInfo {
+  font-size: 1em;
+  color: #555;
+  margin: 0 10px;
 }

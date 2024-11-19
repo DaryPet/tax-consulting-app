@@ -1,6 +1,5 @@
 import { DOCUMENTS_URL, DOCUMENTS_MY_URL } from "../config/apiConfig";
 
-// ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ НОВОГО ДОКУМЕНТА
 export const uploadDocumentApi = async ({
   file,
   description,
@@ -31,11 +30,7 @@ export const uploadDocumentApi = async ({
   return await response.json();
 };
 
-// ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ВСЕХ ДОКУМЕНТОВ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-export const fetchUserDocumentsApi = async (
-  // userId: number,
-  token: string
-): Promise<any> => {
+export const fetchUserDocumentsApi = async (token: string): Promise<any> => {
   const response = await fetch(DOCUMENTS_MY_URL, {
     method: "GET",
     headers: {
@@ -67,7 +62,7 @@ export const fetchDocumentsForUserApi = async (
 
   return await response.json();
 };
-// ФУНКЦИЯ ДЛЯ СКАЧИВАНИЯ ДОКУМЕНТА
+
 export const downloadDocumentApi = async (
   documentId: string,
   token: string
@@ -97,10 +92,8 @@ export const downloadDocumentApi = async (
     const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = downloadUrl;
-
-    // Пытаемся извлечь имя файла из заголовка Content-Disposition
     const contentDisposition = response.headers.get("Content-Disposition");
-    let filename = "document.pdf"; // Значение по умолчанию, если имя файла не указано в заголовке
+    let filename = "document.pdf";
 
     if (contentDisposition && contentDisposition.includes("filename=")) {
       const matches = contentDisposition.match(/filename=\"(.+)\"/);
@@ -114,7 +107,6 @@ export const downloadDocumentApi = async (
     link.click();
     document.body.removeChild(link);
 
-    // Освобождаем URL
     window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
     console.error("Error while downloading document:", error);
