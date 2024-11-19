@@ -21,31 +21,37 @@ import { useParams } from "react-router-dom";
 const AllDocuments: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector(selectAuthToken);
-  const documents = useSelector(selectUserDocuments) || [];
+  const documents = useSelector(selectUserDocuments);
   const loading = useSelector(selectDocumentLoading);
   const error = useSelector(selectDocumentError);
   const successMessage = useSelector(selectDocumentSuccess);
   const { userId: paramUserId } = useParams<{ userId: string }>();
-  const [userName, setUserName] = useState<string>("");
+  // const [userName, setUserName] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>("");
-  // const [userId, setUserId] = useState<number | null>(null);
+  const [searchUserName, setSearchUserName] = useState<string>("");
+  const [filteredDocuments, setFilteredDocuments] = useState<any[]>(documents);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
+
   const [userId, setUserId] = useState<number | null>(
     paramUserId ? parseInt(paramUserId) : null
   );
-  // Фетчим все документы при первом рендере
+
   useEffect(() => {
     if (token) {
       dispatch(fetchAllDocuments(token));
     }
   }, [dispatch, token]);
 
-  // Используем эффект для обработки успеха и ошибок
+  useEffect(() => {
+    setFilteredDocuments(documents);
+  }, [documents]);
+
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage, { autoClose: 2000 });
       dispatch(clearMessages());
-      // Обновляем список документов после успешного добавления
       if (token) {
         dispatch(fetchAllDocuments(token));
       }
@@ -56,30 +62,41 @@ const AllDocuments: React.FC = () => {
     }
   }, [successMessage, error, dispatch, token]);
 
-  // Поиск пользователя по имени и сохранение userId для загрузки документа
-  const handleUserSearch = async () => {
-    if (!userName) {
-      alert("Please enter the user's name.");
+  const handleUserSearchForFilter = async () => {
+    if (!searchUserName) {
+      setFilteredDocuments(documents);
+      setUserId(null);
       return;
     }
 
     try {
-      const user = await fetchUserByName(userName, token as string);
+      const user = await fetchUserByName(searchUserName, token as string);
       if (user) {
         setUserId(user.id);
-        toast.success(`User found: ${userName}, ID: ${user.id}`);
+        const userDocs = documents.filter(
+          (doc) => doc.uploadedBy?.id === user.id
+        );
+        setFilteredDocuments(userDocs);
+        toast.success(`User found: ${user.name}`);
       } else {
+        setFilteredDocuments([]);
         setUserId(null);
-        toast.error(`User with name ${userName} not found.`);
+        toast.error(`User with name ${searchUserName} not found.`);
       }
     } catch (err) {
       console.error("Ошибка при поиске пользователя:", err);
+      setFilteredDocuments([]);
       setUserId(null);
       toast.error("Failed to find user. Please check the name and try again.");
     }
   };
 
-  // Загрузка документа для определенного пользователя
+  const handleShowAllDocuments = () => {
+    setFilteredDocuments(documents);
+    setUserId(null);
+    setSearchUserName("");
+  };
+
   const handleUpload = () => {
     if (userId === null || !file) {
       alert("Please find the user and select a file to upload.");
@@ -119,54 +136,94 @@ const AllDocuments: React.FC = () => {
     }
   };
 
+  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+
+  const currentDocuments = filteredDocuments.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <section className={styles.allDocumentsContainer}>
-      <h2>Manage Documents</h2>
+      <h2 className={styles.title}>Manage Documents</h2>
       {loading && <Loader />}
-
-      <div className={styles.uploadSection}>
-        <h3>Upload document for user</h3>
-        <div className={styles.userSearchContainer}>
-          <input
-            type="text"
-            placeholder="Put user name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className={styles.inputField}
-          />
-          <button onClick={handleUserSearch} className={styles.searchButton}>
-            Find user
-          </button>
-        </div>
-        <input
-          type="file"
-          onChange={(e) => e.target.files && setFile(e.target.files[0])}
-        />
+      <div className={styles.filterSection}>
+        <h3>Filter Documents by User Name</h3>
         <input
           type="text"
-          placeholder="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Enter user name to filter documents"
+          value={searchUserName}
+          onChange={(e) => setSearchUserName(e.target.value)}
           className={styles.inputField}
         />
         <button
-          onClick={handleUpload}
-          disabled={loading}
-          className={styles.uploadButton}
+          onClick={handleUserSearchForFilter}
+          className={styles.searchButton}
         >
-          {loading ? "Uploading..." : "Upload"}
+          Filter Documents
         </button>
+        {userId !== null && (
+          <button
+            onClick={handleShowAllDocuments}
+            className={styles.showAllButton}
+          >
+            All Documents
+          </button>
+        )}
       </div>
-
+      {userId !== null && (
+        <div className={styles.uploadSection}>
+          <h3>Upload document for user</h3>
+          <input
+            type="file"
+            onChange={(e) => e.target.files && setFile(e.target.files[0])}
+          />
+          <input
+            type="text"
+            placeholder="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className={styles.inputField}
+          />
+          <button
+            onClick={handleUpload}
+            disabled={loading}
+            className={styles.uploadButton}
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+        </div>
+      )}
       <div className={styles.documentsList}>
-        <h3>All Documents:</h3>
-        {documents.length > 0 ? (
-          documents.map((document: any) => (
+        {currentDocuments.length > 0 ? (
+          currentDocuments.map((document: any) => (
             <div key={document.id} className={styles.documentItem}>
-              <p>{document.filename}</p>
-              <p>description: {document.description}</p>
-              <p>Uploaded By: {document.uploadedBy?.name ?? "Unknown"}</p>
+              <div className={styles.documentDetails}>
+                <p>
+                  <strong>Filename:</strong> {document.filename}
+                </p>
+                <p>
+                  <strong>Description:</strong> {document.description}
+                </p>
+                <p>
+                  <strong>Uploaded By:</strong>{" "}
+                  {document.uploadedBy?.name ?? "Unknown"}
+                </p>
+              </div>
               <button
+                className={styles.downloadButton}
                 onClick={() =>
                   handleDownload(document.filepath, document.filename)
                 }
@@ -182,14 +239,32 @@ const AllDocuments: React.FC = () => {
             </div>
           ))
         ) : (
-          <p>There are no document yet.</p>
+          <p>There are no documents yet.</p>
         )}
+      </div>
+      <div className={styles.pagination}>
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={styles.paginationButton}
+        >
+          Previous
+        </button>
+        <span className={styles.pageInfo}>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={styles.paginationButton}
+        >
+          Next
+        </button>
       </div>
     </section>
   );
 };
 
-// Функция для скачивания документа
 const handleDownload = async (url: string, filename: string) => {
   try {
     const response = await fetch(url);

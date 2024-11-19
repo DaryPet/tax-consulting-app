@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import {
@@ -25,6 +25,12 @@ const Documents: React.FC = () => {
   const loading = useSelector(selectDocumentLoading);
   const error = useSelector(selectDocumentError);
   const successMessage = useSelector(selectDocumentSuccess);
+  const [description, setDescription] = useState<string>("");
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (token) {
@@ -43,12 +49,29 @@ const Documents: React.FC = () => {
     }
   }, [successMessage, error, dispatch]);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      if (token) {
-        dispatch(uploadDocument({ file, token }));
-      }
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile && token) {
+      dispatch(uploadDocument({ file: selectedFile, description, token }))
+        .unwrap()
+        .then(() => {
+          setSelectedFile(null);
+          setDescription("");
+          toast.success("Document uploaded successfully", { autoClose: 2000 });
+        })
+        .catch((uploadError) => {
+          console.error("Ошибка при загрузке документа:", uploadError);
+          toast.error("Error uploading document, please try again.");
+        });
+    } else {
+      toast.error("Please select a file and provide a description", {
+        autoClose: 2000,
+      });
     }
   };
 
@@ -72,6 +95,27 @@ const Documents: React.FC = () => {
     }
   };
 
+  const indexOfLastDocument = currentPage * itemsPerPage;
+  const indexOfFirstDocument = indexOfLastDocument - itemsPerPage;
+  const currentDocuments = documents.slice(
+    indexOfFirstDocument,
+    indexOfLastDocument
+  );
+
+  const totalPages = Math.ceil(documents.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className={styles.documentsSection}>
       <h2>Upload and Manage Documents</h2>
@@ -79,29 +123,78 @@ const Documents: React.FC = () => {
         <Loader />
       ) : (
         <>
-          <input type="file" onChange={handleFileUpload} />
+          <div className={styles.fileInputContainer}>
+            <input type="file" onChange={handleFileSelect} />
+            <input
+              type="text"
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={styles.descriptionInput}
+            />
+            <button
+              className={styles.uploadButton}
+              onClick={handleUpload}
+              disabled={selectedFile === null}
+            >
+              Upload
+            </button>
+          </div>
           <div className={styles.documentsList}>
             <h3>Your Documents:</h3>
-            {documents.length > 0 ? (
-              documents.map((document) => (
+            {currentDocuments.length > 0 ? (
+              currentDocuments.map((document) => (
                 <div key={document.id} className={styles.documentItem}>
-                  <p>{document.filename}</p>
-                  <button
-                    onClick={() => handleDownload(document.id.toString())}
-                  >
-                    Download
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => handleDelete(document.id.toString())}
-                  >
-                    Delete
-                  </button>
+                  <div className={styles.documentDetails}>
+                    <p>
+                      <strong>Filename:</strong> {document.filename}
+                    </p>
+                    <p>
+                      <strong>Description:</strong> {document.description}
+                    </p>
+                    <p>
+                      <strong>Uploaded By:</strong>{" "}
+                      {document.uploadedBy?.name ?? "Unknown"}
+                    </p>
+                  </div>
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={styles.downloadButton}
+                      onClick={() => handleDownload(document.id.toString())}
+                    >
+                      Download
+                    </button>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => handleDelete(document.id.toString())}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
               <p>No documents found</p>
             )}
+            <div className={styles.pagination}>
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={styles.paginationButton}
+              >
+                Previous
+              </button>
+              <span className={styles.pageInfo}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={styles.paginationButton}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </>
       )}

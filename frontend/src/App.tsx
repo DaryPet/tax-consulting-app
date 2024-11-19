@@ -6,7 +6,6 @@ import { RootState } from "./redux/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
-// import { initializeAuthState } from "./redux/operations";
 import Loader from "../src/components/Loader/Loader";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
@@ -27,19 +26,14 @@ const UsersDocuments = lazy(
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
-  // const dispatch = useDispatch<any>();
   const { user } = useSelector((state: RootState) => state.auth);
 
-  // useEffect(() => {
-  //   dispatch(initializeAuthState());
-  // }, [dispatch]);
   return (
     <div>
       <Layout>
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* <Route path="/services" element={<ServicePage />} /> */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/booking" element={<Booking />} />
@@ -57,7 +51,6 @@ export default function App() {
                 )
               }
             >
-              {/* Вложенные маршруты для секций админской панели */}
               <Route path="users" element={<AllUsers />} />
               <Route path="bookings" element={<AllBookings />} />
               <Route path="documents" element={<AllDocuments />} />

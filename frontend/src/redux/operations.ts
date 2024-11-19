@@ -59,9 +59,7 @@ export const logoutUser = createAsyncThunk(
     try {
       console.log("Начало выполнения операции logout");
 
-      await logout(); // Вызываем функцию logout из authService для выполнения API-запроса
-
-      // Локально очищаем токен из LocalStorage
+      await logout();
       localStorage.removeItem("access_token");
 
       console.log("Логаут завершен");

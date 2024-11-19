@@ -178,7 +178,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.users = action.payload.sort((a: User, b: User) =>
           a.username.localeCompare(b.username)
-        ); // Сортируем пользователей по имени пользователя
+        );
         state.status = "succeeded";
       })
       .addCase(fetchAllUsers.rejected, (state, action) => {

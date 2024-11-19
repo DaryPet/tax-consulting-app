@@ -1,67 +1,118 @@
-.userItem span {
-  font-weight: bold;
-  color: #555;
-}
 .allUsersContainer {
   padding: 20px;
   background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2 {
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+  outline: none;
 }
 
 .usersList {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .userItem {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.link {
-  margin-right: 10px;
+.userItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.userName {
   color: #007bff;
-  text-decoration: none;
-}
-
-.link:hover {
-  text-decoration: underline;
+  font-weight: bold;
 }
 
 .actions {
-  margin-top: 5px;
+  display: flex;
+  gap: 10px;
 }
 
-.searchInput {
-  padding: 8px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid #ccc;
+.link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #007bff;
   border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.link:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: #dc3545;
+  font-weight: bold;
+  text-align: center;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
 }
 
 .pageButton {
-  padding: 10px 20px;
+  padding: 8px 16px;
   margin: 0 5px;
-  background-color: #007bff;
-  color: #fff;
   border: none;
   border-radius: 4px;
+  background-color: #007bff;
+  color: #ffffff;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pageButton:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
 .pageButton:disabled {
-  background-color: #ccc;
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .pageInfo {
-  margin: auto 15px;
   font-weight: bold;
+  font-size: 1rem;
+  color: #333333;
 }

@@ -1,7 +1,6 @@
 .nav {
   background-color: #ffffff;
   padding: 10px 20px;
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -13,8 +12,8 @@
   padding: 0;
   margin: 0;
   align-items: center;
-  justify-content: center; /* Центрируем все ссылки */
-  gap: 20px; /* Пространство между элементами */
+  justify-content: center;
+  gap: 20px;
 }
 
 .navItem {
@@ -30,7 +29,7 @@
   border: none;
   cursor: pointer;
   transition: color 0.3s, transform 0.3s;
-  padding: 10px 15px; /* Добавим немного отступа для кнопок */
+  padding: 10px 15px;
 }
 
 .link:hover {

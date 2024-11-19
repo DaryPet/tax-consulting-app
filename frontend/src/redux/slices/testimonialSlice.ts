@@ -30,7 +30,6 @@ const initialState: TestimonialState = {
   successMessage: null,
 };
 
-// Thunk для получения всех отзывов
 export const fetchAllTestimonials = createAsyncThunk<Testimonial[]>(
   "testimonial/fetchAll",
   async (_, { rejectWithValue }) => {
@@ -42,7 +41,6 @@ export const fetchAllTestimonials = createAsyncThunk<Testimonial[]>(
   }
 );
 
-// Thunk для получения отзывов текущего пользователя
 export const fetchUserTestimonials = createAsyncThunk<Testimonial[], string>(
   "testimonial/fetchUser",
   async (token, { rejectWithValue }) => {
@@ -54,7 +52,6 @@ export const fetchUserTestimonials = createAsyncThunk<Testimonial[], string>(
   }
 );
 
-// Thunk для добавления нового отзыва
 export const addTestimonial = createAsyncThunk<
   void,
   { testimonial: string; token: string },
@@ -67,7 +64,6 @@ export const addTestimonial = createAsyncThunk<
   }
 });
 
-// Thunk для удаления отзыва
 export const deleteTestimonial = createAsyncThunk<
   void,
   { testimonialId: string; token: string },

@@ -19,9 +19,9 @@
   transition: background-color 0.3s, color 0.3s;
 }
 .activeAdminLink {
-  background-color: #cce7ff; /* Светло-синий фон для активной ссылки */
-  color: #0066cc; /* Синий цвет текста для активной ссылки */
-  border-color: #0066cc; /* Граница активной ссылки синий цвет */
+  background-color: #cce7ff;
+  color: #0066cc;
+  border-color: #0066cc;
 }
 
 .adminLink:hover {

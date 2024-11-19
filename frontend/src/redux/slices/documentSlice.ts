@@ -13,7 +13,7 @@ interface User {
   id: number;
   name: string;
 }
-// Интерфейсы для данных документов
+
 interface Document {
   id: number;
   filename: string;
@@ -37,7 +37,6 @@ const initialState: DocumentState = {
   successMessage: null,
 };
 
-// Асинхронный thunk для загрузки документа
 export const uploadDocument = createAsyncThunk<
   Document,
   {
@@ -53,7 +52,6 @@ export const uploadDocument = createAsyncThunk<
   }
 });
 
-// Асинхронный thunk для получения всех документов текущего пользователя
 export const fetchUserDocuments = createAsyncThunk<Document[], string>(
   "document/fetchUserDocuments",
   async (token, { rejectWithValue }) => {
@@ -116,7 +114,7 @@ export const fetchDocumentsForUser = createAsyncThunk<
     }
   }
 );
-// Slice для документов
+
 const documentSlice = createSlice({
   name: "document",
   initialState,
@@ -128,7 +126,6 @@ const documentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Обработка загрузки документа
       .addCase(uploadDocument.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -145,8 +142,6 @@ const documentSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Обработка получения всех документов текущего пользователя
       .addCase(fetchUserDocuments.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -192,8 +187,6 @@ const documentSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-
-      // Обработка загрузки документа
       .addCase(uploadDocumentForUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -210,7 +203,6 @@ const documentSlice = createSlice({
 
 export const { clearMessages } = documentSlice.actions;
 
-// Селекторы для получения данных из состояния документов
 export const selectUserDocuments = (state: RootState) =>
   state.document.documents;
 export const selectDocumentLoading = (state: RootState) =>

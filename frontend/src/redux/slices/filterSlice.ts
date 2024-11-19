@@ -18,7 +18,7 @@ const filtersSlice = createSlice({
   reducers: {
     changeFilter: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
-      state.currentPage = 1; // Обнуляем текущую страницу при изменении фильтра
+      state.currentPage = 1;
     },
     changePage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
