@@ -20,6 +20,10 @@ const AllBookings = lazy(() => import("./components/AllBookings/AllBookings"));
 const AllDocuments = lazy(
   () => import("./components/AllDocuments/AllDocuments")
 );
+const UsersDocuments = lazy(
+  () => import("./components/UsersDocuments/UsersDocuments")
+);
+
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
@@ -57,6 +61,10 @@ export default function App() {
               <Route path="users" element={<AllUsers />} />
               <Route path="bookings" element={<AllBookings />} />
               <Route path="documents" element={<AllDocuments />} />
+              <Route
+                path="users/:userId/documents"
+                element={<UsersDocuments />}
+              />
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

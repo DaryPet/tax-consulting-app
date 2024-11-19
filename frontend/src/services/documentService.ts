@@ -32,7 +32,10 @@ export const uploadDocumentApi = async ({
 };
 
 // ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ВСЕХ ДОКУМЕНТОВ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-export const fetchUserDocumentsApi = async (token: string): Promise<any> => {
+export const fetchUserDocumentsApi = async (
+  // userId: number,
+  token: string
+): Promise<any> => {
   const response = await fetch(DOCUMENTS_MY_URL, {
     method: "GET",
     headers: {
@@ -47,6 +50,23 @@ export const fetchUserDocumentsApi = async (token: string): Promise<any> => {
   return await response.json();
 };
 
+export const fetchDocumentsForUserApi = async (
+  userId: number,
+  token: string
+): Promise<any> => {
+  const response = await fetch(`${DOCUMENTS_URL}user/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch documents for user");
+  }
+
+  return await response.json();
+};
 // ФУНКЦИЯ ДЛЯ СКАЧИВАНИЯ ДОКУМЕНТА
 export const downloadDocumentApi = async (
   documentId: string,

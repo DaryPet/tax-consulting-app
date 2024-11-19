@@ -6,6 +6,7 @@ import {
   deleteDocumentApi,
   fetchAllDocumentsApi,
   uploadDocumentForUserApi,
+  fetchDocumentsForUserApi,
 } from "../../services/documentService";
 
 interface User {
@@ -63,6 +64,7 @@ export const fetchUserDocuments = createAsyncThunk<Document[], string>(
     }
   }
 );
+
 export const uploadDocumentForUser = createAsyncThunk<
   void,
   { userId: number; file: File; description: string; token: string }
@@ -98,6 +100,19 @@ export const fetchAllDocuments = createAsyncThunk<Document[], string>(
       return documents;
     } catch (error) {
       return rejectWithValue("Error fetching all documents");
+    }
+  }
+);
+export const fetchDocumentsForUser = createAsyncThunk<
+  any[],
+  { userId: number; token: string }
+>(
+  "documents/fetchDocumentsForUser",
+  async ({ userId, token }, { rejectWithValue }) => {
+    try {
+      return await fetchDocumentsForUserApi(userId, token);
+    } catch (error) {
+      return rejectWithValue("Error fetching documents for specific user");
     }
   }
 );

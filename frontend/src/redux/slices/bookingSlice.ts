@@ -5,6 +5,7 @@ import {
   createBookingApi,
   fetchUserBookingsApi,
   fetchAllBookingsApi,
+  deleteBookingApi,
 } from "../../services/bookingService";
 
 // Интерфейсы для данных бронирования
@@ -90,6 +91,20 @@ export const fetchAllBookings = createAsyncThunk<Booking[], string>(
     }
   }
 );
+// Добавьте новый thunk для удаления бронирования
+export const deleteBooking = createAsyncThunk<
+  void,
+  { bookingId: number; token: string }
+>(
+  "booking/deleteBooking",
+  async ({ bookingId, token }, { rejectWithValue }) => {
+    try {
+      await deleteBookingApi(bookingId, token);
+    } catch (error) {
+      return rejectWithValue("Error deleting booking");
+    }
+  }
+);
 
 // Slice для бронирования
 const bookingSlice = createSlice({
@@ -162,6 +177,21 @@ const bookingSlice = createSlice({
         }
       )
       .addCase(fetchAllBookings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteBooking.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteBooking.fulfilled, (state, action) => {
+        state.loading = false;
+        state.bookings = state.bookings.filter(
+          (booking) => booking.id !== action.meta.arg.bookingId
+        );
+        state.successMessage = "Booking successfully deleted";
+      })
+      .addCase(deleteBooking.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
