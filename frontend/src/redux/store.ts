@@ -3,6 +3,7 @@ import documentReducer from "./slices/documentSlice";
 import testimonialReducer from "./slices/testimonialSlice";
 import bookingReducer from "./slices/bookingSlice";
 import authReducer, { initializeAuthState } from "./slices/authSlice";
+import filtersReducer from "./slices/filterSlice";
 import {
   persistStore,
   persistReducer,
@@ -30,6 +31,7 @@ export const store = configureStore({
     testimonials: testimonialReducer,
     booking: bookingReducer,
     document: documentReducer,
+    filters: filtersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

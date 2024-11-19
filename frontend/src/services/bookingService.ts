@@ -5,7 +5,6 @@ import {
 } from "../config/apiConfig";
 import { Booking } from "../redux/slices/bookingSlice";
 
-// Функция для получения доступных временных слотов
 export const fetchAvailableSlotsApi = async (
   date: string
 ): Promise<string[]> => {
@@ -18,7 +17,6 @@ export const fetchAvailableSlotsApi = async (
   return await response.json();
 };
 
-// Функция для создания нового бронирования (с опциональным токеном авторизации)
 export const createBookingApi = async (
   bookingData: {
     name: string;
@@ -34,7 +32,6 @@ export const createBookingApi = async (
     "Content-Type": "application/json",
   };
 
-  // Добавляем токен авторизации, если пользователь зарегистрирован и токен передан
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -49,13 +46,12 @@ export const createBookingApi = async (
   }
 };
 
-// Функция для получения всех бронирований текущего пользователя
 export const fetchUserBookingsApi = async (token: string): Promise<any> => {
   const response = await fetch(BOOKING_MY_URL, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Токен обязателен для зарегистрированного пользователя
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
@@ -70,11 +66,27 @@ export const fetchAllBookingsApi = async (
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Токен обязателен для администратора
+      Authorization: `Bearer ${token}`,
     },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch all bookings");
   }
   return await response.json();
+};
+
+export const deleteBookingApi = async (
+  bookingId: number,
+  token: string
+): Promise<void> => {
+  const response = await fetch(`${BOOKING_URL}/${bookingId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status !== 204) {
+    throw new Error("Failed to delete booking");
+  }
 };
