@@ -8,6 +8,7 @@ import {
   logoutUser,
   refreshUserToken,
   fetchAllUsers,
+  initializeAuthState,
 } from "../operations";
 import { toast } from "react-toastify";
 
@@ -33,8 +34,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("access_token"),
-  isLoggedIn: !!localStorage.getItem("access_token"),
+  token: null,
+  isLoggedIn: false,
   isRefreshing: false,
   loading: false,
   status: "idle",
@@ -46,23 +47,44 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    initializeAuthState: (state) => {
-      console.log("Инициализация состояния:");
-      console.log("user:", state.user);
-      console.log("token:", state.token);
-      if (state.user && state.token) {
-        state.isLoggedIn = true;
-        console.log("isLoggedIn установлено в true");
-      } else {
-        state.isLoggedIn = false;
-        state.user = null;
-        state.token = null;
-        console.log("isLoggedIn установлено в false");
-      }
+    // initializeAuthState: (state) => {
+    //   console.log("Инициализация состояния:");
+    //   console.log("user:", state.user);
+    //   console.log("token:", state.token);
+    //   if (state.user && state.token) {
+    //     state.isLoggedIn = true;
+    //     console.log("isLoggedIn установлено в true");
+    //   } else {
+    //     state.isLoggedIn = false;
+    //     state.user = null;
+    //     state.token = null;
+    //     console.log("isLoggedIn установлено в false");
+    //   }
+    // },
+    resetAuthState: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isLoggedIn = false;
+      state.error = null;
+      state.status = "idle";
+      toast.info("Authentication state has been reset.");
     },
   },
   extraReducers: (builder) =>
     builder
+      .addCase(initializeAuthState.pending, (state) => {
+        state.status = "loading";
+        state.isRefreshing = true;
+      })
+      .addCase(initializeAuthState.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.isRefreshing = false;
+      })
+      .addCase(initializeAuthState.rejected, (state, action) => {
+        state.status = "failed";
+        state.isRefreshing = false;
+        state.error = action.payload as string;
+      })
       .addCase(loginUsers.pending, (state) => {
         state.status = "loading";
         state.loading = true;
@@ -188,7 +210,7 @@ const authSlice = createSlice({
       }),
 });
 
-export const { initializeAuthState } = authSlice.actions;
+export const { resetAuthState } = authSlice.actions;
 export const selectAuthUser = (state: RootState) => state.auth.user;
 export const selectAuthToken = (state: RootState) => state.auth.token;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;

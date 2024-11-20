@@ -2,8 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import documentReducer from "./slices/documentSlice";
 import testimonialReducer from "./slices/testimonialSlice";
 import bookingReducer from "./slices/bookingSlice";
-import authReducer, { initializeAuthState } from "./slices/authSlice";
+import authReducer from "./slices/authSlice";
 import filtersReducer from "./slices/filterSlice";
+import { initializeAuthState } from "./operations";
 import {
   persistStore,
   persistReducer,

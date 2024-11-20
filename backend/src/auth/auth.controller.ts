@@ -126,6 +126,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getCurrentUser(@Req() req: Request) {
+    console.log('Authorization Header:', req.headers.authorization); // Логируем заголовок
+    console.log('Access Token from Cookies:', req.cookies['access_token']); // Логируем токен из куков
+
     const user = req.user;
     console.log('Текущий пользователь (req.user):', req.user);
     return this.authService.getCurrentUser(user);

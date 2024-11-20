@@ -105,21 +105,49 @@ export const refreshToken = async () => {
 
     const response = await axios.post(
       AUTH_REFRESH_URL,
-      {},
+      {}, // Если требуется, добавьте body
       {
-        withCredentials: true,
+        withCredentials: true, // Если сервер поддерживает
       }
     );
-    const { access_token } = response.data;
-    localStorage.setItem("access_token", access_token);
 
-    console.log("Ответ от сервера на обновление токена:", response.data);
+    // Проверка структуры ответа
+    if (!response.data || !response.data.access_token) {
+      console.error(
+        "Некорректный ответ сервера при обновлении токена:",
+        response.data
+      );
+      throw new Error("Invalid token response");
+    }
+
+    const { access_token } = response.data;
+
+    // Сохранение токена с обработкой ошибок
+    try {
+      localStorage.setItem("access_token", access_token);
+    } catch (e) {
+      console.error("Ошибка при сохранении токена в localStorage:", e);
+      throw new Error("Failed to save token");
+    }
+
+    console.log("Токен успешно обновлен:", access_token);
     return response.data;
   } catch (error) {
+    // Удаление токена при ошибке
+    localStorage.removeItem("access_token");
     console.error("Ошибка при обновлении токена:", error);
+
+    // Генерация читабельного сообщения
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        `Ошибка запроса: ${error.response?.status} ${error.response?.statusText}`
+      );
+    }
+
     throw new Error("Error while refreshing token");
   }
 };
+
 // \\\\\\\\\\\\\\\\\\\\\\\\
 export const getAllUsers = async () => {
   const access_token = localStorage.getItem("access_token");
@@ -182,3 +210,32 @@ export const fetchUserByName = async (
     throw new Error("Error fetching user by username");
   }
 };
+// axios.interceptors.response.use(
+//   (response) => response, // Пропускаем успешные запросы
+//   async (error) => {
+//     const originalRequest = error.config;
+
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+
+//       try {
+//         const token = localStorage.getItem("access_token");
+//         if (!token) {
+//           throw new Error("Access token missing. Cannot retry request.");
+//         }
+
+//         const { access_token } = await refreshToken();
+//         localStorage.setItem("access_token", access_token);
+
+//         originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
+//         return axios.request(originalRequest);
+//       } catch (err) {
+//         console.error("Ошибка при обновлении токена:", err);
+//         localStorage.removeItem("access_token"); // Удаляем токен при ошибке
+//         return Promise.reject(err);
+//       }
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
