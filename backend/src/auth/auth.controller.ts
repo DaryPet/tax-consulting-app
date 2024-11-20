@@ -123,14 +123,42 @@ export class AuthController {
     return res.status(HttpStatus.NO_CONTENT).send();
   }
 
+  //   @UseGuards(JwtAuthGuard)
+  //   @Get('me')
+  //   async getCurrentUser(@Req() req: Request) {
+  //     console.log('Authorization Header:', req.headers.authorization); // Логируем заголовок
+  //     console.log('Access Token from Cookies:', req.cookies['access_token']); // Логируем токен из куков
+
+  //     const user = req.user;
+  //     console.log('Текущий пользователь (req.user):', req.user);
+  //     return this.authService.getCurrentUser(user);
+  //   }
+  // }
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getCurrentUser(@Req() req: Request) {
-    console.log('Authorization Header:', req.headers.authorization); // Логируем заголовок
-    console.log('Access Token from Cookies:', req.cookies['access_token']); // Логируем токен из куков
+    console.log('Authorization Header:', req.headers.authorization);
+    console.log('Access Token from Cookies:', req.cookies['access_token']);
+
+    if (!req.headers.authorization) {
+      console.error('Authorization header is missing');
+    }
+
+    if (!req.cookies['access_token']) {
+      console.error('Access token is missing in cookies');
+    }
 
     const user = req.user;
-    console.log('Текущий пользователь (req.user):', req.user);
-    return this.authService.getCurrentUser(user);
+    if (!user) {
+      console.error('Ошибка: req.user не определен');
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    console.log('Текущий пользователь (req.user):', user);
+
+    const currentUser = await this.authService.getCurrentUser(user);
+    console.log('Возвращаемый пользователь:', currentUser);
+
+    return currentUser;
   }
 }
