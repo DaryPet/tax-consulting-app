@@ -87,6 +87,8 @@ export const getCurrentUser = async () => {
 // \\\\\\\\\\\
 export const fetchUserData = async () => {
   const access_token = localStorage.getItem("access_token");
+  console.log("Токен перед отправкой запроса fetchUserData:", access_token);
+
   if (!access_token) {
     throw new Error("Access token is missing");
   }
@@ -96,6 +98,7 @@ export const fetchUserData = async () => {
     },
     withCredentials: true,
   });
+  console.log("Ответ от /auth/me:", response.data);
   return response.data;
 };
 // \\\\\\\\\\\\\\\\\\\

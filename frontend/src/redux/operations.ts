@@ -78,9 +78,14 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, thunkAPI) => {
     try {
+      console.log(
+        "Запуск fetchCurrentUser, с токеном:",
+        localStorage.getItem("access_token")
+      );
       const response = await fetchUserData();
       return response;
     } catch (error) {
+      console.error("Ошибка при вызове fetchCurrentUser:", error);
       return thunkAPI.rejectWithValue("Failed to fetch user data");
     }
   }
@@ -103,6 +108,7 @@ export const refreshUserToken = createAsyncThunk(
   "auth/refreshUserToken",
   async (_, { rejectWithValue }) => {
     try {
+      console.log("Отправка запроса на обновление токена...");
       const response = await axios.post(
         AUTH_REFRESH_URL,
         {},
@@ -118,6 +124,10 @@ export const refreshUserToken = createAsyncThunk(
       localStorage.setItem("access_token", access_token);
 
       console.log("Токен успешно обновлен:", access_token);
+      console.log(
+        "Токен после обновления в refreshUserToken:",
+        localStorage.getItem("access_token")
+      );
       return { access_token }; // Исправлено: возвращаем объект с access_token
     } catch (error) {
       console.error("Ошибка при обновлении токена:", error);
@@ -196,6 +206,7 @@ export const initializeAuthState = createAsyncThunk(
   async (_, { dispatch }) => {
     try {
       const token = localStorage.getItem("access_token");
+      console.log("Токен при инициализации:", token);
 
       if (!token) {
         // Если токена нет, сброс состояния
@@ -206,6 +217,7 @@ export const initializeAuthState = createAsyncThunk(
       // Попытка обновить токен
       const response = await dispatch(refreshUserToken()).unwrap();
       const { access_token } = response;
+      console.log("Обновленный токен в initializeAuthState:", access_token);
 
       localStorage.setItem("access_token", access_token);
       await dispatch(fetchCurrentUser());
