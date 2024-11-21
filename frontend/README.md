@@ -30,6 +30,7 @@ The **Smart Booking & Document Management System** is a web application that ena
   - View **all meetings** scheduled by both registered and unregistered users.
   - Access and manage **all documents** uploaded by registered users.
   - Upload documents for specific registered users to make personalized resources available.
+  - to try use username - admin2; password - adminpassword
 
 ## Technologies Used
 
