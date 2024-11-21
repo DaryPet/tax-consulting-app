@@ -59,10 +59,14 @@ export class AuthController {
 
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
+    console.log('Cookies при запросе на обновление токена:', req.cookies);
     const sessionId = req.cookies['sessionId'];
     const refreshToken = req.cookies['refresh_token'];
 
     if (!refreshToken || !sessionId) {
+      console.error(
+        'Ошибка: Не удалось найти refresh_token или sessionId в куках',
+      );
       throw new UnauthorizedException('Refresh token is required');
     }
 
@@ -86,6 +90,9 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000, // 1 день
       path: '/',
     });
+    if (!res.getHeader('Set-Cookie')) {
+      console.error('Ошибка: Куки не обновлены после обновления');
+    }
     console.log('Куки обновлены: sessionId и refresh_token');
     return res.json({ access_token: updatedSession.accessToken });
   }
