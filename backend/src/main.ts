@@ -15,6 +15,8 @@ async function bootstrap() {
       'https://tax-consulting-app-git-main-darya-petrenkos-projects.vercel.app', // Укажите домен вашего фронтенда на Vercel
     ],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
   await app.listen(process.env.PORT || 3001);
