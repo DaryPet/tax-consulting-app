@@ -108,27 +108,36 @@ export const refreshUserToken = createAsyncThunk(
   "auth/refreshUserToken",
   async (_, { rejectWithValue }) => {
     try {
+      const token = localStorage.getItem("access_token");
+      // Логируем токен перед отправкой
+      console.log("Token перед запросом /auth/me:", token);
+      if (!token) {
+        throw new Error("Access token not found");
+      }
       console.log("Отправка запроса на обновление токена...");
-      const response = await axios.post(
-        AUTH_REFRESH_URL,
-        {},
-        { withCredentials: true }
-      );
+      const response = await axios.post(AUTH_REFRESH_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
 
       if (!response.data || !response.data.access_token) {
         throw new Error("Invalid token response");
       }
 
-      const { access_token } = response.data;
+      // const { access_token } = response.data;
+      const { access_token: updatedToken } = response.data;
 
-      localStorage.setItem("access_token", access_token);
-
-      console.log("Токен успешно обновлен:", access_token);
+      // localStorage.setItem("access_token", access_token);
+      // Логи и сохранение токена
+      console.log("Token after refresh:", updatedToken);
+      localStorage.setItem("access_token", updatedToken);
       console.log(
         "Токен после обновления в refreshUserToken:",
         localStorage.getItem("access_token")
       );
-      return { access_token }; // Исправлено: возвращаем объект с access_token
+      return response.data; // Исправлено: возвращаем объект с access_token
     } catch (error) {
       console.error("Ошибка при обновлении токена:", error);
       if (axios.isAxiosError(error) && error.response?.status === 401) {

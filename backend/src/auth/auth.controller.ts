@@ -53,6 +53,7 @@ export class AuthController {
       path: '/',
     });
 
+    console.log('Куки установлены: sessionId и refresh_token');
     return res.json({ access_token });
   }
 
@@ -85,7 +86,7 @@ export class AuthController {
       maxAge: 24 * 60 * 60 * 1000, // 1 день
       path: '/',
     });
-
+    console.log('Куки обновлены: sessionId и refresh_token');
     return res.json({ access_token: updatedSession.accessToken });
   }
 
@@ -122,18 +123,6 @@ export class AuthController {
     console.log('Сессия успешно завершена');
     return res.status(HttpStatus.NO_CONTENT).send();
   }
-
-  //   @UseGuards(JwtAuthGuard)
-  //   @Get('me')
-  //   async getCurrentUser(@Req() req: Request) {
-  //     console.log('Authorization Header:', req.headers.authorization); // Логируем заголовок
-  //     console.log('Access Token from Cookies:', req.cookies['access_token']); // Логируем токен из куков
-
-  //     const user = req.user;
-  //     console.log('Текущий пользователь (req.user):', req.user);
-  //     return this.authService.getCurrentUser(user);
-  //   }
-  // }
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getCurrentUser(@Req() req: Request) {
