@@ -80,7 +80,7 @@ export class AuthController {
       refreshToken,
     );
     // \\\\\\\\\\\\\\
-    console.log('jeje', updatedSession);
+    console.log('je', updatedSession);
     res.cookie('sessionId', updatedSession.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -136,29 +136,35 @@ export class AuthController {
     console.log('Сессия успешно завершена');
     return res.status(HttpStatus.NO_CONTENT).send();
   }
-  @UseGuards(JwtAuthGuard)
+
   @Get('me')
   async getCurrentUser(@Req() req: Request) {
-    console.log('Authorization Header:', req.headers.authorization);
-    console.log('Access Token from Cookies:', req.cookies['access_token']);
+    console.log('hj');
+    console.log('Authorization:', req.headers.authorization);
+    // console.log('Access Token from Cookies:', req.cookies.access_token);
+    console.log('Refresh Token from Cookies:', req.cookies.refresh_token);
 
     if (!req.headers.authorization) {
       console.error('Authorization header is missing');
     }
 
-    if (!req.cookies['access_token']) {
-      console.error('Access token is missing in cookies');
+    if (!req.cookies.refresh_token) {
+      console.error('Refresh token is missing in cookies');
     }
-
-    const user = req.user;
-    if (!user) {
+    const currentSession = await this.authService.getSessionById(
+      req.cookies.sessionId,
+    );
+    console.log(currentSession.userId);
+    if (!currentSession.userId) {
       console.error('Ошибка: req.user не определен');
       throw new UnauthorizedException('User not authenticated');
     }
 
-    console.log('Текущий пользователь (req.user):', user);
+    console.log('Текущий пользователь (req.user):', currentSession.userId);
 
-    const currentUser = await this.authService.getCurrentUser(user);
+    const currentUser = await this.authService.getCurrentUser(
+      currentSession.userId,
+    );
     console.log('Возвращаемый пользователь:', currentUser);
 
     return currentUser;
