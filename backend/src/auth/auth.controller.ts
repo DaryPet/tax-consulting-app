@@ -109,8 +109,8 @@ export class AuthController {
   async logout(@Req() req: Request, @Res() res: Response) {
     console.log('Запрос на логаут получен');
 
-    const sessionId = req.cookies['sessionId'];
-    const refreshToken = req.cookies['refresh_token'];
+    const sessionId = req.cookies.sessionId;
+    const refreshToken = req.cookies.refresh_token;
 
     if (!refreshToken || !sessionId) {
       console.error('Не удалось найти refresh_token или sessionId в куках');
