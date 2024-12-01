@@ -143,13 +143,28 @@ export class AuthService {
     console.log('Сессия успешно удалена');
   }
 
-  async getCurrentUser(user: any) {
-    const currentUser = await this.userService.findById(user.id);
+  async getCurrentUser(userId: number) {
+    const currentUser = await this.userService.findById(userId);
     if (!currentUser) {
       throw new Error('User not found');
     }
 
     const { password: _password, ...result } = currentUser;
     return result;
+  }
+  // Новый метод для поиска сессии по ID
+  async getSessionById(sessionId: number): Promise<Session> {
+    console.log(`Ищем сессию по id: ${sessionId}`);
+    const session = await this.sessionRepository.findOne({
+      where: { id: sessionId },
+    });
+
+    if (!session) {
+      console.error('Сессия не найдена с id:', sessionId);
+      throw new Error('Session not found');
+    }
+
+    console.log('Найдена сессия:', session);
+    return session;
   }
 }
