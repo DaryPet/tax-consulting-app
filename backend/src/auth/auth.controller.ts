@@ -59,22 +59,28 @@ export class AuthController {
 
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
-    console.log('Cookies при запросе на обновление токена:', req.cookies);
-    const sessionId = req.cookies['sessionId'];
-    const refreshToken = req.cookies['refresh_token'];
+    console.log('при запросе на обновление токена:', req.cookies);
+    // console.log(req.body); // если вам нужно тело запроса
+    // console.log(req.headers); // если нужны заголовки
+    // console.log(req.query); // если вам нужны параметры строки запроса
 
-    if (!refreshToken || !sessionId) {
-      console.error(
-        'Ошибка: Не удалось найти refresh_token или sessionId в куках',
-      );
-      throw new UnauthorizedException('Refresh token is required');
-    }
+    const sessionId = req.cookies.sessionId;
+    const refreshToken = req.cookies.refresh_token;
+    console.log('perevirka', sessionId, refreshToken);
+
+    // if (!refreshToken || !sessionId) {
+    //   console.error(
+    //     'Ошибка: Не удалось найти refresh_token или sessionId в куках',
+    //   );
+    //   throw new UnauthorizedException('Refresh token is required');
+    // }
 
     const updatedSession = await this.authService.refreshUserSession(
       sessionId,
       refreshToken,
     );
-
+    // \\\\\\\\\\\\\\
+    console.log('jeje', updatedSession);
     res.cookie('sessionId', updatedSession.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
