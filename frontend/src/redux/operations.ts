@@ -10,6 +10,7 @@ import {
 import { resetAuthState } from "./slices/authSlice";
 import axios from "axios";
 import { AUTH_REFRESH_URL } from "../config/apiConfig";
+
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
@@ -58,12 +59,13 @@ export const loginUsers = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
-  async (_, { rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       console.log("Начало выполнения операции logout");
 
       await logout();
       localStorage.removeItem("access_token");
+      dispatch(resetAuthState());
 
       console.log("Логаут завершен");
       return;
@@ -78,76 +80,58 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, thunkAPI) => {
     try {
-      console.log(
-        "Запуск fetchCurrentUser, с токеном:",
-        localStorage.getItem("access_token")
-      );
       const response = await fetchUserData();
       return response;
     } catch (error) {
-      console.error("Ошибка при вызове fetchCurrentUser:", error);
       return thunkAPI.rejectWithValue("Failed to fetch user data");
     }
   }
 );
-// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-// export const refreshUserToken = createAsyncThunk(
-//   "auth/refreshUserToken",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await refreshToken();
-//       const { access_token } = response;
-//       localStorage.setItem("access_token", access_token);
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue("Error while refreshing token");
-//     }
-//   }
-// );
+
 export const refreshUserToken = createAsyncThunk(
   "auth/refreshUserToken",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("access_token");
-      // Логируем токен перед отправкой
-      console.log("Token перед запросом /auth/me:", token);
       if (!token) {
         throw new Error("Access token not found");
       }
-      console.log("Отправка запроса на обновление токена...");
-      const response = await axios.post(AUTH_REFRESH_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        AUTH_REFRESH_URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
 
       if (!response.data || !response.data.access_token) {
         throw new Error("Invalid token response");
       }
 
-      // const { access_token } = response.data;
       const { access_token: updatedToken } = response.data;
 
-      // localStorage.setItem("access_token", access_token);
-      // Логи и сохранение токена
-      console.log("Token after refresh:", updatedToken);
+      // Сохраняем новый токен в localStorage
       localStorage.setItem("access_token", updatedToken);
+
       console.log(
-        "Токен после обновления в refreshUserToken:",
-        localStorage.getItem("access_token")
+        "Токен успешно обновлён и сохранён в localStorage:",
+        updatedToken
       );
-      return response.data; // Исправлено: возвращаем объект с access_token
+
+      return response.data;
     } catch (error) {
       console.error("Ошибка при обновлении токена:", error);
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        localStorage.removeItem("access_token"); // Удаляем токен только при 401 Unauthorized
+        localStorage.removeItem("access_token");
       }
       return rejectWithValue("Error while refreshing token");
     }
   }
 );
-// \\\\\\\\\\\\\\\\\
+
 export const fetchAllUsers = createAsyncThunk(
   "auth/fetchAllUsers",
   async (_, thunkAPI) => {
@@ -159,23 +143,7 @@ export const fetchAllUsers = createAsyncThunk(
     }
   }
 );
-// export const restoreSession = createAsyncThunk(
-//   "auth/restoreSession",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       // Сначала обновляем токен
-//       const { access_token } = await refreshToken();
-//       localStorage.setItem("access_token", access_token);
 
-//       // Затем загружаем данные пользователя
-//       const userData = await fetchUserData();
-//       return userData;
-//     } catch (error) {
-//       console.error("Ошибка восстановления сессии:", error);
-//       return rejectWithValue("Failed to restore session");
-//     }
-//   }
-// );
 export const restoreSession = createAsyncThunk(
   "auth/restoreSession",
   async (_, { rejectWithValue }) => {
@@ -192,46 +160,33 @@ export const restoreSession = createAsyncThunk(
       const userData = await fetchUserData();
       return userData;
     } catch (error) {
-      console.error("Ошибка восстановления сессии:", error);
-      localStorage.removeItem("access_token"); // Сброс токена
+      // console.error("Ошибка восстановления сессии:", error);
+      localStorage.removeItem("access_token");
       return rejectWithValue("Failed to restore session");
     }
   }
 );
 
-// export const initializeAuthState = createAsyncThunk(
-//   "auth/initializeAuthState",
-//   async (_, { dispatch }) => {
-//     try {
-//       // Попытка восстановления сессии через refreshToken
-//       await dispatch(restoreSession());
-//     } catch (error) {
-//       console.error("Ошибка при восстановлении сессии:", error);
-//     }
-//   }
-// );
 export const initializeAuthState = createAsyncThunk(
   "auth/initializeAuthState",
   async (_, { dispatch }) => {
     try {
       const token = localStorage.getItem("access_token");
-      console.log("Токен при инициализации:", token);
+      // console.log("Токен при инициализации:", token);
 
       if (!token) {
-        // Если токена нет, сброс состояния
         dispatch(resetAuthState());
         return;
       }
 
-      // Попытка обновить токен
       const response = await dispatch(refreshUserToken()).unwrap();
       const { access_token } = response;
-      console.log("Обновленный токен в initializeAuthState:", access_token);
+      // console.log("Обновленный токен в initializeAuthState:", access_token);
 
       localStorage.setItem("access_token", access_token);
       await dispatch(fetchCurrentUser());
     } catch (error) {
-      console.error("Ошибка восстановления сессии:", error);
+      // console.error("Ошибка восстановления сессии:", error);
       dispatch(resetAuthState());
     }
   }

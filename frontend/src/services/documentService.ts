@@ -96,7 +96,7 @@ export const downloadDocumentApi = async (
     let filename = "document.pdf";
 
     if (contentDisposition && contentDisposition.includes("filename=")) {
-      const matches = contentDisposition.match(/filename=\"(.+)\"/);
+      const matches = contentDisposition.match(/filename="(.+)"/);
       if (matches && matches[1]) {
         filename = matches[1];
       }
