@@ -47,27 +47,12 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // initializeAuthState: (state) => {
-    //   console.log("Инициализация состояния:");
-    //   console.log("user:", state.user);
-    //   console.log("token:", state.token);
-    //   if (state.user && state.token) {
-    //     state.isLoggedIn = true;
-    //     console.log("isLoggedIn установлено в true");
-    //   } else {
-    //     state.isLoggedIn = false;
-    //     state.user = null;
-    //     state.token = null;
-    //     console.log("isLoggedIn установлено в false");
-    //   }
-    // },
     resetAuthState: (state) => {
       state.user = null;
       state.token = null;
       state.isLoggedIn = false;
       state.error = null;
       state.status = "idle";
-      toast.info("Authentication state has been reset.");
     },
   },
   extraReducers: (builder) =>
@@ -128,12 +113,6 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         const { access_token } = action.payload;
-        if (!access_token) {
-          state.status = "failed";
-          state.loading = false;
-          state.error = "Invalid response from server during registration";
-          return;
-        }
         state.user = action.payload.user;
         state.token = access_token;
         state.isLoggedIn = true;

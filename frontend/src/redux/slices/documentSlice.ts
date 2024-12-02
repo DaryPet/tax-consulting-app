@@ -134,7 +134,6 @@ const documentSlice = createSlice({
         uploadDocument.fulfilled,
         (state, action: PayloadAction<Document>) => {
           state.loading = false;
-          state.successMessage = "Document successfully uploaded";
           state.documents.push(action.payload);
         }
       )
