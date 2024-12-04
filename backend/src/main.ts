@@ -10,10 +10,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://tax-consulting-app-git-main-darya-petrenkos-projects.vercel.app',
-    ],
+    origin: ['http://localhost:3000', 'https://tax-consulting-app.vercel.app'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
