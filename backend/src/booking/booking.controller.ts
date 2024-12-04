@@ -76,7 +76,7 @@ export class BookingController {
     @Body() updatedBooking: Partial<Booking>,
     @Req() req: Request,
   ): Promise<Booking> {
-    console.log('PATCH Request - User:', req.user); // Логируем для проверки
+    console.log('PATCH Request - User:', req.user);
     // const user = req.user;
     const user = req.user ? req.user : null; // Пользователь может быть авторизован, либо null для неавторизованных
     return await this.bookingService.update(id, updatedBooking, user, token);

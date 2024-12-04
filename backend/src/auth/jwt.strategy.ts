@@ -16,8 +16,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             : null;
 
           const cookieToken = req?.cookies?.['refresh_token'] || null;
-
-          // Лог для проверки, откуда берется токен
           console.log('Token extraction result:', {
             fromHeader: authHeaderToken,
             fromCookie: cookieToken,
@@ -27,20 +25,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET, // Секретный ключ для подписи JWT
+      secretOrKey: process.env.JWT_SECRET,
     });
   }
 
   async validate(payload: any) {
-    // Лог для проверки содержимого токена
     console.log('Validating token payload:', payload);
 
     if (!payload.sub || !payload.username || !payload.role) {
       console.error('Invalid token payload detected:', payload);
       throw new UnauthorizedException('Invalid token payload');
     }
-
-    // Возвращаем данные пользователя из токена
     return {
       id: payload.sub,
       username: payload.username,
