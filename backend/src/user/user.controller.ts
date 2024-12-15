@@ -14,9 +14,9 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'; // Защита маршрутов с помощью JWT аутентификации
-import { RolesGuard } from '../auth/guards/roles.guard'; // Импортируем RolesGuard
-import { Role } from '../auth/decorators/roles.decorator'; // Импортируем Role декоратор
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Role } from '../auth/decorators/roles.decorator';
 
 @Controller('users')
 export class UserController {
@@ -28,21 +28,19 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Role('admin') // Только администраторы могут видеть всех пользователей
+  @Role('admin')
   @Get()
   async getAllUsers(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard) // Доступ только авторизованным пользователям
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getUserById(
     @Param('id') id: number,
     @Req() req: Request,
   ): Promise<User> {
     const user = req.user;
-
-    // Проверяем, если текущий пользователь - администратор или запрашивает свои данные
     if (user.role !== 'admin' && user.id !== id) {
       throw new ForbiddenException(
         'Access denied. You can only view your own data.',
@@ -52,7 +50,7 @@ export class UserController {
     return await this.userService.findById(id);
   }
 
-  @UseGuards(JwtAuthGuard) // Доступ только авторизованным пользователям
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updateUser(
     @Param('id') id: number,
@@ -60,8 +58,6 @@ export class UserController {
     @Req() req: Request,
   ): Promise<User> {
     const user = req.user;
-
-    // Проверяем, если текущий пользователь - администратор или запрашивает изменение своих данных
     if (user.role !== 'admin' && user.id !== id) {
       throw new ForbiddenException(
         'Access denied. You can only update your own data.',
@@ -71,8 +67,8 @@ export class UserController {
     return await this.userService.updateUser(id, updateData);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard) // Ограничиваем удаление пользователей
-  @Role('admin') // Только администратор может удалять пользователей
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Role('admin')
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<void> {
     return await this.userService.deleteUser(id);

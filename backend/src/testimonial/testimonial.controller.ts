@@ -21,8 +21,6 @@ import { Request } from 'express';
 @Controller('testimonial')
 export class TestimonialController {
   constructor(private readonly testimonialService: TestimonialService) {}
-
-  // Создание нового отзыва (только авторизованные пользователи)
   @UseGuards(JwtAuthGuard)
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
@@ -43,7 +41,6 @@ export class TestimonialController {
   async findAll(): Promise<Testimonial[]> {
     return await this.testimonialService.findAll();
   }
-  // Получение всех отзывов текущего пользователя (только авторизованные пользователи)
   @UseGuards(JwtAuthGuard)
   @Get('my')
   async findAllUserTestimonials(@Req() req: Request): Promise<Testimonial[]> {
@@ -56,7 +53,6 @@ export class TestimonialController {
     return await this.testimonialService.findAllUserTestimonials(user);
   }
 
-  // Получение конкретного отзыва по ID (только авторизованные пользователи и администраторы)
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(
@@ -72,7 +68,6 @@ export class TestimonialController {
     return await this.testimonialService.findOne(+id, user);
   }
 
-  // Обновление отзыва (только авторизованные пользователи и администраторы)
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
@@ -93,8 +88,6 @@ export class TestimonialController {
       user,
     );
   }
-
-  // Удаление отзыва (только авторизованные пользователи и администраторы)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req: Request): Promise<void> {

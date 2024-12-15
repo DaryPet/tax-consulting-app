@@ -25,14 +25,14 @@ export class DocumentService {
     createDocumentDto: CreateDocumentDto,
     fileUrl: string,
     userId: number,
+    originalName: string,
   ): Promise<Document> {
-    const filename = basename(fileUrl);
     const targetUser = await this.userService.findById(userId);
     if (!targetUser) {
       throw new NotFoundException('Target user not found');
     }
     const newDocument = new Document();
-    newDocument.filename = filename;
+    newDocument.filename = originalName;
     newDocument.filepath = fileUrl;
     newDocument.uploadedBy = targetUser;
     newDocument.description = createDocumentDto.description;
@@ -83,8 +83,6 @@ export class DocumentService {
     }
     if (newFilePath) {
       const fullPath = path.resolve(newFilePath);
-      console.log('Updated full file path:', fullPath);
-      console.log('Updated file name:', basename(fullPath));
       if (document.filepath && fs.existsSync(document.filepath)) {
         fs.unlinkSync(document.filepath);
       }

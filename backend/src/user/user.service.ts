@@ -13,13 +13,12 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    // Здесь не нужно хэшировать пароль снова, он уже захэширован в register
     const user = this.userRepository.create({
       name: createUserDto.name,
       email: createUserDto.email,
       username: createUserDto.username,
-      password: createUserDto.password, // Захэшированный пароль уже передается
-      role: createUserDto.role, // Добавляем роль для сохранения в базу данных
+      password: createUserDto.password,
+      role: createUserDto.role,
     });
     return await this.userRepository.save(user);
   }

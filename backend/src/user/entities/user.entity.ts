@@ -4,35 +4,35 @@ import { Document } from '../../documents/enteties/document.entity';
 import { Booking } from '../../booking/entities/booking.entity';
 import { Testimonial } from 'src/testimonial/entities/testimonial.entity';
 
-@Entity('users') // Декоратор, обозначающий, что этот класс представляет сущность базы данных
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn() // Автоматически генерируемый уникальный идентификатор пользователя
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column() // Имя пользователя
+  @Column()
   name: string;
 
-  @Column({ unique: true }) // Email пользователя, должен быть уникальным
+  @Column({ unique: true })
   email: string;
 
-  @Column() // Пароль пользователя
+  @Column()
   password: string;
 
   @Column({ unique: true })
   username: string;
 
-  @Column({ default: 'user' }) // Роль по умолчанию - обычный пользователь
+  @Column({ default: 'user' })
   role: string;
 
   @OneToMany(() => Session, (session) => session.user)
   sessions: Session[];
 
-  @OneToMany(() => Document, (document) => document.uploadedBy) // Связь с документами, которые загрузил пользователь
+  @OneToMany(() => Document, (document) => document.uploadedBy)
   documents: Document[];
 
   @OneToMany(() => Booking, (booking) => booking.user)
-  bookings: Booking[]; // Связь "один ко многим" с бронированиями
+  bookings: Booking[];
 
   @OneToMany(() => Testimonial, (testimonial) => testimonial.user)
-  testimonials: Testimonial[]; // Связь "Один ко Многим" с отзывами
+  testimonials: Testimonial[];
 }

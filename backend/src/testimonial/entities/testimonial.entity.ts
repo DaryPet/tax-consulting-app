@@ -28,5 +28,5 @@ export class Testimonial {
     eager: true,
     onDelete: 'CASCADE',
   })
-  user: User; // Связь с пользователем, который оставил отзыв
+  user: User;
 }
