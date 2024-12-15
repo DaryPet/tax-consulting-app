@@ -17,8 +17,8 @@ import { Session } from '../auth/enteties/session.entity';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    SessionModule, // Импорт SessionModule
-    TypeOrmModule.forFeature([Session]), // Добавляем Session в TypeOrmModule
+    SessionModule,
+    TypeOrmModule.forFeature([Session]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

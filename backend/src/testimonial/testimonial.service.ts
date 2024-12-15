@@ -25,14 +25,12 @@ export class TestimonialService {
   findAll(): Promise<Testimonial[]> {
     return this.testimonialRepository.find();
   }
-  // Получение всех отзывов текущего пользователя
   async findAllUserTestimonials(user: any): Promise<Testimonial[]> {
     return await this.testimonialRepository.find({
       where: { user: { id: user.id } },
     });
   }
 
-  // Получение конкретного отзыва по ID
   async findOne(id: number, user: any): Promise<Testimonial> {
     const testimonial = await this.testimonialRepository.findOne({
       where: { id },
@@ -41,7 +39,6 @@ export class TestimonialService {
     if (!testimonial) {
       throw new NotFoundException('Testimonial not found');
     }
-    // Проверка прав доступа
     if (user.role !== 'admin' && testimonial.user.id !== user.id) {
       throw new ForbiddenException('You can only view your own testimonials.');
     }
@@ -49,7 +46,6 @@ export class TestimonialService {
     return testimonial;
   }
 
-  // Обновление отзыва
   async update(
     id: number,
     updatedTestimonial: Partial<Testimonial>,
@@ -68,7 +64,6 @@ export class TestimonialService {
     return await this.testimonialRepository.save(testimonial);
   }
 
-  // Удаление отзыва
   async remove(id: number, user: any): Promise<void> {
     const testimonial = await this.findOne(id, user);
     if (!testimonial) {

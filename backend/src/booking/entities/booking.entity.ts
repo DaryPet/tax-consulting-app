@@ -25,7 +25,7 @@ export class Booking {
   time: string;
 
   @Column({ unique: true })
-  uniqueToken: string; // Уникальный токен для управления бронированием
+  uniqueToken: string;
 
   @ManyToOne(() => User, (user) => user.bookings, {
     eager: true,

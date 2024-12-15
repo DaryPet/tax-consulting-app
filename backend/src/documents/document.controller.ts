@@ -25,6 +25,8 @@ import { Role } from '../auth/decorators/roles.decorator';
 import { Request, Response } from 'express';
 import { saveFileToCloudinary } from '../utils/saveFilesToCloudinary';
 import * as multer from 'multer';
+import axios from 'axios';
+import * as mime from 'mime-types';
 
 @Controller('documents')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -61,20 +63,18 @@ export class DocumentController {
 
     let fileUrl: string;
 
-    console.log('Uploading file to Cloudinary...');
     try {
-      fileUrl = await saveFileToCloudinary(file);
+      fileUrl = await saveFileToCloudinary(file, file.originalname);
     } catch (error) {
       console.error('Error while uploading to Cloudinary:', error);
       throw new Error('Failed to upload file to Cloudinary');
     }
 
-    console.log('File URL:', fileUrl);
-
     return await this.documentService.create(
       createDocumentDto,
       fileUrl,
       targetUserId,
+      file.originalname,
     );
   }
 
@@ -136,16 +136,10 @@ export class DocumentController {
 
     let newFileUrl: string | undefined;
 
-    console.log('Uploading file to Cloudinary...');
     if (file) {
-      console.log('Uploading updated file to Cloudinary...');
       try {
-        newFileUrl = await saveFileToCloudinary(file);
+        newFileUrl = await saveFileToCloudinary(file, file.originalname);
       } catch (error) {
-        console.error(
-          'Error while uploading updated file to Cloudinary:',
-          error,
-        );
         throw new Error('Failed to upload updated file to Cloudinary');
       }
     }
@@ -171,12 +165,18 @@ export class DocumentController {
   }
 
   @Get('download/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async downloadDocument(
     @Param('id') id: number,
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<void> {
     const user = req.user;
+    if (!user || !user.id) {
+      throw new UnauthorizedException(
+        'User information is missing or incorrect',
+      );
+    }
     const document = await this.documentService.findOne(id, user);
     if (!document) {
       throw new NotFoundException('Document not found');
@@ -187,7 +187,23 @@ export class DocumentController {
         'Access denied. You can only download your own documents.',
       );
     }
+    try {
+      const mimeType =
+        mime.lookup(document.filename) || 'application/octet-stream';
+      const response = await axios.get(document.filepath, {
+        responseType: 'stream',
+      });
 
-    res.redirect(document.filepath);
+      res.setHeader('Content-Type', mimeType);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${document.filename}"`,
+      );
+
+      (response.data as NodeJS.ReadableStream).pipe(res);
+    } catch (error) {
+      console.error('Error downloading file from Cloudinary:', error);
+      throw new NotFoundException('Failed to download document');
+    }
   }
 }

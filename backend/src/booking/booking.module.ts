@@ -7,9 +7,9 @@ import { MailerService } from '../mailer/mailer.service';
 import { User } from '../user/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Booking, User])], // Подключаем сущность Booking в TypeOrmModule
-  controllers: [BookingController], // Указываем контроллер
-  providers: [BookingService, MailerService], // Добавляем сервисы в providers
-  exports: [BookingService], // Экспортируем BookingService, чтобы его можно было использовать в других модулях
+  imports: [TypeOrmModule.forFeature([Booking, User])],
+  controllers: [BookingController],
+  providers: [BookingService, MailerService],
+  exports: [BookingService],
 })
 export class BookingModule {}

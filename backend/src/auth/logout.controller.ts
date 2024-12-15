@@ -20,7 +20,6 @@ export class LogoutController {
     const user = req.user;
     if (user) {
       await this.logoutService.logoutUser(user['userId']);
-      // Очищаем куки, связанные с токенами
       res.clearCookie('accessToken');
       res.clearCookie('refreshToken');
       res.status(HttpStatus.NO_CONTENT).send();

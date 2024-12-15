@@ -26,7 +26,7 @@ export class CreateUserDto {
   readonly password: string;
 
   @IsString()
-  @IsOptional() // Поле является необязательным при регистрации
-  @IsIn(['user', 'admin']) // Значение может быть только 'user' или 'admin'
-  readonly role?: string; // Опционально: если не указано, по умолчанию будет 'user'
+  @IsOptional()
+  @IsIn(['user', 'admin'])
+  readonly role?: string;
 }

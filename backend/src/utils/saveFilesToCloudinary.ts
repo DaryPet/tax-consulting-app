@@ -3,6 +3,7 @@ import * as streamifier from 'streamifier';
 
 export const saveFileToCloudinary = async (
   file: Express.Multer.File,
+  originalName: string,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (!file || !file.buffer) {
@@ -12,7 +13,8 @@ export const saveFileToCloudinary = async (
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: 'taxDocuments',
-        resource_type: 'auto',
+        public_id: originalName.split('.')[0],
+        resource_type: 'raw',
       },
       (error, result) => {
         if (error) {

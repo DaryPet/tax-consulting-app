@@ -1,4 +1,3 @@
-// backend/src/documents/entities/document.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +5,7 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity'; // Импортируем сущность User
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Document {
@@ -24,13 +23,10 @@ export class Document {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  // @Column()
-  // uploadedBy: string; // имя пользователя или ID пользователя, который загрузил документ
   @ManyToOne(() => User, (user) => user.documents, {
     eager: true,
     onDelete: 'CASCADE',
   })
-  uploadedBy: User; // Связь с пользователем, который загрузил документ
+  uploadedBy: User;
 }
 export default Document;
