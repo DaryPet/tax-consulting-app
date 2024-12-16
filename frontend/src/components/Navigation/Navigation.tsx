@@ -5,7 +5,12 @@ import { RootState } from "../../redux/store";
 import LogoutButton from "../Buttons/LogoutButton";
 import styles from "./Navigation.module.css";
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+  isOpen: boolean;
+  toggleNav: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ isOpen, toggleNav }) => {
   const { isLoggedIn, user } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,6 +21,7 @@ const Navigation: React.FC = () => {
     } else {
       scrollToSection(targetId);
     }
+    toggleNav();
   };
 
   const scrollToSection = (targetId: string) => {
@@ -26,7 +32,7 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <nav className={styles.nav}>
+    <nav className={`${styles.nav} ${isOpen ? styles.navOpen : ""}`}>
       <ul className={styles.navList}>
         <li className={styles.navItem}>
           <button onClick={() => handleScroll("about")} className={styles.link}>
