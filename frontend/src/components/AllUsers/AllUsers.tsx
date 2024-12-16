@@ -43,6 +43,11 @@ const AllUsers: React.FC = () => {
       setCurrentPage(currentPage + 1);
     }
   };
+  // const handleDeleteUser = async (userId: string) => {
+  //   if (window.confirm("Are you sure you want to delete this user?")) {
+  //     await dispatch(deleteUser(userId));
+  //   }
+  // };
 
   return (
     <section className={styles.allUsersContainer}>

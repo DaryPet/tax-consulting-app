@@ -34,8 +34,22 @@ export default function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/login"
+              element={
+                user ? <Navigate to="/user-profile" replace /> : <LoginPage />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                user ? (
+                  <Navigate to="/user-profile" replace />
+                ) : (
+                  <RegisterPage />
+                )
+              }
+            />
             <Route path="/booking" element={<Booking />} />
             <Route
               path="/user-profile"

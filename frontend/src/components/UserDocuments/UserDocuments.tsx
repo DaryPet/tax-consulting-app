@@ -65,7 +65,6 @@ const Documents: React.FC = () => {
           toast.success("Document uploaded successfully", { autoClose: 2000 });
         })
         .catch((uploadError) => {
-          console.error("Ошибка при загрузке документа:", uploadError);
           toast.error("Error uploading document, please try again.");
         });
     } else {
@@ -81,7 +80,6 @@ const Documents: React.FC = () => {
         await downloadDocumentApi(documentId, token);
         toast.success("Document downloaded successfully", { autoClose: 2000 });
       } catch (error) {
-        console.error("Error downloading document:", error);
         toast.error("Failed to download document. Please try again later.", {
           autoClose: 2000,
         });

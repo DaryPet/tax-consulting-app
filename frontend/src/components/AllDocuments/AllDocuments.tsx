@@ -26,7 +26,6 @@ const AllDocuments: React.FC = () => {
   const error = useSelector(selectDocumentError);
   const successMessage = useSelector(selectDocumentSuccess);
   const { userId: paramUserId } = useParams<{ userId: string }>();
-  // const [userName, setUserName] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>("");
   const [searchUserName, setSearchUserName] = useState<string>("");
@@ -84,7 +83,7 @@ const AllDocuments: React.FC = () => {
         toast.error(`User with name ${searchUserName} not found.`);
       }
     } catch (err) {
-      console.error("Ошибка при поиске пользователя:", err);
+      // console.error("Ошибка при поиске пользователя:", err);
       setFilteredDocuments([]);
       setUserId(null);
       toast.error("Failed to find user. Please check the name and try again.");
@@ -130,7 +129,6 @@ const AllDocuments: React.FC = () => {
           }
         })
         .catch((deleteError) => {
-          console.error("Ошибка при удалении документа:", deleteError);
           toast.error("Error deleting document, please try again.");
         });
     }
@@ -279,7 +277,6 @@ const handleDownload = async (url: string, filename: string) => {
     window.URL.revokeObjectURL(downloadUrl);
     toast.success("Document downloaded successfully", { autoClose: 2000 });
   } catch (error) {
-    console.error("Error downloading document:", error);
     toast.error("Failed to download document. Please try again later.", {
       autoClose: 2000,
     });

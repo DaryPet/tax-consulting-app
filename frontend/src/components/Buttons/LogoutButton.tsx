@@ -16,14 +16,9 @@ const LogoutButton = () => {
 
     setLogoutInProgress(true);
     try {
-      console.log("Отправка запроса на logout...");
       await dispatch(logoutUser()).unwrap();
-
-      console.log("Логаут успешно выполнен");
-
       navigate("/login");
     } catch (error) {
-      console.error("Ошибка при выполнении логаута", error);
     } finally {
       setLogoutInProgress(false);
     }
