@@ -29,15 +29,15 @@ const HomePage: React.FC = () => {
         <InfoCardsList />
       </section>
       <section id="services" className={styles.section}>
-        <p className={styles.sectionTitle}>Our service</p>
+        {/* <p className={styles.sectionTitle}></p> */}
         <ServiceList />
       </section>
       <section id="team" className={styles.section}>
-        <p className={styles.sectionTitle}>Our team</p>
+        {/* <p className={styles.sectionTitle}>Our team</p> */}
         <TeamList />
       </section>
       <section id="testimonials" className={styles.section}>
-        <p className={styles.sectionTitle}>Testimonials</p>
+        {/* <p className={styles.sectionTitle}>Testimonials</p> */}
         <Testimonials />
       </section>
       <section id="booking" className={styles.section}>

@@ -8,6 +8,7 @@
   transition: transform 0.3s ease-in-out;
   z-index: 2000;
   padding: 20px;
+  max-width: 500px;
 }
 .navList {
   list-style: none;
@@ -23,7 +24,6 @@
 }
 
 .link {
-  font-size: 1rem;
   font-weight: 500;
   color: #1d5396;
   text-decoration: none;
@@ -86,7 +86,7 @@
 
 @media (min-width: 1440px) {
   .link {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   .nav {
     position: static;
@@ -94,9 +94,10 @@
     transition: none;
     background-color: transparent;
     padding: 0;
+    max-width: 800px;
   }
   .navList {
     flex-direction: row;
-    gap: 30px;
+    gap: 10px;
   }
 }

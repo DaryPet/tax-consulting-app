@@ -1,6 +1,29 @@
+.teamContainer {
+  padding: 40px 20px;
+}
 .teamGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 20px;
-  padding: 40px 20px;
+}
+.heading {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #1f2d3d;
+}
+
+@media (min-width: 768px) {
+  .teamGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .teamGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
 }

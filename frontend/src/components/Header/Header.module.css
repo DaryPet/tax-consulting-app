@@ -2,6 +2,7 @@
   position: sticky;
   top: 0;
   width: 100%;
+  max-width: 1440px;
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;

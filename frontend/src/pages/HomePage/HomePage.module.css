@@ -2,17 +2,17 @@
   background-color: #aac2e7;
 }
 
-.serviceSection,
+/* .serviceSection,
 .teamSection,
 .testimonialsSection {
-  padding: 60px 40px;
-}
+  padding: 80px 40px;
+} */
 
-.sectionTitle {
+/* .sectionTitle {
   font-size: 2rem;
   text-align: center;
   margin-bottom: 40px;
-}
+} */
 
 .serviceGrid,
 .teamGrid {

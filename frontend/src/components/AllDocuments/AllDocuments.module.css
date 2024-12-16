@@ -3,6 +3,7 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   max-width: 800px;
+  width: 100%;
   margin: 20px auto;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -21,6 +22,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  gap: 10px;
 }
 
 .inputField {
@@ -34,13 +36,14 @@
 
 .searchButton {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #5793d2;
   color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-right: 10px;
+  margin-top: 10px;
 }
 
 .searchButton:hover {
@@ -48,7 +51,7 @@
 }
 .showAllButton {
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #5793d2;
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -63,7 +66,7 @@
 .uploadButton {
   margin-top: 10px;
   padding: 8px 16px;
-  background-color: #28a745;
+  background-color: #65a173;
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -72,7 +75,7 @@
 }
 
 .uploadButton:hover {
-  background-color: #218838;
+  background-color: #286034;
 }
 
 .documentsList {
@@ -85,6 +88,7 @@
 
 .documentItem {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
@@ -96,6 +100,7 @@
 
 .documentDetails {
   flex: 1;
+  margin-bottom: 10px;
 }
 
 .documentDetails p {
@@ -111,6 +116,7 @@
 .downloadButton,
 .deleteButton {
   padding: 6px 12px;
+  margin: 5px;
   font-size: 0.9rem;
   border: none;
   border-radius: 4px;
@@ -119,7 +125,7 @@
 }
 
 .downloadButton {
-  background-color: #007bff;
+  background-color: #5793d2;
   color: #ffffff;
   margin-right: 4px;
 }
@@ -129,7 +135,7 @@
 }
 
 .deleteButton {
-  background-color: #dc3545;
+  background-color: #96464e;
   color: #ffffff;
 }
 
@@ -150,7 +156,7 @@
 }
 
 .paginationButton {
-  background-color: #007bff;
+  background-color: #5793d2;
   color: #ffffff;
   border: none;
   padding: 10px 15px;
@@ -173,4 +179,30 @@
   font-size: 1em;
   color: #555;
   margin: 0 10px;
+}
+.uploadSection {
+  margin-top: 20px;
+}
+@media (max-width: 767px) {
+  .documentItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .buttonsContainer {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 768px) {
+  .documentItem {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .buttonsContainer {
+    width: auto;
+  }
+  /* .uploadSection {
+    margin-top: 20px;
+  } */
 }
