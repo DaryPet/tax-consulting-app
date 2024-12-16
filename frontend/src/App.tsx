@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
 import Loader from "../src/components/Loader/Loader";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import Documents from "./components/UserDocuments/UserDocuments";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
@@ -56,7 +57,21 @@ export default function App() {
             <Route
               path="/user-profile"
               element={user ? <UserPage /> : <Navigate to="/login" replace />}
-            />
+            >
+              <Route path="document" element={<Documents />} />
+              <Route
+                path="booking"
+                element={
+                  <Booking
+                    prefillData={{
+                      name: user?.name || "",
+                      email: user?.email || "",
+                      phone: user?.phone || "",
+                    }}
+                  />
+                }
+              />
+            </Route>
             <Route
               path="/admin"
               element={

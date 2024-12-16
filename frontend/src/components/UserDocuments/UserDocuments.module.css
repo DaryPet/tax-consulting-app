@@ -1,12 +1,20 @@
 .documentsSection {
-  margin-top: 40px;
-  padding: 20px;
-  background: #fff;
+  /* margin-top: 40px;
+  padding: 5px;
+  background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
-  max-width: 800px;
+  max-width: 1000px;
+  width: 100%;
+  margin: 20px auto; */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  /* max-width: 800px; */
+  width: 90%;
   margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .fileInputContainer {
@@ -51,7 +59,10 @@
 
 .documentsList {
   margin-top: 20px;
-  text-align: left;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  border-radius: 8px;
 }
 
 .documentsList h3 {
@@ -61,16 +72,15 @@
 }
 
 .documentItem {
-  margin-bottom: 15px;
-  padding: 15px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  border-radius: 6px;
-  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ddd;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s;
+  border-radius: 4px;
+  background-color: #f8f9fa;
 }
 
 .documentItem:hover {
@@ -78,19 +88,18 @@
 }
 
 .documentDetails {
-  flex: 2;
+  flex: 1;
+  margin-bottom: 10px;
 }
 
 .documentDetails p {
   margin: 5px 0;
-  font-weight: normal;
+  text-align: left;
 }
 
 .buttonContainer {
   display: flex;
   gap: 10px;
-  flex: 1;
-  justify-content: flex-end;
 }
 
 .downloadButton,
@@ -104,8 +113,9 @@
 }
 
 .downloadButton {
-  background-color: #007bff;
+  background-color: #5793d2;
   color: #ffffff;
+  margin-right: 4px;
 }
 
 .downloadButton:hover {
@@ -113,7 +123,7 @@
 }
 
 .deleteButton {
-  background-color: #dc3545;
+  background-color: #96464e;
   color: #ffffff;
 }
 
@@ -127,7 +137,7 @@
   background: #fdecea;
   border: 1px solid #f5c6cb;
   border-radius: 4px;
-  color: #721c24;
+  color: #dc3545;
   text-align: center;
 }
 
@@ -139,4 +149,57 @@
   border-radius: 4px;
   color: #388e3c;
   text-align: center;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.paginationButton {
+  background-color: #5793d2;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+.paginationButton:hover {
+  background-color: #0056b3;
+}
+.paginationButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+@media (max-width: 767px) {
+  .documentItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .buttonsContainer {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 768px) {
+  .documentItem {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .buttonsContainer {
+    width: auto;
+  }
+}
+@media (min-width: 1440px) {
+  .documentItem {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .buttonsContainer {
+    width: auto;
+  }
 }

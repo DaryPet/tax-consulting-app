@@ -81,14 +81,18 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, toggleNav }) => {
         )}
         {isLoggedIn && user?.role === "admin" && (
           <li className={styles.navItem}>
-            <Link to="/admin" className={styles.link}>
+            <Link to="/admin" className={styles.link} onClick={toggleNav}>
               Admin Dashboard
             </Link>
           </li>
         )}
         {isLoggedIn && user?.role === "user" && (
           <li className={styles.navItem}>
-            <Link to="/user-profile" className={styles.link}>
+            <Link
+              to="/user-profile"
+              className={styles.link}
+              onClick={toggleNav}
+            >
               My Room
             </Link>
           </li>
