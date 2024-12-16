@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Booking from "./components/Booking/Booking";
 import Loader from "../src/components/Loader/Loader";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
@@ -23,7 +24,7 @@ const UsersDocuments = lazy(
   () => import("./components/UsersDocuments/UsersDocuments")
 );
 
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFound/NotFoundPage"));
 
 export default function App() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <div>
       <Layout>
+        <ScrollToTop />
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />

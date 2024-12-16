@@ -61,19 +61,19 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, toggleNav }) => {
           </button>
         </li>
         <li className={styles.navItem}>
-          <Link to="/booking" className={styles.link}>
+          <Link to="/booking" className={styles.link} onClick={toggleNav}>
             Booking
           </Link>
         </li>
         {!isLoggedIn && (
           <>
             <li className={styles.navItem}>
-              <Link to="/login" className={styles.link}>
+              <Link to="/login" className={styles.link} onClick={toggleNav}>
                 Login
               </Link>
             </li>
             <li className={styles.navItem}>
-              <Link to="/register" className={styles.link}>
+              <Link to="/register" className={styles.link} onClick={toggleNav}>
                 Register
               </Link>
             </li>
