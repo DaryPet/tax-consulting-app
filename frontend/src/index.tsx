@@ -4,12 +4,10 @@ import App from "./App";
 import { store, persistor } from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-// @ts-ignore
 import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.css";
 import "modern-normalize";
-// import "./assets/favicon.png";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {

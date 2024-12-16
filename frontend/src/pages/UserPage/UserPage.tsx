@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserDocuments from "../../components/UserDocuments/UserDocuments";
 import Booking from "../../components/Booking/Booking";
 import { useSelector } from "react-redux";
@@ -7,6 +7,9 @@ import styles from "./UserPage.module.css";
 
 const UserPage: React.FC = () => {
   const user = useSelector(selectAuthUser);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className={styles.container}>

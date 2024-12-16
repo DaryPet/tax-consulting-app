@@ -9,6 +9,7 @@ import {
   refreshUserToken,
   fetchAllUsers,
   initializeAuthState,
+  deleteUser,
 } from "../operations";
 import { toast } from "react-toastify";
 
@@ -90,8 +91,6 @@ const authSlice = createSlice({
         state.loading = false;
         const errorMessage = action.payload as string;
         state.error = errorMessage;
-        // \\\\\\\\\\\\\\\\\\\\
-        console.error("Invalid data received:", action.payload);
         toast.error(errorMessage);
       })
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -125,7 +124,6 @@ const authSlice = createSlice({
         state.loading = false;
         const errorMessage = action.payload as string;
         state.error = errorMessage;
-        console.error("Register error: ", action.error);
         toast.error(errorMessage);
       })
       .addCase(refreshUserToken.fulfilled, (state, action) => {
@@ -135,7 +133,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.status = "succeeded";
         localStorage.setItem("access_token", access_token);
-        console.log("Token successfully refreshed");
       })
       .addCase(refreshUserToken.rejected, (state, action) => {
         state.status = "failed";
@@ -144,7 +141,6 @@ const authSlice = createSlice({
         state.token = null;
         state.user = null;
         state.error = action.payload as string;
-        console.error("Refresh token error: ", action.error);
         toast.error("Session expired. Please log in again.");
       })
       .addCase(logoutUser.pending, (state) => {
@@ -167,8 +163,6 @@ const authSlice = createSlice({
         state.loading = false;
         const errorMessage = action.payload as string;
         state.error = errorMessage;
-        // \\\\\\\\\\\\\\\\\\\\\
-        console.error("Logout error: ", action.error);
         toast.error(errorMessage);
       })
       .addCase(fetchAllUsers.pending, (state) => {
@@ -186,6 +180,23 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         state.status = "failed";
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.status = "loading";
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user.id !== action.payload);
+        state.loading = false;
+        state.status = "succeeded";
+        toast.success("User deleted successfully");
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+        state.status = "failed";
+        toast.error("Failed to delete user");
       }),
 });
 

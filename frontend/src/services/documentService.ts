@@ -73,7 +73,6 @@ export const downloadDocumentApi = async (
     }
 
     const url = `${DOCUMENTS_URL}download/${documentId}`;
-    console.log(`Attempting to download document from URL: ${url}`);
 
     const response = await fetch(url, {
       method: "GET",
@@ -109,7 +108,6 @@ export const downloadDocumentApi = async (
 
     window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
-    console.error("Error while downloading document:", error);
     throw error;
   }
 };

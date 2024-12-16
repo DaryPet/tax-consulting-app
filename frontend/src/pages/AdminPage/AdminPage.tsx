@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./AdminPage.module.css";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
 const AdminPage: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className={styles.adminPageContainer}>
       <h1>Admin Dashboard</h1>
