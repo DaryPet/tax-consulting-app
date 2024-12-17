@@ -137,7 +137,6 @@ export const restoreSession = createAsyncThunk(
       const userData = await fetchUserData();
       return userData;
     } catch (error) {
-      // console.error("Ошибка восстановления сессии:", error);
       localStorage.removeItem("access_token");
       return rejectWithValue("Failed to restore session");
     }

@@ -23,12 +23,10 @@
   color: #0066cc;
   border-color: #0066cc;
 }
-
 .adminLink:hover {
   background-color: #007bff;
   color: #fff;
 }
-
 .outletSection {
   width: 100%;
   margin-top: 20px;

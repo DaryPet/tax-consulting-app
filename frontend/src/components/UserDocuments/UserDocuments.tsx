@@ -116,7 +116,7 @@ const Documents: React.FC = () => {
 
   return (
     <div className={styles.documentsSection}>
-      <h2>Upload and Manage Documents</h2>
+      <h2 className={styles.title}>Upload and Manage Documents</h2>
       {loading ? (
         <Loader />
       ) : (

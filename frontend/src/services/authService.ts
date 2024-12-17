@@ -56,10 +56,9 @@ export const logout = async () => {
     );
 
     if (response.status === 204) {
-      console.log("Логаут успешно выполнен");
       return response.data;
     } else {
-      throw new Error(`Ошибка при логауте: ${response.status}`);
+      throw new Error(`Error: ${response.status}`);
     }
   } catch (error) {
     throw error;
