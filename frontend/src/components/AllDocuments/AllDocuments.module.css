@@ -2,8 +2,7 @@
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  /* max-width: 800px; */
-  width: 90%;
+  width: 100%;
   margin: 20px auto;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -188,21 +187,10 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .buttonsContainer {
-    width: 100%;
-    justify-content: space-between;
-  }
 }
 @media (min-width: 768px) {
   .documentItem {
     flex-direction: row;
     align-items: center;
   }
-
-  .buttonsContainer {
-    width: auto;
-  }
-  /* .uploadSection {
-    margin-top: 20px;
-  } */
 }
