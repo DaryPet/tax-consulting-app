@@ -2,8 +2,9 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 40px 20px;
-  background-color: #f8f4f0;
+  padding: 40px;
+  background: linear-gradient(135deg, #f8f4f0, #aac2e7);
+  /* background-color: #f8f4f0; */
   flex-wrap: wrap;
 }
 
@@ -40,14 +41,6 @@
   height: 30px;
 }
 
-/* .offsetUp {
-  transform: translateY(-20px);
-}
-
-.offsetDown {
-  transform: translateY(20px);
-} */
-
 .title {
   font-size: 1.2rem;
   font-weight: 600;
@@ -72,7 +65,7 @@
   .infoCardsContainer {
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 40px 80px;
     gap: 10px;
   }
 

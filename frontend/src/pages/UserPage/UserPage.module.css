@@ -1,7 +1,10 @@
 .container {
+  position: relative;
   padding: 20px 0;
   color: #333;
+  z-index: 10;
 }
+
 .linkSection {
   display: flex;
   justify-content: center;

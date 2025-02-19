@@ -5,13 +5,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: #99b5de; */
+  background-color: #99b5de;
 }
-/* Контейнер для центрирования контента */
+
 .container {
   max-width: 1440px;
-  margin: 0 auto; /* Центрирование контейнера на экране */
-  padding: 0; /* Добавление отступов для удобства на маленьких экранах */
+  margin: 0 auto;
+  padding: 0;
   background-color: #99b5de;
 }
 code {

@@ -1,10 +1,16 @@
 .bookingSection {
   margin-top: 40px;
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
+  /* background: #fff; */
+  background: transparent;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
+  /* background: linear-gradient(
+    135deg,
+    rgb(211, 206, 217) 0%,
+    rgb(170, 194, 231) 100%
+  ); */
+  position: relative;
 }
 
 .bookingForm {
@@ -97,12 +103,18 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
+  /* transition: background 0.3s; */
   font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s ease-in-out;
+  transform-style: preserve-3d;
+  perspective: 1500px;
 }
 
 .bookButton:hover {
   background: #3a7bc1;
+  /* transform: rotateX(10deg) rotateY(10deg) scale(1.1); */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 .modal {
   position: absolute;
@@ -167,11 +179,17 @@
     width: 400px;
     padding: 15px;
   }
+  .gridBackground {
+    background-size: 120px 120px;
+  }
 }
 
 @media (min-width: 1440px) {
   .calendarContainer {
     width: 600px;
     padding: 20px;
+  }
+  .gridBackground {
+    background-size: 150px 150px;
   }
 }

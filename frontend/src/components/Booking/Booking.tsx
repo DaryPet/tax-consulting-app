@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Modal from "react-modal";
@@ -20,6 +20,10 @@ import {
   selectAuthToken,
   selectIsLoggedIn,
 } from "../../redux/slices/authSlice";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface BookingProps {
   prefillData?: {
@@ -32,7 +36,11 @@ interface BookingProps {
 Modal.setAppElement("#root");
 
 const Booking: React.FC<BookingProps> = ({ prefillData }) => {
+  const gridRef = useRef<HTMLDivElement | null>(null);
+
   const dispatch = useDispatch<AppDispatch>();
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const token = useSelector(selectAuthToken);
   const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -52,6 +60,22 @@ const Booking: React.FC<BookingProps> = ({ prefillData }) => {
   const successMessage = useSelector(selectBookingSuccess);
 
   useEffect(() => {
+    if (gridRef.current) {
+      gsap.to(gridRef.current, {
+        rotationX: 360,
+        rotationY: 360,
+        ease: "none",
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (date) {
       dispatch(fetchAvailableSlots(date.toISOString().split("T")[0]));
     }
@@ -68,6 +92,48 @@ const Booking: React.FC<BookingProps> = ({ prefillData }) => {
       dispatch(clearMessages());
     }
   }, [error, successMessage, dispatch]);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      gsap.fromTo(
+        titleRef.current,
+        {
+          opacity: 0,
+          x: "-100%",
+        },
+        {
+          opacity: 1,
+          x: "0%",
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: "top 80%",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    }
+    if (buttonRef.current) {
+      gsap.fromTo(
+        buttonRef.current,
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: buttonRef.current,
+            start: "top 80%",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -129,7 +195,9 @@ const Booking: React.FC<BookingProps> = ({ prefillData }) => {
 
   return (
     <div className={styles.bookingSection}>
-      <h2>Book a Consultation</h2>
+      <h2 ref={titleRef} className={styles.title}>
+        Book a Consultation
+      </h2>
       <form className={styles.bookingForm} onSubmit={formik.handleSubmit}>
         <div className={styles.inputGroup}>
           <label htmlFor="name">Name:</label>
@@ -223,7 +291,12 @@ const Booking: React.FC<BookingProps> = ({ prefillData }) => {
           </div>
         )}
 
-        <button type="submit" disabled={loading} className={styles.bookButton}>
+        <button
+          ref={buttonRef}
+          type="submit"
+          disabled={loading}
+          className={styles.bookButton}
+        >
           {loading ? "Booking..." : "Book Now"}
         </button>
       </form>

@@ -9,6 +9,7 @@ import Booking from "./components/Booking/Booking";
 import Loader from "../src/components/Loader/Loader";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Documents from "./components/UserDocuments/UserDocuments";
+import ParticlesBackground from "./components/ParticlesBackground/ParticlesBackground";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
@@ -33,8 +34,11 @@ export default function App() {
   return (
     <div>
       <Layout>
+        <ParticlesBackground />
         <ScrollToTop />
+        {/* <ParticlesBackground /> */}
         <Suspense fallback={<Loader />}>
+          {/* <ParticlesBackground /> */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route

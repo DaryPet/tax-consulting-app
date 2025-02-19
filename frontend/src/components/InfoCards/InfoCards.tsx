@@ -11,11 +11,13 @@ const InfoCards: React.FC = () => {
             <img
               src={card.iconUrl}
               alt={`${card.title} icon`}
-              className={styles.icon}
+              className={`${styles.icon} icon`}
             />
           </div>
           <h3 className={styles.title}>{card.title}</h3>
-          <p className={styles.description}>{card.description}</p>
+          <p className={`${styles.description} description`}>
+            {card.description}
+          </p>
         </div>
       ))}
     </div>
