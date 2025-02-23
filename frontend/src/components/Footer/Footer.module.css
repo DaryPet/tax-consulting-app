@@ -41,7 +41,8 @@
 }
 
 .navLinks a {
-  color: #e1e1e1;
+  /* color: #e1e1e1; */
+  color: rgb(245, 245, 245);
   text-decoration: none;
   transition: color 0.3s;
 }

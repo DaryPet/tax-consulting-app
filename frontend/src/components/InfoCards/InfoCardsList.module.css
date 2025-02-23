@@ -4,7 +4,6 @@
   gap: 20px;
   padding: 40px;
   background: linear-gradient(135deg, #f8f4f0, #aac2e7);
-  /* background-color: #f8f4f0; */
   flex-wrap: wrap;
 }
 
@@ -25,7 +24,8 @@
 }
 
 .iconWrapper {
-  background-color: #aac2e7;
+  /* background-color: #aac2e7; */
+  background-color: orange;
   padding: 10px;
   border-radius: 50%;
   width: 60px;
@@ -44,13 +44,27 @@
 .title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #333;
+  /* color: #6798c0; */
+  color: #1d5396;
   margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+  -webkit-background-clip: text;
+}
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  right: 0;
+  width: 70%;
+  height: 4px;
+  background-color: orange;
 }
 
 .description {
   font-size: 1rem;
-  color: #777;
+  /* color: #777; */
+  color: black;
   line-height: 1.4;
 }
 @media (min-width: 320px) and (max-width: 375px) {

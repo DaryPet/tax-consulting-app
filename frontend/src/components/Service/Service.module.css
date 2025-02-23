@@ -10,7 +10,10 @@
   overflow: hidden;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 30px 100%, 0 calc(100% - 30px));
 }
-
+.title {
+  /* color: orange; */
+  color: #1d5396;
+}
 .card:hover {
   transform: translateY(-5px);
 }
@@ -32,6 +35,7 @@
   transition: background 0.3s;
   font-size: 16px;
   transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  /* shadow:  color: #1d5396; */
 }
 
 .bookButton:hover {

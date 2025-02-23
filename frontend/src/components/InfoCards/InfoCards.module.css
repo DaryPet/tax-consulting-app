@@ -30,12 +30,12 @@
 .title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #333;
+  /* color: #333; */
   margin-bottom: 10px;
 }
 
 .description {
   font-size: 1rem;
-  color: #777;
+  /* color: #777; */
   line-height: 1.4;
 }
