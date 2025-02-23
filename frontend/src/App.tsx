@@ -10,6 +10,8 @@ import Loader from "../src/components/Loader/Loader";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Documents from "./components/UserDocuments/UserDocuments";
 import ParticlesBackground from "./components/ParticlesBackground/ParticlesBackground";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService/TermsOfService";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 
@@ -41,6 +43,8 @@ export default function App() {
           {/* <ParticlesBackground /> */}
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route
               path="/login"
               element={

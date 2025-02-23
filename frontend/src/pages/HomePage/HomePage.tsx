@@ -36,10 +36,10 @@ const HomePage: React.FC = () => {
         {/* <p className={styles.sectionTitle}>Our team</p> */}
         <TeamList />
       </section>
-      <section id="testimonials" className={styles.section}>
-        {/* <p className={styles.sectionTitle}>Testimonials</p> */}
+      {/* <section id="testimonials" className={styles.section}>
+  
         <Testimonials />
-      </section>
+      </section> */}
       <section id="booking" className={styles.section}>
         <Booking />
       </section>
