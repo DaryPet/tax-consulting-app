@@ -18,23 +18,6 @@ const ServiceList: React.FC = () => {
   useEffect(() => {
     serviceRefs.current.forEach((service, index) => {
       if (service) {
-        // gsap.fromTo(
-        //   service,
-        //   { opacity: 0, y: 50, scale: 0.8 }, // Начальное состояние карточки
-        //   {
-        //     opacity: 1,
-        //     y: 0, // Конечная позиция
-        //     scale: 1,
-        //     duration: 1,
-        //     ease: "power2.out",
-        //     scrollTrigger: {
-        //       trigger: service,
-        //       start: "top 80%", // Когда верх карточки будет на 80% экрана
-        //       end: "bottom top",
-        //       scrub: true,
-        //     },
-        //   }
-        // );
         gsap.fromTo(
           service,
           { opacity: 0, x: -100 },

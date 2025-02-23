@@ -26,13 +26,27 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin: 10px 0;
-  color: #333;
+  /* color: #333; */
+  /* color: orange; */
+  color: #1d5396;
 }
 
 .role {
+  position: relative;
   font-size: 1.2rem;
   color: #777;
   margin-bottom: 10px;
+  /* color: orange; */
+}
+
+.role::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  right: 100px;
+  width: 50%;
+  height: 4px;
+  background-color: orange;
 }
 
 .bio {

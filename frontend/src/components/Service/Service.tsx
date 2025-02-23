@@ -44,7 +44,7 @@ const Service: React.FC<ServiceProps> = ({
   return (
     <div className={styles.card}>
       <img src={imageUrl} alt={title} className={styles.image} />
-      <h3>{title}</h3>
+      <h3 className={styles.title}>{title}</h3>
       <p>{description}</p>
       <button
         ref={buttonRef}
