@@ -1,6 +1,5 @@
-// const BASE_URL = "https://tax-consulting-app.onrender.com";
-const BASE_URL = "http://13.220.44.168:3000";
-// const BASE_URL = "https://tax-consulting-app.onrender.com";
+
+const BASE_URL = "https://tax-consulting-app.onrender.com";
 
 export const AUTH_API_URL = `${BASE_URL}/auth/`;
 export const TESTIMONIALS_API_URL = `${BASE_URL}/testimonial/`;
