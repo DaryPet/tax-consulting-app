@@ -30,7 +30,7 @@
     "react-toastify": "^10.0.6",
     "react-tsparticles": "^2.12.2",
     "redux-persist": "^6.0.0",
-    "swiper": "^11.1.14",
+    "swiper": "^12.1.2",
     "three": "^0.173.0",
     "toastify": "^2.0.1",
     "tsparticles": "^3.8.1",
